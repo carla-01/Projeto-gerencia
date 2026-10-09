@@ -1,0 +1,33 @@
+USER STORY - Nova funcionalidade do ponto de vista do usuário
+Título: [US]
+Label: user-story
+
+Chave no Jira
+(Ex.: SCRUM-12)
+
+História
+Como [perfil: paciente, recepcionista, profissional, farmacêutico, gestor ou acompanhante],
+quero [ação],
+para [benefício].
+
+Critérios de aceite (Gherkin)
+# language: pt
+Funcionalidade: [nome da funcionalidade]
+
+  Cenário: [caminho feliz]
+    Dado que ...
+    Quando ...
+    Então ...
+
+  Cenário: [caso de erro ou permissão negada]
+    Dado que ...
+    Quando ...
+    Então ...
+
+
+DOD
+[ ] Código revisado por pelo menos 1 integrante
+[ ] Testes escritos e passando (unitários e cenários Gherkin)
+[ ] Permissões por perfil verificadas
+[ ] Documentação atualizada
+[ ] Demonstrável na Sprint Review

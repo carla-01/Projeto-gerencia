@@ -1,0 +1,21 @@
+PULL REQUEST
+
+O que muda
+(Resumo em 2 ou 3 linhas)
+
+Issue relacionada
+(Chave do Jira, ex.: SCRUM-12. Use a mesma chave no nome da branch.)
+Closes #
+
+Como testar
+1.
+2.
+3.
+
+
+Checklist
+[ ] Testes escritos e passando
+[ ] Permissões por perfil conferidas
+[ ] Sem senhas, tokens ou dados reais de pacientes no código
+[ ] Documentação atualizada (README, API ou doc do projeto)
+[ ] Revisado por pelo menos 1 integrante

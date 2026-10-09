@@ -1,0 +1,38 @@
+BUG - Algo não funciona como esperado
+Título: [BUG]
+Label: bug
+
+Chave no Jira
+(Ex.: SCRUM-34)
+
+O que aconteceu
+(Descreva o comportamento errado)
+
+O que era esperado
+(Descreva o comportamento correto)
+
+Passos para reproduzir
+1.
+2.
+3.
+
+Perfil de usuário afetado
+[ ] Paciente
+[ ] Recepcionista
+[ ] Profissional de saúde
+[ ] Farmacêutico
+[ ] Gestor da UBS
+[ ] Acompanhante
+
+Ambiente
+- Navegador e versão:
+- Dispositivo (computador ou celular):
+- Branch ou versão do sistema:
+
+Evidências
+(Print, gravação de tela ou trecho de log. Não inclua CPF nem dados reais de pacientes.)
+
+Gravidade
+[ ] Bloqueia o uso
+[ ] Atrapalha, mas há contorno
+[ ] Detalhe visual ou de texto
