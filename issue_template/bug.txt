@@ -1,38 +1,1573 @@
-BUG - Algo não funciona como esperado
-Título: [BUG]
-Label: bug
+TÍTULO: [BUG] <sintoma curto> - SCRUM-14 US01 Login por perfil
 
-Chave no Jira
-(Ex.: SCRUM-34)
+RELEASE: R1 - Acesso e Cadastro        SPRINT: 1
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Maria Eduarda da Nóbrega      REPORTADO POR: Mirelle Casimiro Silvino (QA)
+US RELACIONADA: SCRUM-14 US01 - Login por perfil · casos de teste CT-US01-01, CT-US01-02
 
-O que aconteceu
-(Descreva o comportamento errado)
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US01 - Login por perfil, em uma ou duas frases>
 
-O que era esperado
-(Descreva o comportamento correto)
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: local (docker-compose)
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-14-login-por-perfil), <commit>
 
-Passos para reproduzir
-1.
-2.
-3.
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
 
-Perfil de usuário afetado
-[ ] Paciente
-[ ] Recepcionista
-[ ] Profissional de saúde
-[ ] Farmacêutico
-[ ] Gestor da UBS
-[ ] Acompanhante
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US01-01 (Login com sucesso): sou levado à tela inicial do meu perfil
+CT-US01-02 (Senha incorreta): vejo "CPF ou senha inválidos" e a conta fica bloqueada por 15 minutos
 
-Ambiente
-- Navegador e versão:
-- Dispositivo (computador ou celular):
-- Branch ou versão do sistema:
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
 
-Evidências
-(Print, gravação de tela ou trecho de log. Não inclua CPF nem dados reais de pacientes.)
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
 
-Gravidade
-[ ] Bloqueia o uso
-[ ] Atrapalha, mas há contorno
-[ ] Detalhe visual ou de texto
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US01-01 - Login com sucesso
+  Dado que estou cadastrado e ativo
+  Quando informo CPF e senha corretos
+  Então sou levado à tela inicial do meu perfil
+
+CT-US01-02 - Senha incorreta
+  Dado que estou cadastrado
+  Quando informo a senha errada 5 vezes seguidas
+  Então vejo "CPF ou senha inválidos" e a conta fica bloqueada por 15 minutos
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-14-login-por-perfil com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Mirelle): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-15 US02 Controle de acesso por papel
+
+RELEASE: R1 - Acesso e Cadastro        SPRINT: 1
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Mirelle Casimiro Silvino      REPORTADO POR: Mirelle Casimiro Silvino (QA)
+US RELACIONADA: SCRUM-15 US02 - Controle de acesso por papel · casos de teste CT-US02-01, CT-US02-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US02 - Controle de acesso por papel, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: local (docker-compose)
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-15-controle-de-acesso), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US02-01 (Acesso permitido): a fila do dia é exibida
+CT-US02-02 (Acesso negado): o sistema responde 403 e mostra "Acesso não permitido"
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US02-01 - Acesso permitido
+  Dado que estou logado como recepcionista
+  Quando abro o painel da recepção da minha UBS
+  Então a fila do dia é exibida
+
+CT-US02-02 - Acesso negado
+  Dado que estou logado como paciente
+  Quando tento acessar a rota do painel da recepção
+  Então o sistema responde 403 e mostra "Acesso não permitido"
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-15-controle-de-acesso com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Mirelle): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-16 US04 Autocadastro do paciente com consentimento
+
+RELEASE: R1 - Acesso e Cadastro        SPRINT: 1
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Maria Eduarda da Nóbrega      REPORTADO POR: Mirelle Casimiro Silvino (QA)
+US RELACIONADA: SCRUM-16 US04 - Autocadastro do paciente com consentimento · casos de teste CT-US04-01, CT-US04-02, CT-US04-03
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US04 - Autocadastro do paciente com consentimento, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: local (docker-compose)
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-16-autocadastro-paciente), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US04-01 (Cadastro com sucesso): minha conta é criada e o aceite fica registrado com data e hora
+CT-US04-02 (Sem consentimento): o cadastro não é concluído e vejo a finalidade do uso dos dados
+CT-US04-03 (CPF inválido): vejo "CPF inválido" no campo
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US04-01 - Cadastro com sucesso
+  Dado que estou na tela de cadastro
+  Quando preencho os dados obrigatórios e aceito o termo LGPD
+  Então minha conta é criada e o aceite fica registrado com data e hora
+
+CT-US04-02 - Sem consentimento
+  Dado que preenchi os dados
+  Quando tento concluir sem marcar o aceite do termo
+  Então o cadastro não é concluído e vejo a finalidade do uso dos dados
+
+CT-US04-03 - CPF inválido
+  Dado que estou na tela de cadastro
+  Quando informo um CPF com dígito verificador errado
+  Então vejo "CPF inválido" no campo
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-16-autocadastro-paciente com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Mirelle): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-17 US05 Recepção cadastra paciente
+
+RELEASE: R1 - Acesso e Cadastro        SPRINT: 1
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      REPORTADO POR: Mirelle Casimiro Silvino (QA)
+US RELACIONADA: SCRUM-17 US05 - Recepção cadastra paciente · casos de teste CT-US05-01, CT-US05-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US05 - Recepção cadastra paciente, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: local (docker-compose)
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-17-cadastro-pela-recepcao), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US05-01 (Cadastro presencial): o paciente fica disponível para entrar na fila
+CT-US05-02 (Paciente já cadastrado): o sistema abre o cadastro existente em vez de duplicar
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US05-01 - Cadastro presencial
+  Dado que estou logado como recepcionista
+  Quando cadastro o paciente e registro o consentimento verbal
+  Então o paciente fica disponível para entrar na fila
+
+CT-US05-02 - Paciente já cadastrado
+  Dado que o CPF já existe na base
+  Quando tento cadastrar de novo
+  Então o sistema abre o cadastro existente em vez de duplicar
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-17-cadastro-pela-recepcao com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Mirelle): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-18 US06 Entrar na fila
+
+RELEASE: R2 - Fila e Atendimento        SPRINT: 2
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      REPORTADO POR: Adrielly Carla Ferreira de Melo (QA)
+US RELACIONADA: SCRUM-18 US06 - Entrar na fila · casos de teste CT-US06-01, CT-US06-02, CT-US06-03
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US06 - Entrar na fila, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-18-entrar-na-fila), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US06-01 (Entrada com sucesso): recebo uma senha e minha posição na fila
+CT-US06-02 (Fila fechada): vejo "Fila fechada" com o próximo horário de abertura
+CT-US06-03 (Já estou na fila): o sistema mostra minha senha atual e não cria outra
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US06-01 - Entrada com sucesso
+  Dado que estou logado e a fila do serviço está aberta
+  Quando escolho o serviço e confirmo
+  Então recebo uma senha e minha posição na fila
+
+CT-US06-02 - Fila fechada
+  Dado que a fila do serviço está fora do horário ou lotada
+  Quando tento entrar
+  Então vejo "Fila fechada" com o próximo horário de abertura
+
+CT-US06-03 - Já estou na fila
+  Dado que já tenho senha ativa hoje no mesmo serviço
+  Quando tento entrar de novo
+  Então o sistema mostra minha senha atual e não cria outra
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-18-entrar-na-fila com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Adrielly): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-19 US07 Ver minha posição
+
+RELEASE: R2 - Fila e Atendimento        SPRINT: 2
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      REPORTADO POR: Adrielly Carla Ferreira de Melo (QA)
+US RELACIONADA: SCRUM-19 US07 - Ver minha posição · casos de teste CT-US07-01, CT-US07-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US07 - Ver minha posição, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-19-ver-posicao), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US07-01 (Posição exibida): vejo minha senha, minha posição e quantas pessoas faltam
+CT-US07-02 (Não estou na fila): vejo a opção "Entrar na fila"
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US07-01 - Posição exibida
+  Dado que estou na fila
+  Quando abro a tela da fila
+  Então vejo minha senha, minha posição e quantas pessoas faltam
+
+CT-US07-02 - Não estou na fila
+  Dado que não tenho senha ativa
+  Quando abro a tela da fila
+  Então vejo a opção "Entrar na fila"
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-19-ver-posicao com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Adrielly): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-20 US08 Cancelar minha senha
+
+RELEASE: R2 - Fila e Atendimento        SPRINT: 2
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Maria Eduarda da Nóbrega      REPORTADO POR: Adrielly Carla Ferreira de Melo (QA)
+US RELACIONADA: SCRUM-20 US08 - Cancelar minha senha · casos de teste CT-US08-01, CT-US08-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US08 - Cancelar minha senha, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-20-cancelar-senha), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US08-01 (Cancelamento): saio da fila e as posições seguintes são atualizadas
+CT-US08-02 (Já fui chamado): o botão de cancelar não aparece
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US08-01 - Cancelamento
+  Dado que estou na fila
+  Quando clico em cancelar e confirmo
+  Então saio da fila e as posições seguintes são atualizadas
+
+CT-US08-02 - Já fui chamado
+  Dado que meu atendimento já começou
+  Quando tento cancelar
+  Então o botão de cancelar não aparece
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-20-cancelar-senha com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Adrielly): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-21 US09 Configurar filas e horários
+
+RELEASE: R2 - Fila e Atendimento        SPRINT: 2
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Mirelle Casimiro Silvino      REPORTADO POR: Adrielly Carla Ferreira de Melo (QA)
+US RELACIONADA: SCRUM-21 US09 - Configurar filas e horários · casos de teste CT-US09-01, CT-US09-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US09 - Configurar filas e horários, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-21-configurar-filas), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US09-01 (Configuração salva): a fila abre e fecha nesses horários e limita a 40 senhas
+CT-US09-02 (Horário inválido): vejo "Horário inválido" e nada é salvo
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US09-01 - Configuração salva
+  Dado que estou logado como gestor
+  Quando defino o serviço Clínico das 7h às 12h com 40 senhas
+  Então a fila abre e fecha nesses horários e limita a 40 senhas
+
+CT-US09-02 - Horário inválido
+  Dado que estou configurando uma fila
+  Quando informo horário de fim antes do início
+  Então vejo "Horário inválido" e nada é salvo
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-21-configurar-filas com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Adrielly): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-22 US03 Gestor cadastra funcionários
+
+RELEASE: R2 - Fila e Atendimento        SPRINT: 3
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Mirelle Casimiro Silvino      REPORTADO POR: Adrielly Carla Ferreira de Melo (QA)
+US RELACIONADA: SCRUM-22 US03 - Gestor cadastra funcionários · casos de teste CT-US03-01, CT-US03-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US03 - Gestor cadastra funcionários, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-22-cadastro-funcionarios), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US03-01 (Cadastro de funcionário): ele recebe acesso e aparece na lista de usuários
+CT-US03-02 (E-mail duplicado): vejo "E-mail já cadastrado" e nada é gravado
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US03-01 - Cadastro de funcionário
+  Dado que estou logado como gestor
+  Quando cadastro um profissional com nome, e-mail, setor e papel
+  Então ele recebe acesso e aparece na lista de usuários
+
+CT-US03-02 - E-mail duplicado
+  Dado que já existe um usuário com o e-mail informado
+  Quando tento salvar o cadastro
+  Então vejo "E-mail já cadastrado" e nada é gravado
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-22-cadastro-funcionarios com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Adrielly): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-23 US10 Check-in na recepção
+
+RELEASE: R2 - Fila e Atendimento        SPRINT: 3
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Maria Eduarda da Nóbrega      REPORTADO POR: Adrielly Carla Ferreira de Melo (QA)
+US RELACIONADA: SCRUM-23 US10 - Check-in na recepção · casos de teste CT-US10-01, CT-US10-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US10 - Check-in na recepção, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-23-check-in), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US10-01 (Check-in): o status muda para "Presente"
+CT-US10-02 (Senha inexistente): vejo "Paciente sem senha hoje" e a opção de colocá-lo na fila
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US10-01 - Check-in
+  Dado que o paciente tem senha ativa
+  Quando busco pelo CPF ou senha e confirmo presença
+  Então o status muda para "Presente"
+
+CT-US10-02 - Senha inexistente
+  Dado que o CPF não tem senha hoje
+  Quando tento fazer check-in
+  Então vejo "Paciente sem senha hoje" e a opção de colocá-lo na fila
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-23-check-in com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Adrielly): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-24 US11 Aplicar prioridade legal
+
+RELEASE: R2 - Fila e Atendimento        SPRINT: 3
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      REPORTADO POR: Adrielly Carla Ferreira de Melo (QA)
+US RELACIONADA: SCRUM-24 US11 - Aplicar prioridade legal · casos de teste CT-US11-01, CT-US11-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US11 - Aplicar prioridade legal, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-24-prioridade-legal), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US11-01 (Prioridade aplicada): ele é reposicionado conforme a regra de prioridade e a mudança fica registrada
+CT-US11-02 (Prioridade sem justificativa): o sistema exige o motivo antes de salvar
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US11-01 - Prioridade aplicada
+  Dado que o paciente está na fila
+  Quando marco a prioridade "Idoso 60+"
+  Então ele é reposicionado conforme a regra de prioridade e a mudança fica registrada
+
+CT-US11-02 - Prioridade sem justificativa
+  Dado que estou marcando urgência
+  Quando tento salvar sem informar o motivo
+  Então o sistema exige o motivo antes de salvar
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-24-prioridade-legal com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Adrielly): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-25 US13 Chamar o próximo
+
+RELEASE: R2 - Fila e Atendimento        SPRINT: 3
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      REPORTADO POR: Adrielly Carla Ferreira de Melo (QA)
+US RELACIONADA: SCRUM-25 US13 - Chamar o próximo · casos de teste CT-US13-01, CT-US13-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US13 - Chamar o próximo, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-25-chamar-proximo), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US13-01 (Chamada): o próximo pela ordem de prioridade é chamado e o paciente é avisado na tela dele
+CT-US13-02 (Fila vazia): vejo "Não há pacientes aguardando"
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US13-01 - Chamada
+  Dado que há pacientes presentes na fila do meu setor
+  Quando clico em "Chamar próximo"
+  Então o próximo pela ordem de prioridade é chamado e o paciente é avisado na tela dele
+
+CT-US13-02 - Fila vazia
+  Dado que não há pacientes presentes
+  Quando clico em "Chamar próximo"
+  Então vejo "Não há pacientes aguardando"
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-25-chamar-proximo com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Adrielly): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-26 US14 Iniciar e finalizar atendimento
+
+RELEASE: R2 - Fila e Atendimento        SPRINT: 3
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Mirelle Casimiro Silvino      REPORTADO POR: Adrielly Carla Ferreira de Melo (QA)
+US RELACIONADA: SCRUM-26 US14 - Iniciar e finalizar atendimento · casos de teste CT-US14-01, CT-US14-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US14 - Iniciar e finalizar atendimento, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-26-iniciar-finalizar-atendimento), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US14-01 (Ciclo completo): os horários ficam gravados e o paciente sai da fila
+CT-US14-02 (Finalizar sem iniciar): o sistema pede para iniciar antes
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US14-01 - Ciclo completo
+  Dado que chamei um paciente
+  Quando clico em iniciar e depois em finalizar
+  Então os horários ficam gravados e o paciente sai da fila
+
+CT-US14-02 - Finalizar sem iniciar
+  Dado que o atendimento não foi iniciado
+  Quando tento finalizar
+  Então o sistema pede para iniciar antes
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-26-iniciar-finalizar-atendimento com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Adrielly): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-27 US15 Registrar observação curta
+
+RELEASE: R3 - Tempo real e Qualidade        SPRINT: 4
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Mirelle Casimiro Silvino      REPORTADO POR: Maria Eduarda da Nóbrega (QA)
+US RELACIONADA: SCRUM-27 US15 - Registrar observação curta · casos de teste CT-US15-01, CT-US15-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US15 - Registrar observação curta, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-27-observacao-atendimento), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US15-01 (Observação salva): a observação fica no histórico do paciente, visível só para profissionais
+CT-US15-02 (Texto longo): o sistema impede e mostra o limite
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US15-01 - Observação salva
+  Dado que estou finalizando um atendimento
+  Quando escrevo até 500 caracteres e salvo
+  Então a observação fica no histórico do paciente, visível só para profissionais
+
+CT-US15-02 - Texto longo
+  Dado que estou escrevendo a observação
+  Quando passo de 500 caracteres
+  Então o sistema impede e mostra o limite
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-27-observacao-atendimento com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Maria Eduarda): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-28 US16 Estimativa de espera
+
+RELEASE: R3 - Tempo real e Qualidade        SPRINT: 4
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Maria Eduarda da Nóbrega      REPORTADO POR: Maria Eduarda da Nóbrega (QA)
+US RELACIONADA: SCRUM-28 US16 - Estimativa de espera · casos de teste CT-US16-01, CT-US16-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US16 - Estimativa de espera, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-28-estimativa-espera), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US16-01 (Estimativa exibida): aparece "Estimativa: cerca de X min" calculada pela média móvel
+CT-US16-02 (Sem histórico): aparece "Estimativa indisponível no momento" em vez de um número
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US16-01 - Estimativa exibida
+  Dado que há atendimentos finalizados hoje no serviço
+  Quando vejo minha posição
+  Então aparece "Estimativa: cerca de X min" calculada pela média móvel
+
+CT-US16-02 - Sem histórico
+  Dado que ainda não houve atendimentos hoje
+  Quando vejo minha posição
+  Então aparece "Estimativa indisponível no momento" em vez de um número
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-28-estimativa-espera com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Maria Eduarda): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-29 US17 Fila em tempo real
+
+RELEASE: R3 - Tempo real e Qualidade        SPRINT: 4
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      REPORTADO POR: Maria Eduarda da Nóbrega (QA)
+US RELACIONADA: SCRUM-29 US17 - Fila em tempo real · casos de teste CT-US17-01, CT-US17-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US17 - Fila em tempo real, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-29-fila-tempo-real), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US17-01 (Atualização automática): minha posição muda em até 5 segundos sem recarregar
+CT-US17-02 (Canal em tempo real cai): a tela passa a consultar a cada 15 segundos e mostra "Atualização mais lenta"
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US17-01 - Atualização automática
+  Dado que estou com a tela da fila aberta
+  Quando outro paciente é chamado
+  Então minha posição muda em até 5 segundos sem recarregar
+
+CT-US17-02 - Canal em tempo real cai
+  Dado que a conexão SSE caiu
+  Quando a fila muda
+  Então a tela passa a consultar a cada 15 segundos e mostra "Atualização mais lenta"
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-29-fila-tempo-real com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Maria Eduarda): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-30 US12 Remover faltosos
+
+RELEASE: R3 - Tempo real e Qualidade        SPRINT: 5
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Mirelle Casimiro Silvino      REPORTADO POR: Maria Eduarda da Nóbrega (QA)
+US RELACIONADA: SCRUM-30 US12 - Remover faltosos · casos de teste CT-US12-01, CT-US12-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US12 - Remover faltosos, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-30-remover-faltosos), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US12-01 (Falta registrada): ele sai da fila e a falta conta nos indicadores
+CT-US12-02 (Marcação indevida): a opção fica desabilitada
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US12-01 - Falta registrada
+  Dado que o paciente foi chamado 3 vezes e não apareceu
+  Quando marco como faltoso
+  Então ele sai da fila e a falta conta nos indicadores
+
+CT-US12-02 - Marcação indevida
+  Dado que o paciente ainda não foi chamado
+  Quando tento marcar falta
+  Então a opção fica desabilitada
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-30-remover-faltosos com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Maria Eduarda): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-31 US20 Auditoria de acessos
+
+RELEASE: R3 - Tempo real e Qualidade        SPRINT: 5
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Maria Eduarda da Nóbrega      REPORTADO POR: Maria Eduarda da Nóbrega (QA)
+US RELACIONADA: SCRUM-31 US20 - Auditoria de acessos · casos de teste CT-US20-01, CT-US20-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US20 - Auditoria de acessos, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-31-auditoria-acessos), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US20-01 (Consulta ao log): vejo usuário, data, hora e ação de cada registro
+CT-US20-02 (Tentativa de alterar log): a ação não existe no sistema
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US20-01 - Consulta ao log
+  Dado que houve acessos a dados pessoais
+  Quando filtro o log por data e usuário
+  Então vejo usuário, data, hora e ação de cada registro
+
+CT-US20-02 - Tentativa de alterar log
+  Dado que sou qualquer usuário
+  Quando tento editar ou apagar um registro do log
+  Então a ação não existe no sistema
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-31-auditoria-acessos com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Maria Eduarda): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-32 US18 Relatório de tempo de espera
+
+RELEASE: R4 - Gestão e Demo Day        SPRINT: 6
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Maria Eduarda da Nóbrega      REPORTADO POR: Mirelle Casimiro Silvino (QA)
+US RELACIONADA: SCRUM-32 US18 - Relatório de tempo de espera · casos de teste CT-US18-01, CT-US18-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US18 - Relatório de tempo de espera, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-32-relatorio-tempo-espera), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US18-01 (Relatório): vejo o tempo médio de espera e o gráfico por dia
+CT-US18-02 (Período sem dados): vejo "Sem dados para o período"
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US18-01 - Relatório
+  Dado que há atendimentos no período
+  Quando escolho o período e o serviço
+  Então vejo o tempo médio de espera e o gráfico por dia
+
+CT-US18-02 - Período sem dados
+  Dado que não houve atendimentos no período
+  Quando gero o relatório
+  Então vejo "Sem dados para o período"
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-32-relatorio-tempo-espera com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Mirelle): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-33 US19 Volume por horário e taxa de faltas
+
+RELEASE: R4 - Gestão e Demo Day        SPRINT: 6
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Mirelle Casimiro Silvino      REPORTADO POR: Mirelle Casimiro Silvino (QA)
+US RELACIONADA: SCRUM-33 US19 - Volume por horário e taxa de faltas · casos de teste CT-US19-01, CT-US19-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US19 - Volume por horário e taxa de faltas, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-33-volume-e-faltas), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US19-01 (Indicadores): vejo volume por hora, picos e taxa de faltas sem nenhum dado clínico
+CT-US19-02 (Sem permissão): recebo "Acesso não permitido"
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US19-01 - Indicadores
+  Dado que há dados da semana
+  Quando abro o painel do gestor
+  Então vejo volume por hora, picos e taxa de faltas sem nenhum dado clínico
+
+CT-US19-02 - Sem permissão
+  Dado que estou logado como recepcionista
+  Quando tento abrir o painel do gestor
+  Então recebo "Acesso não permitido"
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-33-volume-e-faltas com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Mirelle): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-34 US21 Excluir meus dados
+
+RELEASE: R4 - Gestão e Demo Day        SPRINT: 6
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      REPORTADO POR: Mirelle Casimiro Silvino (QA)
+US RELACIONADA: SCRUM-34 US21 - Excluir meus dados · casos de teste CT-US21-01, CT-US21-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US21 - Excluir meus dados, em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-34-excluir-meus-dados), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US21-01 (Exclusão): meus dados pessoais são anonimizados e recebo a confirmação
+CT-US21-02 (Senha ativa): o sistema pede para cancelar a senha antes
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US21-01 - Exclusão
+  Dado que não tenho senha ativa
+  Quando solicito a exclusão e confirmo
+  Então meus dados pessoais são anonimizados e recebo a confirmação
+
+CT-US21-02 - Senha ativa
+  Dado que estou na fila hoje
+  Quando solicito a exclusão
+  Então o sistema pede para cancelar a senha antes
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-34-excluir-meus-dados com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Mirelle): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-35 US22 Painel de chamada (TV)
+
+RELEASE: R4 - Gestão e Demo Day        SPRINT: 6
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Maria Eduarda da Nóbrega      REPORTADO POR: Mirelle Casimiro Silvino (QA)
+US RELACIONADA: SCRUM-35 US22 - Painel de chamada (TV) · casos de teste CT-US22-01, CT-US22-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US22 - Painel de chamada (TV), em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-35-painel-tv), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US22-01 (Senha na TV): a senha e o consultório aparecem na tela, sem nome completo
+CT-US22-02 (Sem chamadas): aparece "Aguardando chamadas"
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US22-01 - Senha na TV
+  Dado que o painel está aberto na TV
+  Quando um profissional chama o próximo
+  Então a senha e o consultório aparecem na tela, sem nome completo
+
+CT-US22-02 - Sem chamadas
+  Dado que ninguém foi chamado ainda
+  Quando abro o painel
+  Então aparece "Aguardando chamadas"
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-35-painel-tv com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Mirelle): "Reteste OK" e bug em Concluído
+
+################################################################
+
+TÍTULO: [BUG] <sintoma curto> - SCRUM-36 US23 Aviso "sua vez está chegando"
+
+RELEASE: R4 - Gestão e Demo Day        SPRINT: 6
+SEVERIDADE: <Crítica | Alta | Média | Baixa>
+PRIORIDADE: <Mais alta (Crítica) | Alta | Média | Baixa>
+RESPONSÁVEL: Mirelle Casimiro Silvino      REPORTADO POR: Mirelle Casimiro Silvino (QA)
+US RELACIONADA: SCRUM-36 US23 - Aviso "sua vez está chegando" · casos de teste CT-US23-01, CT-US23-02
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+<O que está acontecendo de errado em US23 - Aviso "sua vez está chegando", em uma ou duas frases>
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: homologação
+Navegador / versão: <ex.: Chrome 130>
+Sistema operacional: <ex.: Windows 11>
+Versão / commit / branch: develop (feature/SCRUM-36-aviso-sua-vez), <commit>
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. <passo 1>
+2. <passo 2>
+3. <passo 3>
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+(manter só o caso de teste que falhou)
+CT-US23-01 (Aviso enviado): recebo um e-mail com minha senha e posição
+CT-US23-02 (Sem e-mail): nenhum envio é feito e nada quebra na fila
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+<O que aconteceu de fato>
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print ou vídeo anexado, logs ou mensagens de erro. Sem CPF nem dados reais de pacientes>
+
+----------------------------------------------------------------
+CRITÉRIO DE CORREÇÃO (Gherkin, opcional)
+----------------------------------------------------------------
+CT-US23-01 - Aviso enviado
+  Dado que estou na fila com e-mail cadastrado
+  Quando minha posição chega a 3
+  Então recebo um e-mail com minha senha e posição
+
+CT-US23-02 - Sem e-mail
+  Dado que não tenho e-mail cadastrado
+  Quando minha posição chega a 3
+  Então nenhum envio é feito e nada quebra na fila
+
+----------------------------------------------------------------
+CHECKLIST DE ENCERRAMENTO
+----------------------------------------------------------------
+[ ] Causa identificada e registrada nos comentários
+[ ] Correção feita na feature/SCRUM-36-aviso-sua-vez com commit "SCRUM-<chave do bug> fix(...): ..."
+[ ] Teste de regressão criado ou atualizado
+[ ] Correção verificada pela QA (Mirelle): "Reteste OK" e bug em Concluído

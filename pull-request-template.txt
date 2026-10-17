@@ -1,21 +1,2295 @@
-PULL REQUEST
+TÍTULO: SCRUM-14 US01 - Login por perfil
 
-O que muda
-(Resumo em 2 ou 3 linhas)
+AUTOR: Maria Eduarda da Nóbrega
+REVISORES: Mirelle Casimiro Silvino
+ISSUE RELACIONADA: SCRUM-14 (Jira) · épico SCRUM-10 Autenticação e perfis
+BRANCH: feature/SCRUM-14-login-por-perfil  ->  develop
 
-Issue relacionada
-(Chave do Jira, ex.: SCRUM-12. Use a mesma chave no nome da branch.)
-Closes #
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US01 - Login por perfil (5 pts, Sprint 1, R1 - Acesso e Cadastro).
 
-Como testar
-1.
-2.
-3.
+- Back-end: cria entidade Usuario e enum Perfil
+- Back-end: adiciona endpoint POST /auth/login com JWT
+- Back-end: bloqueia a conta por 15 min após 5 tentativas
+- Front-end: cria tela de login
+- Testes: automatiza cenários Gherkin da US01
 
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como usuário do sistema (paciente, recepcionista, profissional ou gestor), preciso fazer login com CPF/e-mail e senha, de modo que eu acesse apenas as telas do meu perfil.
 
-Checklist
-[ ] Testes escritos e passando
-[ ] Permissões por perfil conferidas
-[ ] Sem senhas, tokens ou dados reais de pacientes no código
-[ ] Documentação atualizada (README, API ou doc do projeto)
-[ ] Revisado por pelo menos 1 integrante
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto no ambiente local (docker-compose) com dados fictícios
+2. CT-US01-01 - Login com sucesso: dado que estou cadastrado e ativo, quando informo CPF e senha corretos, então sou levado à tela inicial do meu perfil
+3. CT-US01-02 - Senha incorreta: dado que estou cadastrado, quando informo a senha errada 5 vezes seguidas, então vejo "CPF ou senha inválidos" e a conta fica bloqueada por 15 minutos
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US01-01, CT-US01-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US01 atendidos (Login com sucesso · Senha incorreta); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US01 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 1; revisar e mesclar até a Review de 29/10. Depois do merge, a QA (Mirelle) executa CT-US01-01, CT-US01-02.
+
+################################################################
+
+TÍTULO: SCRUM-15 US02 - Controle de acesso por papel
+
+AUTOR: Mirelle Casimiro Silvino
+REVISORES: Adrielly Carla Ferreira de Melo
+ISSUE RELACIONADA: SCRUM-15 (Jira) · épico SCRUM-10 Autenticação e perfis
+BRANCH: feature/SCRUM-15-controle-de-acesso  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US02 - Controle de acesso por papel (8 pts, Sprint 1, R1 - Acesso e Cadastro).
+
+- Back-end: configura Spring Security com filtro JWT
+- Back-end: restringe rotas por perfil
+- Front-end: protege rotas do front-end por perfil
+- Testes: testa acesso permitido e resposta 403
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como gestor, preciso que cada perfil só consiga abrir as funções permitidas para ele, de modo que dados de pacientes não sejam vistos por quem não deve.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto no ambiente local (docker-compose) com dados fictícios
+2. CT-US02-01 - Acesso permitido: dado que estou logado como recepcionista, quando abro o painel da recepção da minha UBS, então a fila do dia é exibida
+3. CT-US02-02 - Acesso negado: dado que estou logado como paciente, quando tento acessar a rota do painel da recepção, então o sistema responde 403 e mostra "Acesso não permitido"
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US02-01, CT-US02-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US02 atendidos (Acesso permitido · Acesso negado); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US02 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 1; revisar e mesclar até a Review de 29/10. Depois do merge, a QA (Mirelle) executa CT-US02-01, CT-US02-02.
+
+################################################################
+
+TÍTULO: SCRUM-16 US04 - Autocadastro do paciente com consentimento
+
+AUTOR: Maria Eduarda da Nóbrega
+REVISORES: Mirelle Casimiro Silvino
+ISSUE RELACIONADA: SCRUM-16 (Jira) · épico SCRUM-28 Cadastro do paciente
+BRANCH: feature/SCRUM-16-autocadastro-paciente  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US04 - Autocadastro do paciente com consentimento (5 pts, Sprint 1, R1 - Acesso e Cadastro).
+
+- Back-end: cria entidade Paciente com validação de CPF
+- Back-end: adiciona autocadastro com aceite LGPD registrado
+- Front-end: cria tela de cadastro com termo de consentimento
+- Testes: automatiza cenários Gherkin da US04
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como paciente, preciso me cadastrar com CPF, cartão SUS, contato e necessidade de prioridade, aceitando o termo de consentimento, de modo que eu possa entrar na fila pelo celular.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto no ambiente local (docker-compose) com dados fictícios
+2. CT-US04-01 - Cadastro com sucesso: dado que estou na tela de cadastro, quando preencho os dados obrigatórios e aceito o termo LGPD, então minha conta é criada e o aceite fica registrado com data e hora
+3. CT-US04-02 - Sem consentimento: dado que preenchi os dados, quando tento concluir sem marcar o aceite do termo, então o cadastro não é concluído e vejo a finalidade do uso dos dados
+4. CT-US04-03 - CPF inválido: dado que estou na tela de cadastro, quando informo um CPF com dígito verificador errado, então vejo "CPF inválido" no campo
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US04-01, CT-US04-02, CT-US04-03 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US04 atendidos (Cadastro com sucesso · Sem consentimento · CPF inválido); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US04 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 1; revisar e mesclar até a Review de 29/10. Depois do merge, a QA (Mirelle) executa CT-US04-01, CT-US04-02, CT-US04-03.
+
+################################################################
+
+TÍTULO: SCRUM-17 US05 - Recepção cadastra paciente
+
+AUTOR: Adrielly Carla Ferreira de Melo
+REVISORES: Maria Eduarda da Nóbrega
+ISSUE RELACIONADA: SCRUM-17 (Jira) · épico SCRUM-28 Cadastro do paciente
+BRANCH: feature/SCRUM-17-cadastro-pela-recepcao  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US05 - Recepção cadastra paciente (3 pts, Sprint 1, R1 - Acesso e Cadastro).
+
+- Back-end: adiciona cadastro de paciente pela recepção
+- Back-end: abre cadastro existente quando o CPF já existe
+- Front-end: cria formulário de cadastro da recepção
+- Testes: automatiza cenários Gherkin da US05
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como recepcionista, preciso cadastrar um paciente que não tem celular ou não sabe usar o sistema, de modo que ninguém fique fora da fila por falta de familiaridade digital.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto no ambiente local (docker-compose) com dados fictícios
+2. CT-US05-01 - Cadastro presencial: dado que estou logado como recepcionista, quando cadastro o paciente e registro o consentimento verbal, então o paciente fica disponível para entrar na fila
+3. CT-US05-02 - Paciente já cadastrado: dado que o CPF já existe na base, quando tento cadastrar de novo, então o sistema abre o cadastro existente em vez de duplicar
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US05-01, CT-US05-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US05 atendidos (Cadastro presencial · Paciente já cadastrado); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US05 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 1; revisar e mesclar até a Review de 29/10. Depois do merge, a QA (Mirelle) executa CT-US05-01, CT-US05-02.
+
+################################################################
+
+TÍTULO: SCRUM-44 T09 - [DevOps] Configurar pipeline de CI (build e testes)
+
+AUTOR: Adrielly Carla Ferreira de Melo
+REVISORES: Maria Eduarda da Nóbrega
+ISSUE RELACIONADA: SCRUM-44 (Jira) · Sprint 1 · R1 - Acesso e Cadastro
+BRANCH: ci/SCRUM-44-pipeline-ci  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Cria o pipeline de CI que faz build e roda os testes do back-end e do front-end em todo push e PR.
+
+- Workflow .github/workflows/ci.yml com PostgreSQL 16 temporário, Java 21 (mvn -B verify) e Node 20 (npm ci, build e testes)
+- Badge do CI no README
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Tarefa T09 do PO + DevOps. Garante que nenhum PR entre em develop ou main com build quebrado (Definition of Done).
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[ ] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[x] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Fazer push nesta branch
+2. Abrir a aba Actions e conferir o job build verde
+3. Conferir o badge do CI no README
+
+Comandos úteis: cd backend && mvn -B verify · cd frontend && npm ci && npm run build
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print da execução do workflow CI na aba Actions>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] CI roda em todo push e PR; badge no README
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Workflow executou com sucesso nesta branch
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: A senha do ci.yml é só do banco temporário do CI. Depois da primeira execução, marcar o check build como obrigatório em main e develop.
+
+################################################################
+
+TÍTULO: SCRUM-45 T10 - [DevOps] Documentar ambiente de desenvolvimento
+
+AUTOR: Adrielly Carla Ferreira de Melo
+REVISORES: Maria Eduarda da Nóbrega
+ISSUE RELACIONADA: SCRUM-45 (Jira) · Sprint 1 · R1 - Acesso e Cadastro
+BRANCH: ci/SCRUM-45-ambiente-dev  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Adiciona o docker-compose com PostgreSQL e o passo a passo para subir o ambiente local.
+
+- docker-compose.yml com postgres:16
+- docs/devops/ambiente.md: pré-requisitos, como subir banco, back-end e front-end, variáveis de ambiente
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Tarefa T10 do PO + DevOps. Na R1 o aceite é feito no ambiente local, então todas precisam subir o projeto do mesmo jeito.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[ ] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[x] Documentação
+[x] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Seguir só o docs/devops/ambiente.md numa máquina limpa
+2. Subir banco, back-end e front-end
+3. Comentar "Ambiente funcionando" na SCRUM-45
+
+Comandos úteis: docker compose up -d · cd backend && mvn spring-boot:run · cd frontend && npm run dev
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print do ambiente rodando localmente>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Outra pessoa do time sobe o ambiente seguindo só o documento
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Consegui subir o ambiente só com o documento
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: Nenhuma credencial real no docker-compose; usar variáveis de ambiente.
+
+################################################################
+
+TÍTULO: SCRUM-46 T11 - Release v0.1.0
+
+AUTOR: Adrielly Carla Ferreira de Melo
+REVISORES: Maria Eduarda da Nóbrega
+ISSUE RELACIONADA: SCRUM-46 (Jira) · Sprint 1 · R1 - Acesso e Cadastro
+BRANCH: release/v0.1.0  ->  main
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Fecha a R1 - Acesso e Cadastro com as release notes da v0.1.0.
+
+- docs/po/release-notes/v0.1.0.md com SCRUM-14 US01, SCRUM-15 US02, SCRUM-16 US04 e SCRUM-17 US05 (21 pts planejados)
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Tarefa T11 do PO: fechar a R1 em 29/10 e passar o papel de PO + DevOps para a Maria Eduarda.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[ ] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[x] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Conferir as release notes contra o Jira (histórias aceitas na Review de 29/10)
+2. Depois do merge: tag v0.1.0, GitHub Release, PR main -> develop e lançar a versão R1 no Jira
+
+Comandos úteis: git tag -a v0.1.0 -m "R1 - Acesso e Cadastro" · git push origin v0.1.0
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print da versão R1 lançada no Jira e da GitHub Release>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (main)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Release notes completas (histórias, não concluídas, métricas, próxima release)
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Release notes batem com o Jira
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: Merge commit em main. Em seguida abrir PR main -> develop para alinhar as branches.
+
+################################################################
+
+TÍTULO: SCRUM-18 US06 - Entrar na fila
+
+AUTOR: Adrielly Carla Ferreira de Melo
+REVISORES: Maria Eduarda da Nóbrega
+ISSUE RELACIONADA: SCRUM-18 (Jira) · épico SCRUM-29 Fila virtual
+BRANCH: feature/SCRUM-18-entrar-na-fila  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US06 - Entrar na fila (5 pts, Sprint 2, R2 - Fila e Atendimento).
+
+- Back-end: cria entidades Fila e Senha
+- Back-end: adiciona endpoint para entrar na fila
+- Front-end: cria tela de escolha de serviço
+- Testes: automatiza cenários Gherkin da US06
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como paciente, preciso entrar na fila do serviço que preciso (clínico, enfermagem, odontologia), de modo que eu não precise chegar de madrugada para pegar senha.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US06-01 - Entrada com sucesso: dado que estou logado e a fila do serviço está aberta, quando escolho o serviço e confirmo, então recebo uma senha e minha posição na fila
+3. CT-US06-02 - Fila fechada: dado que a fila do serviço está fora do horário ou lotada, quando tento entrar, então vejo "Fila fechada" com o próximo horário de abertura
+4. CT-US06-03 - Já estou na fila: dado que já tenho senha ativa hoje no mesmo serviço, quando tento entrar de novo, então o sistema mostra minha senha atual e não cria outra
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US06-01, CT-US06-02, CT-US06-03 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US06 atendidos (Entrada com sucesso · Fila fechada · Já estou na fila); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US06 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 2; revisar e mesclar até a Review de 12/11. Depois do merge, a QA (Adrielly) executa CT-US06-01, CT-US06-02, CT-US06-03.
+
+################################################################
+
+TÍTULO: SCRUM-19 US07 - Ver minha posição
+
+AUTOR: Adrielly Carla Ferreira de Melo
+REVISORES: Maria Eduarda da Nóbrega
+ISSUE RELACIONADA: SCRUM-19 (Jira) · épico SCRUM-29 Fila virtual
+BRANCH: feature/SCRUM-19-ver-posicao  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US07 - Ver minha posição (3 pts, Sprint 2, R2 - Fila e Atendimento).
+
+- Back-end: calcula posição e pessoas à frente
+- Front-end: exibe senha e posição do paciente
+- Testes: automatiza cenários Gherkin da US07
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como paciente, preciso ver minha posição e quantas pessoas estão na minha frente, de modo que eu saiba quando sair de casa.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US07-01 - Posição exibida: dado que estou na fila, quando abro a tela da fila, então vejo minha senha, minha posição e quantas pessoas faltam
+3. CT-US07-02 - Não estou na fila: dado que não tenho senha ativa, quando abro a tela da fila, então vejo a opção "Entrar na fila"
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US07-01, CT-US07-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US07 atendidos (Posição exibida · Não estou na fila); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US07 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 2; revisar e mesclar até a Review de 12/11. Depois do merge, a QA (Adrielly) executa CT-US07-01, CT-US07-02.
+
+################################################################
+
+TÍTULO: SCRUM-20 US08 - Cancelar minha senha
+
+AUTOR: Maria Eduarda da Nóbrega
+REVISORES: Mirelle Casimiro Silvino
+ISSUE RELACIONADA: SCRUM-20 (Jira) · épico SCRUM-29 Fila virtual
+BRANCH: feature/SCRUM-20-cancelar-senha  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US08 - Cancelar minha senha (2 pts, Sprint 2, R2 - Fila e Atendimento).
+
+- Back-end: adiciona cancelamento de senha
+- Front-end: adiciona botão de cancelar senha
+- Testes: automatiza cenários Gherkin da US08
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como paciente, preciso cancelar minha senha se eu não puder mais ir, de modo que a fila ande para quem está esperando.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US08-01 - Cancelamento: dado que estou na fila, quando clico em cancelar e confirmo, então saio da fila e as posições seguintes são atualizadas
+3. CT-US08-02 - Já fui chamado: dado que meu atendimento já começou, quando tento cancelar, então o botão de cancelar não aparece
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US08-01, CT-US08-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US08 atendidos (Cancelamento · Já fui chamado); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US08 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 2; revisar e mesclar até a Review de 12/11. Depois do merge, a QA (Adrielly) executa CT-US08-01, CT-US08-02.
+
+################################################################
+
+TÍTULO: SCRUM-21 US09 - Configurar filas e horários
+
+AUTOR: Mirelle Casimiro Silvino
+REVISORES: Adrielly Carla Ferreira de Melo
+ISSUE RELACIONADA: SCRUM-21 (Jira) · épico SCRUM-32 Gestão e relatórios
+BRANCH: feature/SCRUM-21-configurar-filas  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US09 - Configurar filas e horários (5 pts, Sprint 2, R2 - Fila e Atendimento).
+
+- Back-end: adiciona cadastro de serviços e horários
+- Back-end: limita a quantidade de senhas por dia
+- Front-end: cria tela de configuração do gestor
+- Testes: automatiza cenários Gherkin da US09
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como gestor, preciso configurar os serviços, o horário de funcionamento e o limite de senhas por dia, de modo que a fila reflita a capacidade real da UBS.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US09-01 - Configuração salva: dado que estou logado como gestor, quando defino o serviço Clínico das 7h às 12h com 40 senhas, então a fila abre e fecha nesses horários e limita a 40 senhas
+3. CT-US09-02 - Horário inválido: dado que estou configurando uma fila, quando informo horário de fim antes do início, então vejo "Horário inválido" e nada é salvo
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US09-01, CT-US09-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US09 atendidos (Configuração salva · Horário inválido); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US09 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 2; revisar e mesclar até a Review de 12/11. Depois do merge, a QA (Adrielly) executa CT-US09-01, CT-US09-02.
+
+################################################################
+
+TÍTULO: SCRUM-48 T13 - [DevOps] Deploy automatizado em homologação
+
+AUTOR: Maria Eduarda da Nóbrega
+REVISORES: Mirelle Casimiro Silvino
+ISSUE RELACIONADA: SCRUM-48 (Jira) · Sprint 2 · R2 - Fila e Atendimento
+BRANCH: ci/SCRUM-48-deploy-homolog  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Adiciona o deploy automático em homologação a cada merge em develop.
+
+- Workflow .github/workflows/deploy-homolog.yml disparado por push em develop (Render ou Railway com Docker, plano gratuito)
+- Documentação da URL e dos segredos de homologação; URL no README
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Tarefa T13 do PO + DevOps. A partir da R2 o aceite do PO é feito em homologação.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[ ] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[x] Documentação
+[x] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Mesclar em develop
+2. Conferir o deploy na aba Actions
+3. Abrir a URL de homologação do README
+
+Comandos úteis: git push origin develop (dispara o deploy)
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print do deploy no Actions e da aplicação em homologação>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] URL de homologação no README; deploy registrado no Actions
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Homologação no ar após o merge
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: Credenciais só em Settings -> Secrets and variables -> Actions, nunca no código.
+
+################################################################
+
+TÍTULO: SCRUM-22 US03 - Gestor cadastra funcionários
+
+AUTOR: Mirelle Casimiro Silvino
+REVISORES: Adrielly Carla Ferreira de Melo
+ISSUE RELACIONADA: SCRUM-22 (Jira) · épico SCRUM-10 Autenticação e perfis
+BRANCH: feature/SCRUM-22-cadastro-funcionarios  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US03 - Gestor cadastra funcionários (5 pts, Sprint 3, R2 - Fila e Atendimento).
+
+- Back-end: adiciona cadastro de funcionário pelo gestor
+- Front-end: cria lista e formulário de usuários
+- Testes: automatiza cenários Gherkin da US03
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como gestor, preciso cadastrar recepcionistas e profissionais de saúde com seus papéis, de modo que a equipe da UBS tenha acesso ao sistema.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US03-01 - Cadastro de funcionário: dado que estou logado como gestor, quando cadastro um profissional com nome, e-mail, setor e papel, então ele recebe acesso e aparece na lista de usuários
+3. CT-US03-02 - E-mail duplicado: dado que já existe um usuário com o e-mail informado, quando tento salvar o cadastro, então vejo "E-mail já cadastrado" e nada é gravado
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US03-01, CT-US03-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US03 atendidos (Cadastro de funcionário · E-mail duplicado); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US03 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 3; revisar e mesclar até a Review de 26/11. Depois do merge, a QA (Adrielly) executa CT-US03-01, CT-US03-02.
+
+################################################################
+
+TÍTULO: SCRUM-23 US10 - Check-in na recepção
+
+AUTOR: Maria Eduarda da Nóbrega
+REVISORES: Mirelle Casimiro Silvino
+ISSUE RELACIONADA: SCRUM-23 (Jira) · épico SCRUM-30 Painel da recepção
+BRANCH: feature/SCRUM-23-check-in  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US10 - Check-in na recepção (3 pts, Sprint 3, R2 - Fila e Atendimento).
+
+- Back-end: adiciona check-in por CPF ou senha
+- Front-end: cria busca e botão de presença
+- Testes: automatiza cenários Gherkin da US10
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como recepcionista, preciso confirmar a presença do paciente quando ele chega na UBS, de modo que só quem está presente seja chamado.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US10-01 - Check-in: dado que o paciente tem senha ativa, quando busco pelo CPF ou senha e confirmo presença, então o status muda para "Presente"
+3. CT-US10-02 - Senha inexistente: dado que o CPF não tem senha hoje, quando tento fazer check-in, então vejo "Paciente sem senha hoje" e a opção de colocá-lo na fila
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US10-01, CT-US10-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US10 atendidos (Check-in · Senha inexistente); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US10 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 3; revisar e mesclar até a Review de 26/11. Depois do merge, a QA (Adrielly) executa CT-US10-01, CT-US10-02.
+
+################################################################
+
+TÍTULO: SCRUM-24 US11 - Aplicar prioridade legal
+
+AUTOR: Adrielly Carla Ferreira de Melo
+REVISORES: Maria Eduarda da Nóbrega
+ISSUE RELACIONADA: SCRUM-24 (Jira) · épico SCRUM-30 Painel da recepção
+BRANCH: feature/SCRUM-24-prioridade-legal  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US11 - Aplicar prioridade legal (5 pts, Sprint 3, R2 - Fila e Atendimento).
+
+- Back-end: aplica regra de prioridade legal
+- Back-end: exige motivo para urgência e registra a mudança
+- Front-end: adiciona seleção de prioridade
+- Testes: automatiza cenários Gherkin da US11
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como recepcionista, preciso marcar prioridade para idosos, gestantes, pessoas com deficiência e urgências, de modo que a fila respeite a lei e os casos urgentes.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US11-01 - Prioridade aplicada: dado que o paciente está na fila, quando marco a prioridade "Idoso 60+", então ele é reposicionado conforme a regra de prioridade e a mudança fica registrada
+3. CT-US11-02 - Prioridade sem justificativa: dado que estou marcando urgência, quando tento salvar sem informar o motivo, então o sistema exige o motivo antes de salvar
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US11-01, CT-US11-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US11 atendidos (Prioridade aplicada · Prioridade sem justificativa); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US11 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 3; revisar e mesclar até a Review de 26/11. Depois do merge, a QA (Adrielly) executa CT-US11-01, CT-US11-02.
+
+################################################################
+
+TÍTULO: SCRUM-25 US13 - Chamar o próximo
+
+AUTOR: Adrielly Carla Ferreira de Melo
+REVISORES: Maria Eduarda da Nóbrega
+ISSUE RELACIONADA: SCRUM-25 (Jira) · épico SCRUM-31 Atendimento
+BRANCH: feature/SCRUM-25-chamar-proximo  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US13 - Chamar o próximo (3 pts, Sprint 3, R2 - Fila e Atendimento).
+
+- Back-end: chama o próximo pela ordem de prioridade
+- Front-end: cria painel do profissional de saúde
+- Testes: automatiza cenários Gherkin da US13
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como profissional de saúde, preciso chamar o próximo paciente da fila do meu setor, de modo que eu não dependa de chamar em voz alta.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US13-01 - Chamada: dado que há pacientes presentes na fila do meu setor, quando clico em "Chamar próximo", então o próximo pela ordem de prioridade é chamado e o paciente é avisado na tela dele
+3. CT-US13-02 - Fila vazia: dado que não há pacientes presentes, quando clico em "Chamar próximo", então vejo "Não há pacientes aguardando"
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US13-01, CT-US13-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US13 atendidos (Chamada · Fila vazia); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US13 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 3; revisar e mesclar até a Review de 26/11. Depois do merge, a QA (Adrielly) executa CT-US13-01, CT-US13-02.
+
+################################################################
+
+TÍTULO: SCRUM-26 US14 - Iniciar e finalizar atendimento
+
+AUTOR: Mirelle Casimiro Silvino
+REVISORES: Adrielly Carla Ferreira de Melo
+ISSUE RELACIONADA: SCRUM-26 (Jira) · épico SCRUM-31 Atendimento
+BRANCH: feature/SCRUM-26-iniciar-finalizar-atendimento  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US14 - Iniciar e finalizar atendimento (3 pts, Sprint 3, R2 - Fila e Atendimento).
+
+- Back-end: registra início e fim do atendimento
+- Front-end: adiciona botões iniciar e finalizar
+- Testes: automatiza cenários Gherkin da US14
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como profissional de saúde, preciso iniciar e finalizar o atendimento do paciente chamado, de modo que o tempo de atendimento seja medido.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US14-01 - Ciclo completo: dado que chamei um paciente, quando clico em iniciar e depois em finalizar, então os horários ficam gravados e o paciente sai da fila
+3. CT-US14-02 - Finalizar sem iniciar: dado que o atendimento não foi iniciado, quando tento finalizar, então o sistema pede para iniciar antes
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US14-01, CT-US14-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US14 atendidos (Ciclo completo · Finalizar sem iniciar); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US14 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 3; revisar e mesclar até a Review de 26/11. Depois do merge, a QA (Adrielly) executa CT-US14-01, CT-US14-02.
+
+################################################################
+
+TÍTULO: SCRUM-49 T14 - [DevOps] Relatório do pipeline da R2
+
+AUTOR: Maria Eduarda da Nóbrega
+REVISORES: Mirelle Casimiro Silvino
+ISSUE RELACIONADA: SCRUM-49 (Jira) · Sprint 3 · R2 - Fila e Atendimento
+BRANCH: docs/SCRUM-49-relatorio-pipeline-r2  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Adiciona o relatório do pipeline de CI da R2.
+
+- docs/devops/relatorio-pipeline-r2.md: execuções do CI na R2, taxa de sucesso (meta de 90%), tempo médio e cada falha com a correção
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Tarefa T14 do PO + DevOps, com os dados da aba Actions, até 26/11.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[ ] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[x] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Conferir os números do relatório com a aba Actions
+
+Comandos úteis: —
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print da aba Actions usada como fonte>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Relatório no repositório até 26/11
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Números conferem com o Actions
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: —
+
+################################################################
+
+TÍTULO: SCRUM-50 T15 - Release v0.2.0
+
+AUTOR: Maria Eduarda da Nóbrega
+REVISORES: Mirelle Casimiro Silvino
+ISSUE RELACIONADA: SCRUM-50 (Jira) · Sprint 3 · R2 - Fila e Atendimento
+BRANCH: release/v0.2.0  ->  main
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Fecha a R2 - Fila e Atendimento com as release notes da v0.2.0.
+
+- docs/po/release-notes/v0.2.0.md com SCRUM-18 a SCRUM-26 (US06, US07, US08, US09, US03, US10, US11, US13, US14; 34 pts planejados)
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Tarefa T15 do PO: fechar a R2 em 26/11 e passar o papel de PO + DevOps para a Mirelle.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[ ] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[x] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Conferir as release notes contra o Jira (histórias aceitas nas Reviews de 12/11 e 26/11)
+2. Depois do merge: tag v0.2.0, GitHub Release, PR main -> develop e lançar a versão R2 no Jira
+
+Comandos úteis: git tag -a v0.2.0 -m "R2 - Fila e Atendimento" · git push origin v0.2.0
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print da versão R2 lançada no Jira e da GitHub Release>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (main)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Release notes completas (histórias, não concluídas, métricas, próxima release)
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Release notes batem com o Jira
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: Merge commit em main. Em seguida abrir PR main -> develop para alinhar as branches.
+
+################################################################
+
+TÍTULO: SCRUM-27 US15 - Registrar observação curta
+
+AUTOR: Mirelle Casimiro Silvino
+REVISORES: Adrielly Carla Ferreira de Melo
+ISSUE RELACIONADA: SCRUM-27 (Jira) · épico SCRUM-31 Atendimento
+BRANCH: feature/SCRUM-27-observacao-atendimento  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US15 - Registrar observação curta (2 pts, Sprint 4, R3 - Tempo real e Qualidade).
+
+- Back-end: adiciona observação de até 500 caracteres
+- Front-end: cria campo de observação no atendimento
+- Testes: automatiza cenários Gherkin da US15
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como profissional de saúde, preciso registrar uma observação curta ao finalizar o atendimento, de modo que a próxima consulta tenha contexto básico.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US15-01 - Observação salva: dado que estou finalizando um atendimento, quando escrevo até 500 caracteres e salvo, então a observação fica no histórico do paciente, visível só para profissionais
+3. CT-US15-02 - Texto longo: dado que estou escrevendo a observação, quando passo de 500 caracteres, então o sistema impede e mostra o limite
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US15-01, CT-US15-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US15 atendidos (Observação salva · Texto longo); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US15 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 4; revisar e mesclar até a Review de 10/12. Depois do merge, a QA (Maria Eduarda) executa CT-US15-01, CT-US15-02.
+
+################################################################
+
+TÍTULO: SCRUM-28 US16 - Estimativa de espera
+
+AUTOR: Maria Eduarda da Nóbrega
+REVISORES: Mirelle Casimiro Silvino
+ISSUE RELACIONADA: SCRUM-28 (Jira) · épico SCRUM-29 Fila virtual
+BRANCH: feature/SCRUM-28-estimativa-espera  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US16 - Estimativa de espera (8 pts, Sprint 4, R3 - Tempo real e Qualidade).
+
+- Back-end: calcula estimativa de espera por média móvel
+- Front-end: exibe estimativa ou aviso de indisponível
+- Testes: automatiza cenários Gherkin da US16
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como paciente, preciso ver uma estimativa do tempo que falta para ser atendido, de modo que eu planeje meu dia.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US16-01 - Estimativa exibida: dado que há atendimentos finalizados hoje no serviço, quando vejo minha posição, então aparece "Estimativa: cerca de X min" calculada pela média móvel
+3. CT-US16-02 - Sem histórico: dado que ainda não houve atendimentos hoje, quando vejo minha posição, então aparece "Estimativa indisponível no momento" em vez de um número
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US16-01, CT-US16-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US16 atendidos (Estimativa exibida · Sem histórico); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US16 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 4; revisar e mesclar até a Review de 10/12. Depois do merge, a QA (Maria Eduarda) executa CT-US16-01, CT-US16-02.
+
+################################################################
+
+TÍTULO: SCRUM-29 US17 - Fila em tempo real
+
+AUTOR: Adrielly Carla Ferreira de Melo
+REVISORES: Maria Eduarda da Nóbrega
+ISSUE RELACIONADA: SCRUM-29 (Jira) · épico SCRUM-29 Fila virtual
+BRANCH: feature/SCRUM-29-fila-tempo-real  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US17 - Fila em tempo real (8 pts, Sprint 4, R3 - Tempo real e Qualidade).
+
+- Back-end: publica mudanças da fila via SSE
+- Front-end: atualiza a posição sem recarregar a página
+- Front-end: consulta a cada 15 s quando o SSE cai
+- Testes: verifica atualização em até 5 s
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como paciente, preciso que minha posição atualize sozinha na tela, de modo que eu não precise ficar recarregando a página.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US17-01 - Atualização automática: dado que estou com a tela da fila aberta, quando outro paciente é chamado, então minha posição muda em até 5 segundos sem recarregar
+3. CT-US17-02 - Canal em tempo real cai: dado que a conexão SSE caiu, quando a fila muda, então a tela passa a consultar a cada 15 segundos e mostra "Atualização mais lenta"
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US17-01, CT-US17-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US17 atendidos (Atualização automática · Canal em tempo real cai); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US17 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 4; revisar e mesclar até a Review de 10/12. Depois do merge, a QA (Maria Eduarda) executa CT-US17-01, CT-US17-02.
+
+################################################################
+
+TÍTULO: SCRUM-52 T17 - [DevOps] Análise estática e cobertura de testes no CI
+
+AUTOR: Mirelle Casimiro Silvino
+REVISORES: Adrielly Carla Ferreira de Melo
+ISSUE RELACIONADA: SCRUM-52 (Jira) · Sprint 4 · R3 - Tempo real e Qualidade
+BRANCH: ci/SCRUM-52-qualidade-pipeline  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Adiciona análise estática e cobertura mínima de testes ao CI.
+
+- Checkstyle ou SpotBugs e ESLint no ci.yml
+- JaCoCo com meta de 60% (o CI falha abaixo disso)
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Tarefa T17 do PO + DevOps. Atende a métrica de cobertura do plano de qualidade (meta de 60% a partir da R3).
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[ ] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[x] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Fazer push e conferir os novos passos no Actions
+2. Conferir o relatório de cobertura do JaCoCo
+
+Comandos úteis: cd backend && mvn -B verify · cd frontend && npx eslint .
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print do CI com análise estática e cobertura>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] CI falha se a cobertura cair abaixo da meta
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cobertura e análise estática aparecem no CI
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: Se o build de develop quebrar: abrir "[BUG] Build quebrado em develop" e corrigir em menos de 24 h.
+
+################################################################
+
+TÍTULO: SCRUM-30 US12 - Remover faltosos
+
+AUTOR: Mirelle Casimiro Silvino
+REVISORES: Adrielly Carla Ferreira de Melo
+ISSUE RELACIONADA: SCRUM-30 (Jira) · épico SCRUM-30 Painel da recepção
+BRANCH: feature/SCRUM-30-remover-faltosos  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US12 - Remover faltosos (3 pts, Sprint 5, R3 - Tempo real e Qualidade).
+
+- Back-end: marca faltoso após 3 chamadas
+- Front-end: adiciona ação de registrar falta
+- Testes: automatiza cenários Gherkin da US12
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como recepcionista, preciso marcar como faltoso o paciente chamado que não apareceu, de modo que a fila não trave esperando quem não veio.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US12-01 - Falta registrada: dado que o paciente foi chamado 3 vezes e não apareceu, quando marco como faltoso, então ele sai da fila e a falta conta nos indicadores
+3. CT-US12-02 - Marcação indevida: dado que o paciente ainda não foi chamado, quando tento marcar falta, então a opção fica desabilitada
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US12-01, CT-US12-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US12 atendidos (Falta registrada · Marcação indevida); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US12 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 5; revisar e mesclar até a Review de 22/12. Depois do merge, a QA (Maria Eduarda) executa CT-US12-01, CT-US12-02.
+
+################################################################
+
+TÍTULO: SCRUM-31 US20 - Auditoria de acessos
+
+AUTOR: Maria Eduarda da Nóbrega
+REVISORES: Mirelle Casimiro Silvino
+ISSUE RELACIONADA: SCRUM-31 (Jira) · épico SCRUM-33 LGPD e auditoria
+BRANCH: feature/SCRUM-31-auditoria-acessos  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US20 - Auditoria de acessos (5 pts, Sprint 5, R3 - Tempo real e Qualidade).
+
+- Back-end: registra acessos a dados pessoais
+- Back-end: adiciona consulta ao log com filtros
+- Front-end: cria tela de auditoria do gestor
+- Testes: garante que o log não pode ser alterado
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como gestor, preciso consultar quem acessou ou alterou dados de pacientes, de modo que a UBS cumpra a LGPD.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US20-01 - Consulta ao log: dado que houve acessos a dados pessoais, quando filtro o log por data e usuário, então vejo usuário, data, hora e ação de cada registro
+3. CT-US20-02 - Tentativa de alterar log: dado que sou qualquer usuário, quando tento editar ou apagar um registro do log, então a ação não existe no sistema
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US20-01, CT-US20-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US20 atendidos (Consulta ao log · Tentativa de alterar log); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US20 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 5; revisar e mesclar até a Review de 22/12. Depois do merge, a QA (Maria Eduarda) executa CT-US20-01, CT-US20-02.
+
+################################################################
+
+TÍTULO: SCRUM-53 T18 - [PO] Refinar histórias da Sprint 6 (backlog saudável)
+
+AUTOR: Mirelle Casimiro Silvino
+REVISORES: Adrielly Carla Ferreira de Melo
+ISSUE RELACIONADA: SCRUM-53 (Jira) · Sprint 5 · R3 - Tempo real e Qualidade
+BRANCH: docs/SCRUM-53-refinamento-sprint-6  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Registra o refinamento das histórias da Sprint 6.
+
+- Gherkin, pontos e prioridade conferidos nas US18, US19, US21, US22 e US23
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Tarefa T18 do PO: deixar as histórias prontas para a Planning de 02/02, junto com a Adrielly, que assume o papel em 22/12.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[ ] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[x] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Conferir no Jira as SCRUM-32 a SCRUM-36 com todos os campos
+
+Comandos úteis: —
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print do backlog da Sprint 6 no Jira>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Todas as histórias da Sprint 6 prontas para a Planning de 02/02
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Histórias da Sprint 6 com Gherkin, pontos e prioridade
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: —
+
+################################################################
+
+TÍTULO: SCRUM-54 T19 - Release v0.3.0
+
+AUTOR: Mirelle Casimiro Silvino
+REVISORES: Adrielly Carla Ferreira de Melo
+ISSUE RELACIONADA: SCRUM-54 (Jira) · Sprint 5 · R3 - Tempo real e Qualidade
+BRANCH: release/v0.3.0  ->  main
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Fecha a R3 - Tempo real e Qualidade com as release notes da v0.3.0.
+
+- docs/po/release-notes/v0.3.0.md com SCRUM-27 a SCRUM-31 (US15, US16, US17, US12, US20; 26 pts planejados)
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Tarefa T19 do PO: fechar a R3 em 22/12 e passar o papel de PO + DevOps para a Adrielly.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[ ] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[x] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Conferir as release notes contra o Jira (histórias aceitas nas Reviews de 10/12 e 22/12)
+2. Depois do merge: tag v0.3.0, GitHub Release, PR main -> develop e lançar a versão R3 no Jira
+
+Comandos úteis: git tag -a v0.3.0 -m "R3 - Tempo real e Qualidade" · git push origin v0.3.0
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print da versão R3 lançada no Jira e da GitHub Release>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (main)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Release notes completas (histórias, não concluídas, métricas, próxima release)
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Release notes batem com o Jira
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: Nenhuma sprint fica aberta no recesso (23/12 a 31/01).
+
+################################################################
+
+TÍTULO: SCRUM-32 US18 - Relatório de tempo de espera
+
+AUTOR: Maria Eduarda da Nóbrega
+REVISORES: Mirelle Casimiro Silvino
+ISSUE RELACIONADA: SCRUM-32 (Jira) · épico SCRUM-32 Gestão e relatórios
+BRANCH: feature/SCRUM-32-relatorio-tempo-espera  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US18 - Relatório de tempo de espera (5 pts, Sprint 6, R4 - Gestão e Demo Day).
+
+- Back-end: calcula tempo médio de espera por período
+- Front-end: cria gráfico de espera por dia
+- Testes: automatiza cenários Gherkin da US18
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como gestor, preciso ver o tempo médio de espera por dia e por serviço, de modo que eu ajuste a escala da equipe.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US18-01 - Relatório: dado que há atendimentos no período, quando escolho o período e o serviço, então vejo o tempo médio de espera e o gráfico por dia
+3. CT-US18-02 - Período sem dados: dado que não houve atendimentos no período, quando gero o relatório, então vejo "Sem dados para o período"
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US18-01, CT-US18-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US18 atendidos (Relatório · Período sem dados); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US18 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 6; revisar e mesclar até a Review de 16/02. Depois do merge, a QA (Mirelle) executa CT-US18-01, CT-US18-02.
+
+################################################################
+
+TÍTULO: SCRUM-33 US19 - Volume por horário e taxa de faltas
+
+AUTOR: Mirelle Casimiro Silvino
+REVISORES: Adrielly Carla Ferreira de Melo
+ISSUE RELACIONADA: SCRUM-33 (Jira) · épico SCRUM-32 Gestão e relatórios
+BRANCH: feature/SCRUM-33-volume-e-faltas  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US19 - Volume por horário e taxa de faltas (5 pts, Sprint 6, R4 - Gestão e Demo Day).
+
+- Back-end: calcula volume por hora e taxa de faltas
+- Front-end: cria painel de indicadores do gestor
+- Testes: automatiza cenários Gherkin da US19
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como gestor, preciso ver o volume de pacientes por horário e a taxa de faltas, de modo que eu identifique os picos da semana.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US19-01 - Indicadores: dado que há dados da semana, quando abro o painel do gestor, então vejo volume por hora, picos e taxa de faltas sem nenhum dado clínico
+3. CT-US19-02 - Sem permissão: dado que estou logado como recepcionista, quando tento abrir o painel do gestor, então recebo "Acesso não permitido"
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US19-01, CT-US19-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US19 atendidos (Indicadores · Sem permissão); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US19 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 6; revisar e mesclar até a Review de 16/02. Depois do merge, a QA (Mirelle) executa CT-US19-01, CT-US19-02.
+
+################################################################
+
+TÍTULO: SCRUM-34 US21 - Excluir meus dados
+
+AUTOR: Adrielly Carla Ferreira de Melo
+REVISORES: Maria Eduarda da Nóbrega
+ISSUE RELACIONADA: SCRUM-34 (Jira) · épico SCRUM-33 LGPD e auditoria
+BRANCH: feature/SCRUM-34-excluir-meus-dados  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US21 - Excluir meus dados (3 pts, Sprint 6, R4 - Gestão e Demo Day).
+
+- Back-end: anonimiza os dados a pedido do paciente
+- Front-end: adiciona a opção excluir meus dados
+- Testes: automatiza cenários Gherkin da US21
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como paciente, preciso pedir a exclusão dos meus dados, de modo que eu exerça meu direito previsto na LGPD.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US21-01 - Exclusão: dado que não tenho senha ativa, quando solicito a exclusão e confirmo, então meus dados pessoais são anonimizados e recebo a confirmação
+3. CT-US21-02 - Senha ativa: dado que estou na fila hoje, quando solicito a exclusão, então o sistema pede para cancelar a senha antes
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US21-01, CT-US21-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US21 atendidos (Exclusão · Senha ativa); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US21 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 6; revisar e mesclar até a Review de 16/02. Depois do merge, a QA (Mirelle) executa CT-US21-01, CT-US21-02.
+
+################################################################
+
+TÍTULO: SCRUM-35 US22 - Painel de chamada (TV)
+
+AUTOR: Maria Eduarda da Nóbrega
+REVISORES: Mirelle Casimiro Silvino
+ISSUE RELACIONADA: SCRUM-35 (Jira) · épico SCRUM-34 Diferenciais
+BRANCH: feature/SCRUM-35-painel-tv  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US22 - Painel de chamada (TV) (3 pts, Sprint 6, R4 - Gestão e Demo Day).
+
+- Back-end: cria tela pública de senhas chamadas
+- Front-end: mostra senha e consultório sem nome completo
+- Testes: automatiza cenários Gherkin da US22
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como recepcionista, preciso exibir numa TV da recepção as senhas chamadas, de modo que o chamado por voz seja substituído.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US22-01 - Senha na TV: dado que o painel está aberto na TV, quando um profissional chama o próximo, então a senha e o consultório aparecem na tela, sem nome completo
+3. CT-US22-02 - Sem chamadas: dado que ninguém foi chamado ainda, quando abro o painel, então aparece "Aguardando chamadas"
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US22-01, CT-US22-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US22 atendidos (Senha na TV · Sem chamadas); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US22 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 6; revisar e mesclar até a Review de 16/02. Depois do merge, a QA (Mirelle) executa CT-US22-01, CT-US22-02.
+
+################################################################
+
+TÍTULO: SCRUM-36 US23 - Aviso "sua vez está chegando"
+
+AUTOR: Mirelle Casimiro Silvino
+REVISORES: Adrielly Carla Ferreira de Melo
+ISSUE RELACIONADA: SCRUM-36 (Jira) · épico SCRUM-34 Diferenciais
+BRANCH: feature/SCRUM-36-aviso-sua-vez  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Implementa a US23 - Aviso "sua vez está chegando" (5 pts, Sprint 6, R4 - Gestão e Demo Day).
+
+- Back-end: envia e-mail quando faltam 3 pessoas
+- Back-end: ignora pacientes sem e-mail
+- Testes: automatiza cenários Gherkin da US23
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Eu como paciente, preciso receber um e-mail quando faltarem 3 pessoas na minha frente, de modo que eu espere em casa e chegue na hora.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[x] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Subir o projeto em homologação com dados fictícios
+2. CT-US23-01 - Aviso enviado: dado que estou na fila com e-mail cadastrado, quando minha posição chega a 3, então recebo um e-mail com minha senha e posição
+3. CT-US23-02 - Sem e-mail: dado que não tenho e-mail cadastrado, quando minha posição chega a 3, então nenhum envio é feito e nada quebra na fila
+
+Comandos úteis: docker compose up -d · cd backend && mvn -B verify · cd frontend && npm ci && npm run build && npm test --if-present
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Prints dos cenários CT-US23-01, CT-US23-02 e resultado do CI (só dados fictícios)>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Critérios de aceite da US23 atendidos (Aviso enviado · Sem e-mail); permissões por perfil conferidas
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Cenários Gherkin da US23 validados
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: PR aberto no último dia de desenvolvimento da Sprint 6; revisar e mesclar até a Review de 16/02. Depois do merge, a QA (Mirelle) executa CT-US23-01, CT-US23-02.
+
+################################################################
+
+TÍTULO: SCRUM-55 T20 - [DevOps] Deploy final estável e congelamento de main
+
+AUTOR: Adrielly Carla Ferreira de Melo
+REVISORES: Maria Eduarda da Nóbrega
+ISSUE RELACIONADA: SCRUM-55 (Jira) · Sprint 6 · R4 - Gestão e Demo Day
+BRANCH: ci/SCRUM-55-deploy-final  ->  develop
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Ajusta o deploy final para o Demo Day.
+
+- Ajustes no deploy de homologação para o Demo Day
+- Homologação estável e com dados fictícios
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Tarefa T20 do PO + DevOps. 11/02 é o último dia para mesclar funcionalidade; a partir de 12/02, main só recebe correção de bug.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[ ] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[ ] Documentação
+[x] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Mesclar em develop e conferir o deploy
+2. Navegar pelo fluxo completo em homologação com dados fictícios
+
+Comandos úteis: git push origin develop (dispara o deploy)
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print da homologação estável>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (develop)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Homologação estável para o Demo Day
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Fluxo completo funcionando em homologação
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: Depois deste PR, main fica congelada (só correções).
+
+################################################################
+
+TÍTULO: SCRUM-57 T22 - Release v1.0.0
+
+AUTOR: Adrielly Carla Ferreira de Melo
+REVISORES: Maria Eduarda da Nóbrega
+ISSUE RELACIONADA: SCRUM-57 (Jira) · Sprint 6 · R4 - Gestão e Demo Day
+BRANCH: release/v1.0.0  ->  main
+
+----------------------------------------------------------------
+O QUE FOI FEITO
+----------------------------------------------------------------
+Fecha a R4 - Gestão e Demo Day com o backlog final e as release notes da v1.0.0.
+
+- docs/po/backlog-final.md com o status das 24 histórias
+- docs/po/release-notes/v1.0.0.md com SCRUM-32 a SCRUM-36 (US18, US19, US21, US22, US23; 21 pts planejados)
+
+----------------------------------------------------------------
+POR QUE FOI FEITO
+----------------------------------------------------------------
+Tarefa T22 do PO: backlog final, release v1.0.0 e apresentação de valor no Demo Day.
+
+----------------------------------------------------------------
+TIPO DE ALTERAÇÃO
+----------------------------------------------------------------
+[ ] Nova funcionalidade (US)
+[ ] Correção de bug
+[ ] Refatoração
+[x] Documentação
+[ ] Configuração / CI / infraestrutura
+
+----------------------------------------------------------------
+COMO TESTAR
+----------------------------------------------------------------
+1. Conferir backlog final e release notes contra o Jira
+2. Depois do merge: tag v1.0.0, GitHub Release, PR main -> develop e lançar a versão R4 no Jira
+
+Comandos úteis: git tag -a v1.0.0 -m "R4 - Gestão e Demo Day" · git push origin v1.0.0
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+<Print das versões R1 a R4 lançadas no Jira>
+
+----------------------------------------------------------------
+CHECKLIST DO AUTOR
+----------------------------------------------------------------
+[ ] A branch está atualizada com a base (main)
+[ ] O código segue o padrão do projeto (commits "SCRUM-nn tipo(escopo): descrição")
+[ ] Testes novos ou atualizados, e todos passando
+[ ] Pipeline de CI sem falhas
+[ ] Backlog final e release notes completos
+[ ] Documentação e README atualizados, se necessário
+[ ] Sem segredos, senhas, .env ou dados reais de pacientes no código
+
+----------------------------------------------------------------
+CHECKLIST DO REVISOR
+----------------------------------------------------------------
+[ ] Li o código e não encontrei problemas
+[ ] Executei os passos de "Como testar"
+[ ] Backlog final bate com o Jira
+[ ] Sem regressões visíveis
+[ ] Mesclado com "Create a merge commit" (nunca squash)
+
+OBSERVAÇÕES PARA O REVISOR: SCRUM-37 US24 fica como "Adiada: fora da capacidade do semestre".

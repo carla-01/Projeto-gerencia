@@ -1,33 +1,1398 @@
-USER STORY - Nova funcionalidade do ponto de vista do usuário
-Título: [US]
-Label: user-story
+TÍTULO: [US01] Login por perfil
 
-Chave no Jira
-(Ex.: SCRUM-12)
+FEATURE / ÉPICO: Autenticação e perfis (SCRUM-10)
+RELEASE: R1 - Acesso e Cadastro        SPRINT: 1 (20/10 a 29/10)
+PRIORIDADE: Mais alta  STORY POINTS: 5
+RESPONSÁVEL: Maria Eduarda da Nóbrega      PAPEL DE REVISÃO: QA (Mirelle) verifica a DoD · PO (Adrielly) dá o aceite
 
-História
-Como [perfil: paciente, recepcionista, profissional, farmacêutico, gestor ou acompanhante],
-quero [ação],
-para [benefício].
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como usuário do sistema (paciente, recepcionista, profissional ou gestor),
+preciso fazer login com CPF/e-mail e senha,
+de modo que eu acesse apenas as telas do meu perfil.
 
-Critérios de aceite (Gherkin)
-# language: pt
-Funcionalidade: [nome da funcionalidade]
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-14 · Label: user-story
+Branch: feature/SCRUM-14-login-por-perfil · PR revisado por Mirelle
+Casos de teste da QA: CT-US01-01, CT-US01-02
+Primeira da fila de prioridade: sem login nenhuma tela funciona. Depende dos esqueletos de back-end e front-end (SCRUM-42 e SCRUM-43).
 
-  Cenário: [caminho feliz]
-    Dado que ...
-    Quando ...
-    Então ...
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Login com sucesso
+  Dado que estou cadastrado e ativo
+  Quando informo CPF e senha corretos
+  Então sou levado à tela inicial do meu perfil
 
-  Cenário: [caso de erro ou permissão negada]
-    Dado que ...
-    Quando ...
-    Então ...
+Cenário 2: Senha incorreta
+  Dado que estou cadastrado
+  Quando informo a senha errada 5 vezes seguidas
+  Então vejo "CPF ou senha inválidos" e a conta fica bloqueada por 15 minutos
 
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
 
-DOD
-[ ] Código revisado por pelo menos 1 integrante
-[ ] Testes escritos e passando (unitários e cenários Gherkin)
-[ ] Permissões por perfil verificadas
-[ ] Documentação atualizada
-[ ] Demonstrável na Sprint Review
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (29/10)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Mirelle)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação (na R1, no ambiente local documentado)
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Adrielly)
+
+################################################################
+
+TÍTULO: [US02] Controle de acesso por papel
+
+FEATURE / ÉPICO: Autenticação e perfis (SCRUM-10)
+RELEASE: R1 - Acesso e Cadastro        SPRINT: 1 (20/10 a 29/10)
+PRIORIDADE: Mais alta  STORY POINTS: 8
+RESPONSÁVEL: Mirelle Casimiro Silvino      PAPEL DE REVISÃO: QA (Mirelle) verifica a DoD · PO (Adrielly) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como gestor,
+preciso que cada perfil só consiga abrir as funções permitidas para ele,
+de modo que dados de pacientes não sejam vistos por quem não deve.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-15 · Label: user-story
+Branch: feature/SCRUM-15-controle-de-acesso · PR revisado por Adrielly
+Casos de teste da QA: CT-US02-01, CT-US02-02
+Depende da US01 (JWT). Mitiga o RSK02 (vazamento de dados pessoais de saúde).
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Acesso permitido
+  Dado que estou logado como recepcionista
+  Quando abro o painel da recepção da minha UBS
+  Então a fila do dia é exibida
+
+Cenário 2: Acesso negado
+  Dado que estou logado como paciente
+  Quando tento acessar a rota do painel da recepção
+  Então o sistema responde 403 e mostra "Acesso não permitido"
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (29/10)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Mirelle)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação (na R1, no ambiente local documentado)
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Adrielly)
+
+################################################################
+
+TÍTULO: [US04] Autocadastro do paciente com consentimento
+
+FEATURE / ÉPICO: Cadastro do paciente (SCRUM-28)
+RELEASE: R1 - Acesso e Cadastro        SPRINT: 1 (20/10 a 29/10)
+PRIORIDADE: Mais alta  STORY POINTS: 5
+RESPONSÁVEL: Maria Eduarda da Nóbrega      PAPEL DE REVISÃO: QA (Mirelle) verifica a DoD · PO (Adrielly) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como paciente,
+preciso me cadastrar com CPF, cartão SUS, contato e necessidade de prioridade, aceitando o termo de consentimento,
+de modo que eu possa entrar na fila pelo celular.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-16 · Label: user-story
+Branch: feature/SCRUM-16-autocadastro-paciente · PR revisado por Mirelle
+Casos de teste da QA: CT-US04-01, CT-US04-02, CT-US04-03
+Obrigação legal (consentimento LGPD, RSK02). Usar só dados fictícios nos testes.
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Cadastro com sucesso
+  Dado que estou na tela de cadastro
+  Quando preencho os dados obrigatórios e aceito o termo LGPD
+  Então minha conta é criada e o aceite fica registrado com data e hora
+
+Cenário 2: Sem consentimento
+  Dado que preenchi os dados
+  Quando tento concluir sem marcar o aceite do termo
+  Então o cadastro não é concluído e vejo a finalidade do uso dos dados
+
+Cenário 3: CPF inválido
+  Dado que estou na tela de cadastro
+  Quando informo um CPF com dígito verificador errado
+  Então vejo "CPF inválido" no campo
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (29/10)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Mirelle)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação (na R1, no ambiente local documentado)
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Adrielly)
+
+################################################################
+
+TÍTULO: [US05] Recepção cadastra paciente
+
+FEATURE / ÉPICO: Cadastro do paciente (SCRUM-28)
+RELEASE: R1 - Acesso e Cadastro        SPRINT: 1 (20/10 a 29/10)
+PRIORIDADE: Alta  STORY POINTS: 3
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      PAPEL DE REVISÃO: QA (Mirelle) verifica a DoD · PO (Adrielly) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como recepcionista,
+preciso cadastrar um paciente que não tem celular ou não sabe usar o sistema,
+de modo que ninguém fique fora da fila por falta de familiaridade digital.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-17 · Label: user-story
+Branch: feature/SCRUM-17-cadastro-pela-recepcao · PR revisado por Maria Eduarda
+Casos de teste da QA: CT-US05-01, CT-US05-02
+Inclusão digital (mitiga o RSK05). Reaproveita a entidade Paciente da US04.
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Cadastro presencial
+  Dado que estou logado como recepcionista
+  Quando cadastro o paciente e registro o consentimento verbal
+  Então o paciente fica disponível para entrar na fila
+
+Cenário 2: Paciente já cadastrado
+  Dado que o CPF já existe na base
+  Quando tento cadastrar de novo
+  Então o sistema abre o cadastro existente em vez de duplicar
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (29/10)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Mirelle)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação (na R1, no ambiente local documentado)
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Adrielly)
+
+################################################################
+
+TÍTULO: [US06] Entrar na fila
+
+FEATURE / ÉPICO: Fila virtual (SCRUM-29)
+RELEASE: R2 - Fila e Atendimento        SPRINT: 2 (03/11 a 12/11)
+PRIORIDADE: Mais alta  STORY POINTS: 5
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      PAPEL DE REVISÃO: QA (Adrielly) verifica a DoD · PO (Maria Eduarda) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como paciente,
+preciso entrar na fila do serviço que preciso (clínico, enfermagem, odontologia),
+de modo que eu não precise chegar de madrugada para pegar senha.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-18 · Label: user-story
+Branch: feature/SCRUM-18-entrar-na-fila · PR revisado por Maria Eduarda
+Casos de teste da QA: CT-US06-01, CT-US06-02, CT-US06-03
+Abre a R2. Depende do login (US01) e do cadastro do paciente (US04/US05). Horários e limite vêm da US09.
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Entrada com sucesso
+  Dado que estou logado e a fila do serviço está aberta
+  Quando escolho o serviço e confirmo
+  Então recebo uma senha e minha posição na fila
+
+Cenário 2: Fila fechada
+  Dado que a fila do serviço está fora do horário ou lotada
+  Quando tento entrar
+  Então vejo "Fila fechada" com o próximo horário de abertura
+
+Cenário 3: Já estou na fila
+  Dado que já tenho senha ativa hoje no mesmo serviço
+  Quando tento entrar de novo
+  Então o sistema mostra minha senha atual e não cria outra
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (12/11)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Adrielly)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Maria Eduarda)
+
+################################################################
+
+TÍTULO: [US07] Ver minha posição
+
+FEATURE / ÉPICO: Fila virtual (SCRUM-29)
+RELEASE: R2 - Fila e Atendimento        SPRINT: 2 (03/11 a 12/11)
+PRIORIDADE: Mais alta  STORY POINTS: 3
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      PAPEL DE REVISÃO: QA (Adrielly) verifica a DoD · PO (Maria Eduarda) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como paciente,
+preciso ver minha posição e quantas pessoas estão na minha frente,
+de modo que eu saiba quando sair de casa.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-19 · Label: user-story
+Branch: feature/SCRUM-19-ver-posicao · PR revisado por Maria Eduarda
+Casos de teste da QA: CT-US07-01, CT-US07-02
+Depende da US06 (entidades Fila e Senha).
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Posição exibida
+  Dado que estou na fila
+  Quando abro a tela da fila
+  Então vejo minha senha, minha posição e quantas pessoas faltam
+
+Cenário 2: Não estou na fila
+  Dado que não tenho senha ativa
+  Quando abro a tela da fila
+  Então vejo a opção "Entrar na fila"
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (12/11)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Adrielly)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Maria Eduarda)
+
+################################################################
+
+TÍTULO: [US08] Cancelar minha senha
+
+FEATURE / ÉPICO: Fila virtual (SCRUM-29)
+RELEASE: R2 - Fila e Atendimento        SPRINT: 2 (03/11 a 12/11)
+PRIORIDADE: Alta  STORY POINTS: 2
+RESPONSÁVEL: Maria Eduarda da Nóbrega      PAPEL DE REVISÃO: QA (Adrielly) verifica a DoD · PO (Maria Eduarda) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como paciente,
+preciso cancelar minha senha se eu não puder mais ir,
+de modo que a fila ande para quem está esperando.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-20 · Label: user-story
+Branch: feature/SCRUM-20-cancelar-senha · PR revisado por Mirelle
+Casos de teste da QA: CT-US08-01, CT-US08-02
+Depende da US06 (senha ativa).
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Cancelamento
+  Dado que estou na fila
+  Quando clico em cancelar e confirmo
+  Então saio da fila e as posições seguintes são atualizadas
+
+Cenário 2: Já fui chamado
+  Dado que meu atendimento já começou
+  Quando tento cancelar
+  Então o botão de cancelar não aparece
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (12/11)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Adrielly)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Maria Eduarda)
+
+################################################################
+
+TÍTULO: [US09] Configurar filas e horários
+
+FEATURE / ÉPICO: Gestão e relatórios (SCRUM-32)
+RELEASE: R2 - Fila e Atendimento        SPRINT: 2 (03/11 a 12/11)
+PRIORIDADE: Alta  STORY POINTS: 5
+RESPONSÁVEL: Mirelle Casimiro Silvino      PAPEL DE REVISÃO: QA (Adrielly) verifica a DoD · PO (Maria Eduarda) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como gestor,
+preciso configurar os serviços, o horário de funcionamento e o limite de senhas por dia,
+de modo que a fila reflita a capacidade real da UBS.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-21 · Label: user-story
+Branch: feature/SCRUM-21-configurar-filas · PR revisado por Adrielly
+Casos de teste da QA: CT-US09-01, CT-US09-02
+Define horários e limite usados pela US06 ("Fila fechada").
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Configuração salva
+  Dado que estou logado como gestor
+  Quando defino o serviço Clínico das 7h às 12h com 40 senhas
+  Então a fila abre e fecha nesses horários e limita a 40 senhas
+
+Cenário 2: Horário inválido
+  Dado que estou configurando uma fila
+  Quando informo horário de fim antes do início
+  Então vejo "Horário inválido" e nada é salvo
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (12/11)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Adrielly)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Maria Eduarda)
+
+################################################################
+
+TÍTULO: [US03] Gestor cadastra funcionários
+
+FEATURE / ÉPICO: Autenticação e perfis (SCRUM-10)
+RELEASE: R2 - Fila e Atendimento        SPRINT: 3 (17/11 a 26/11)
+PRIORIDADE: Alta  STORY POINTS: 5
+RESPONSÁVEL: Mirelle Casimiro Silvino      PAPEL DE REVISÃO: QA (Adrielly) verifica a DoD · PO (Maria Eduarda) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como gestor,
+preciso cadastrar recepcionistas e profissionais de saúde com seus papéis,
+de modo que a equipe da UBS tenha acesso ao sistema.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-22 · Label: user-story
+Branch: feature/SCRUM-22-cadastro-funcionarios · PR revisado por Adrielly
+Casos de teste da QA: CT-US03-01, CT-US03-02
+Depende da US01 e da US02 (perfis e controle de acesso).
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Cadastro de funcionário
+  Dado que estou logado como gestor
+  Quando cadastro um profissional com nome, e-mail, setor e papel
+  Então ele recebe acesso e aparece na lista de usuários
+
+Cenário 2: E-mail duplicado
+  Dado que já existe um usuário com o e-mail informado
+  Quando tento salvar o cadastro
+  Então vejo "E-mail já cadastrado" e nada é gravado
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (26/11)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Adrielly)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Maria Eduarda)
+
+################################################################
+
+TÍTULO: [US10] Check-in na recepção
+
+FEATURE / ÉPICO: Painel da recepção (SCRUM-30)
+RELEASE: R2 - Fila e Atendimento        SPRINT: 3 (17/11 a 26/11)
+PRIORIDADE: Alta  STORY POINTS: 3
+RESPONSÁVEL: Maria Eduarda da Nóbrega      PAPEL DE REVISÃO: QA (Adrielly) verifica a DoD · PO (Maria Eduarda) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como recepcionista,
+preciso confirmar a presença do paciente quando ele chega na UBS,
+de modo que só quem está presente seja chamado.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-23 · Label: user-story
+Branch: feature/SCRUM-23-check-in · PR revisado por Mirelle
+Casos de teste da QA: CT-US10-01, CT-US10-02
+Depende da US06 (senha ativa). O status "Presente" é usado pela US13.
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Check-in
+  Dado que o paciente tem senha ativa
+  Quando busco pelo CPF ou senha e confirmo presença
+  Então o status muda para "Presente"
+
+Cenário 2: Senha inexistente
+  Dado que o CPF não tem senha hoje
+  Quando tento fazer check-in
+  Então vejo "Paciente sem senha hoje" e a opção de colocá-lo na fila
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (26/11)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Adrielly)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Maria Eduarda)
+
+################################################################
+
+TÍTULO: [US11] Aplicar prioridade legal
+
+FEATURE / ÉPICO: Painel da recepção (SCRUM-30)
+RELEASE: R2 - Fila e Atendimento        SPRINT: 3 (17/11 a 26/11)
+PRIORIDADE: Mais alta  STORY POINTS: 5
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      PAPEL DE REVISÃO: QA (Adrielly) verifica a DoD · PO (Maria Eduarda) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como recepcionista,
+preciso marcar prioridade para idosos, gestantes, pessoas com deficiência e urgências,
+de modo que a fila respeite a lei e os casos urgentes.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-24 · Label: user-story
+Branch: feature/SCRUM-24-prioridade-legal · PR revisado por Maria Eduarda
+Casos de teste da QA: CT-US11-01, CT-US11-02
+Obrigação legal (prioridade). A ordem de prioridade é usada pela US13.
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Prioridade aplicada
+  Dado que o paciente está na fila
+  Quando marco a prioridade "Idoso 60+"
+  Então ele é reposicionado conforme a regra de prioridade e a mudança fica registrada
+
+Cenário 2: Prioridade sem justificativa
+  Dado que estou marcando urgência
+  Quando tento salvar sem informar o motivo
+  Então o sistema exige o motivo antes de salvar
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (26/11)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Adrielly)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Maria Eduarda)
+
+################################################################
+
+TÍTULO: [US13] Chamar o próximo
+
+FEATURE / ÉPICO: Atendimento (SCRUM-31)
+RELEASE: R2 - Fila e Atendimento        SPRINT: 3 (17/11 a 26/11)
+PRIORIDADE: Mais alta  STORY POINTS: 3
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      PAPEL DE REVISÃO: QA (Adrielly) verifica a DoD · PO (Maria Eduarda) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como profissional de saúde,
+preciso chamar o próximo paciente da fila do meu setor,
+de modo que eu não dependa de chamar em voz alta.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-25 · Label: user-story
+Branch: feature/SCRUM-25-chamar-proximo · PR revisado por Maria Eduarda
+Casos de teste da QA: CT-US13-01, CT-US13-02
+Depende da US10 (presença) e da US11 (ordem de prioridade).
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Chamada
+  Dado que há pacientes presentes na fila do meu setor
+  Quando clico em "Chamar próximo"
+  Então o próximo pela ordem de prioridade é chamado e o paciente é avisado na tela dele
+
+Cenário 2: Fila vazia
+  Dado que não há pacientes presentes
+  Quando clico em "Chamar próximo"
+  Então vejo "Não há pacientes aguardando"
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (26/11)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Adrielly)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Maria Eduarda)
+
+################################################################
+
+TÍTULO: [US14] Iniciar e finalizar atendimento
+
+FEATURE / ÉPICO: Atendimento (SCRUM-31)
+RELEASE: R2 - Fila e Atendimento        SPRINT: 3 (17/11 a 26/11)
+PRIORIDADE: Alta  STORY POINTS: 3
+RESPONSÁVEL: Mirelle Casimiro Silvino      PAPEL DE REVISÃO: QA (Adrielly) verifica a DoD · PO (Maria Eduarda) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como profissional de saúde,
+preciso iniciar e finalizar o atendimento do paciente chamado,
+de modo que o tempo de atendimento seja medido.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-26 · Label: user-story
+Branch: feature/SCRUM-26-iniciar-finalizar-atendimento · PR revisado por Adrielly
+Casos de teste da QA: CT-US14-01, CT-US14-02
+Depende da US13. Os horários gravados alimentam a US16 e a US18.
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Ciclo completo
+  Dado que chamei um paciente
+  Quando clico em iniciar e depois em finalizar
+  Então os horários ficam gravados e o paciente sai da fila
+
+Cenário 2: Finalizar sem iniciar
+  Dado que o atendimento não foi iniciado
+  Quando tento finalizar
+  Então o sistema pede para iniciar antes
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (26/11)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Adrielly)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Maria Eduarda)
+
+################################################################
+
+TÍTULO: [US15] Registrar observação curta
+
+FEATURE / ÉPICO: Atendimento (SCRUM-31)
+RELEASE: R3 - Tempo real e Qualidade        SPRINT: 4 (01/12 a 10/12)
+PRIORIDADE: Média  STORY POINTS: 2
+RESPONSÁVEL: Mirelle Casimiro Silvino      PAPEL DE REVISÃO: QA (Maria Eduarda) verifica a DoD · PO (Mirelle) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como profissional de saúde,
+preciso registrar uma observação curta ao finalizar o atendimento,
+de modo que a próxima consulta tenha contexto básico.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-27 · Label: user-story
+Branch: feature/SCRUM-27-observacao-atendimento · PR revisado por Adrielly
+Casos de teste da QA: CT-US15-01, CT-US15-02
+Depende da US14. Dado sensível: visível só para profissionais (RSK02).
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Observação salva
+  Dado que estou finalizando um atendimento
+  Quando escrevo até 500 caracteres e salvo
+  Então a observação fica no histórico do paciente, visível só para profissionais
+
+Cenário 2: Texto longo
+  Dado que estou escrevendo a observação
+  Quando passo de 500 caracteres
+  Então o sistema impede e mostra o limite
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (10/12)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Maria Eduarda)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Mirelle)
+
+################################################################
+
+TÍTULO: [US16] Estimativa de espera
+
+FEATURE / ÉPICO: Fila virtual (SCRUM-29)
+RELEASE: R3 - Tempo real e Qualidade        SPRINT: 4 (01/12 a 10/12)
+PRIORIDADE: Alta  STORY POINTS: 8
+RESPONSÁVEL: Maria Eduarda da Nóbrega      PAPEL DE REVISÃO: QA (Maria Eduarda) verifica a DoD · PO (Mirelle) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como paciente,
+preciso ver uma estimativa do tempo que falta para ser atendido,
+de modo que eu planeje meu dia.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-28 · Label: user-story
+Branch: feature/SCRUM-28-estimativa-espera · PR revisado por Mirelle
+Casos de teste da QA: CT-US16-01, CT-US16-02
+Depende da US14 (tempos de atendimento). Mitiga o RSK04: texto "estimativa", nunca "promessa".
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Estimativa exibida
+  Dado que há atendimentos finalizados hoje no serviço
+  Quando vejo minha posição
+  Então aparece "Estimativa: cerca de X min" calculada pela média móvel
+
+Cenário 2: Sem histórico
+  Dado que ainda não houve atendimentos hoje
+  Quando vejo minha posição
+  Então aparece "Estimativa indisponível no momento" em vez de um número
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (10/12)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Maria Eduarda)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Mirelle)
+
+################################################################
+
+TÍTULO: [US17] Fila em tempo real
+
+FEATURE / ÉPICO: Fila virtual (SCRUM-29)
+RELEASE: R3 - Tempo real e Qualidade        SPRINT: 4 (01/12 a 10/12)
+PRIORIDADE: Alta  STORY POINTS: 8
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      PAPEL DE REVISÃO: QA (Maria Eduarda) verifica a DoD · PO (Mirelle) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como paciente,
+preciso que minha posição atualize sozinha na tela,
+de modo que eu não precise ficar recarregando a página.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-29 · Label: user-story
+Branch: feature/SCRUM-29-fila-tempo-real · PR revisado por Maria Eduarda
+Casos de teste da QA: CT-US17-01, CT-US17-02
+Depende da US07. Mitiga o RSK10 (tempo real no horário de pico).
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Atualização automática
+  Dado que estou com a tela da fila aberta
+  Quando outro paciente é chamado
+  Então minha posição muda em até 5 segundos sem recarregar
+
+Cenário 2: Canal em tempo real cai
+  Dado que a conexão SSE caiu
+  Quando a fila muda
+  Então a tela passa a consultar a cada 15 segundos e mostra "Atualização mais lenta"
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (10/12)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Maria Eduarda)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Mirelle)
+
+################################################################
+
+TÍTULO: [US12] Remover faltosos
+
+FEATURE / ÉPICO: Painel da recepção (SCRUM-30)
+RELEASE: R3 - Tempo real e Qualidade        SPRINT: 5 (15/12 a 22/12)
+PRIORIDADE: Média  STORY POINTS: 3
+RESPONSÁVEL: Mirelle Casimiro Silvino      PAPEL DE REVISÃO: QA (Maria Eduarda) verifica a DoD · PO (Mirelle) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como recepcionista,
+preciso marcar como faltoso o paciente chamado que não apareceu,
+de modo que a fila não trave esperando quem não veio.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-30 · Label: user-story
+Branch: feature/SCRUM-30-remover-faltosos · PR revisado por Adrielly
+Casos de teste da QA: CT-US12-01, CT-US12-02
+Depende da US13. As faltas alimentam a US19.
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Falta registrada
+  Dado que o paciente foi chamado 3 vezes e não apareceu
+  Quando marco como faltoso
+  Então ele sai da fila e a falta conta nos indicadores
+
+Cenário 2: Marcação indevida
+  Dado que o paciente ainda não foi chamado
+  Quando tento marcar falta
+  Então a opção fica desabilitada
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (22/12)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Maria Eduarda)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Mirelle)
+
+################################################################
+
+TÍTULO: [US20] Auditoria de acessos
+
+FEATURE / ÉPICO: LGPD e auditoria (SCRUM-33)
+RELEASE: R3 - Tempo real e Qualidade        SPRINT: 5 (15/12 a 22/12)
+PRIORIDADE: Alta  STORY POINTS: 5
+RESPONSÁVEL: Maria Eduarda da Nóbrega      PAPEL DE REVISÃO: QA (Maria Eduarda) verifica a DoD · PO (Mirelle) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como gestor,
+preciso consultar quem acessou ou alterou dados de pacientes,
+de modo que a UBS cumpra a LGPD.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-31 · Label: user-story
+Branch: feature/SCRUM-31-auditoria-acessos · PR revisado por Mirelle
+Casos de teste da QA: CT-US20-01, CT-US20-02
+LGPD (RSK02). Sprint curta (recesso): PR aberto no mesmo dia de desenvolvimento.
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Consulta ao log
+  Dado que houve acessos a dados pessoais
+  Quando filtro o log por data e usuário
+  Então vejo usuário, data, hora e ação de cada registro
+
+Cenário 2: Tentativa de alterar log
+  Dado que sou qualquer usuário
+  Quando tento editar ou apagar um registro do log
+  Então a ação não existe no sistema
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (22/12)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Maria Eduarda)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Mirelle)
+
+################################################################
+
+TÍTULO: [US18] Relatório de tempo de espera
+
+FEATURE / ÉPICO: Gestão e relatórios (SCRUM-32)
+RELEASE: R4 - Gestão e Demo Day        SPRINT: 6 (02/02 a 18/02)
+PRIORIDADE: Média  STORY POINTS: 5
+RESPONSÁVEL: Maria Eduarda da Nóbrega      PAPEL DE REVISÃO: QA (Mirelle) verifica a DoD · PO (Adrielly) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como gestor,
+preciso ver o tempo médio de espera por dia e por serviço,
+de modo que eu ajuste a escala da equipe.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-32 · Label: user-story
+Branch: feature/SCRUM-32-relatorio-tempo-espera · PR revisado por Mirelle
+Casos de teste da QA: CT-US18-01, CT-US18-02
+Depende da US14 (horários de atendimento).
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Relatório
+  Dado que há atendimentos no período
+  Quando escolho o período e o serviço
+  Então vejo o tempo médio de espera e o gráfico por dia
+
+Cenário 2: Período sem dados
+  Dado que não houve atendimentos no período
+  Quando gero o relatório
+  Então vejo "Sem dados para o período"
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (16/02)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Mirelle)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Adrielly)
+
+################################################################
+
+TÍTULO: [US19] Volume por horário e taxa de faltas
+
+FEATURE / ÉPICO: Gestão e relatórios (SCRUM-32)
+RELEASE: R4 - Gestão e Demo Day        SPRINT: 6 (02/02 a 18/02)
+PRIORIDADE: Média  STORY POINTS: 5
+RESPONSÁVEL: Mirelle Casimiro Silvino      PAPEL DE REVISÃO: QA (Mirelle) verifica a DoD · PO (Adrielly) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como gestor,
+preciso ver o volume de pacientes por horário e a taxa de faltas,
+de modo que eu identifique os picos da semana.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-33 · Label: user-story
+Branch: feature/SCRUM-33-volume-e-faltas · PR revisado por Adrielly
+Casos de teste da QA: CT-US19-01, CT-US19-02
+Depende da US12 (faltas) e da US02 (acesso por perfil).
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Indicadores
+  Dado que há dados da semana
+  Quando abro o painel do gestor
+  Então vejo volume por hora, picos e taxa de faltas sem nenhum dado clínico
+
+Cenário 2: Sem permissão
+  Dado que estou logado como recepcionista
+  Quando tento abrir o painel do gestor
+  Então recebo "Acesso não permitido"
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (16/02)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Mirelle)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Adrielly)
+
+################################################################
+
+TÍTULO: [US21] Excluir meus dados
+
+FEATURE / ÉPICO: LGPD e auditoria (SCRUM-33)
+RELEASE: R4 - Gestão e Demo Day        SPRINT: 6 (02/02 a 18/02)
+PRIORIDADE: Média  STORY POINTS: 3
+RESPONSÁVEL: Adrielly Carla Ferreira de Melo      PAPEL DE REVISÃO: QA (Mirelle) verifica a DoD · PO (Adrielly) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como paciente,
+preciso pedir a exclusão dos meus dados,
+de modo que eu exerça meu direito previsto na LGPD.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-34 · Label: user-story
+Branch: feature/SCRUM-34-excluir-meus-dados · PR revisado por Maria Eduarda
+Casos de teste da QA: CT-US21-01, CT-US21-02
+LGPD. Depende da US08 (cancelar a senha antes).
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Exclusão
+  Dado que não tenho senha ativa
+  Quando solicito a exclusão e confirmo
+  Então meus dados pessoais são anonimizados e recebo a confirmação
+
+Cenário 2: Senha ativa
+  Dado que estou na fila hoje
+  Quando solicito a exclusão
+  Então o sistema pede para cancelar a senha antes
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (16/02)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Mirelle)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Adrielly)
+
+################################################################
+
+TÍTULO: [US22] Painel de chamada (TV)
+
+FEATURE / ÉPICO: Diferenciais (SCRUM-34)
+RELEASE: R4 - Gestão e Demo Day        SPRINT: 6 (02/02 a 18/02)
+PRIORIDADE: Baixa  STORY POINTS: 3
+RESPONSÁVEL: Maria Eduarda da Nóbrega      PAPEL DE REVISÃO: QA (Mirelle) verifica a DoD · PO (Adrielly) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como recepcionista,
+preciso exibir numa TV da recepção as senhas chamadas,
+de modo que o chamado por voz seja substituído.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-35 · Label: user-story
+Branch: feature/SCRUM-35-painel-tv · PR revisado por Mirelle
+Casos de teste da QA: CT-US22-01, CT-US22-02
+Diferencial para o Demo Day. Depende da US13. Tela pública: nunca exibir nome completo.
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Senha na TV
+  Dado que o painel está aberto na TV
+  Quando um profissional chama o próximo
+  Então a senha e o consultório aparecem na tela, sem nome completo
+
+Cenário 2: Sem chamadas
+  Dado que ninguém foi chamado ainda
+  Quando abro o painel
+  Então aparece "Aguardando chamadas"
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (16/02)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Mirelle)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Adrielly)
+
+################################################################
+
+TÍTULO: [US23] Aviso "sua vez está chegando"
+
+FEATURE / ÉPICO: Diferenciais (SCRUM-34)
+RELEASE: R4 - Gestão e Demo Day        SPRINT: 6 (02/02 a 18/02)
+PRIORIDADE: Baixa  STORY POINTS: 5
+RESPONSÁVEL: Mirelle Casimiro Silvino      PAPEL DE REVISÃO: QA (Mirelle) verifica a DoD · PO (Adrielly) dá o aceite
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como paciente,
+preciso receber um e-mail quando faltarem 3 pessoas na minha frente,
+de modo que eu espere em casa e chegue na hora.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-36 · Label: user-story
+Branch: feature/SCRUM-36-aviso-sua-vez · PR revisado por Adrielly
+Casos de teste da QA: CT-US23-01, CT-US23-02
+Diferencial. Depende da US07 (posição).
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Aviso enviado
+  Dado que estou na fila com e-mail cadastrado
+  Quando minha posição chega a 3
+  Então recebo um e-mail com minha senha e posição
+
+Cenário 2: Sem e-mail
+  Dado que não tenho e-mail cadastrado
+  Quando minha posição chega a 3
+  Então nenhum envio é feito e nada quebra na fila
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[x] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review (16/02)
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA (Mirelle)
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO (Adrielly)
+
+################################################################
+
+TÍTULO: [US24] Modo contingência
+
+FEATURE / ÉPICO: Diferenciais (SCRUM-34)
+RELEASE: Backlog futuro        SPRINT: nenhuma (fica no Backlog)
+PRIORIDADE: Baixa  STORY POINTS: 13
+RESPONSÁVEL: sem responsável (backlog futuro)      PAPEL DE REVISÃO: PO da release em que entrar
+
+----------------------------------------------------------------
+HISTÓRIA DE USUÁRIO
+----------------------------------------------------------------
+Eu como recepcionista,
+preciso continuar registrando check-ins se a internet cair,
+de modo que a UBS não pare de atender.
+
+----------------------------------------------------------------
+CONTEXTO E OBSERVAÇÕES (opcional)
+----------------------------------------------------------------
+Chave no Jira: SCRUM-37 · Label: user-story
+Casos de teste da QA: CT-US24-01, CT-US24-02
+Backlog futuro (se sobrar capacidade). Mitiga o RSK06 (internet instável). Se houver Sprint 7, entra nela.
+
+----------------------------------------------------------------
+CRITÉRIOS DE ACEITE (No JIRA essa seção fica na descrição da issue)
+----------------------------------------------------------------
+Cenário 1: Operação offline
+  Dado que a internet caiu
+  Quando faço check-in de um paciente
+  Então o registro fica salvo no navegador e aparece o aviso "Modo contingência"
+
+Cenário 2: Sincronização
+  Dado que a internet voltou
+  Quando o sistema reconecta
+  Então os registros pendentes são enviados sem duplicar
+
+----------------------------------------------------------------
+DEFINITION OF READY (DoR) - preencher antes da Sprint Planning
+----------------------------------------------------------------
+[x] História escrita no formato "Eu como... preciso... de modo que..."
+[x] Critérios de aceite escritos em Gherkin
+[x] Estimativa de Story Points definida pela equipe
+[x] Prioridade definida pelo PO
+[x] Dependências identificadas
+[ ] Cabe em uma sprint
+
+----------------------------------------------------------------
+DEFINITION OF DONE (DoD) - conferir na Sprint Review
+----------------------------------------------------------------
+[ ] Código revisado e integrado via Pull Request (revisado por outra integrante)
+[ ] Critérios de aceite atendidos e validados pela QA
+[ ] Testes escritos e passando (cenários Gherkin automatizados)
+[ ] Pipeline de CI sem falhas
+[ ] Implantado em ambiente de homologação
+[ ] Sem dado real de paciente, senha ou token no código
+[ ] Aceita pelo PO
