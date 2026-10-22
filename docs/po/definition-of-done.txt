@@ -1,0 +1,8 @@
+DEFINITION OF DONE - FilaSUS
+
+A Definition of Done do time (níveis Sprint e Release) fica na planilha online:
+https://docs.google.com/spreadsheets/d/1V0pCdM18DNSulo2hU0AqC34BCf9ZGqhN/edit?usp=sharing&ouid=107982672857173819125&rtpof=true&sd=true
+
+
+Acordada em 19/10/2026 por Adrielly, Maria Eduarda e Mirelle.
+Revisada na Retrospectiva de cada release.
