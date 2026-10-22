@@ -1,0 +1,69 @@
+
+CASOS DE TESTE - SPRINT 1 - FilaSUS
+QA: Mirelle Casimiro Silvino
+
+----------------------------------------------------------------
+SCRUM-37 [US-01] Login por perfil
+----------------------------------------------------------------
+CT-US01-01  Sucesso   Login com sucesso
+  Dado que estou cadastrado e ativo
+  Quando informo CPF e senha corretos
+  Então sou levado à tela inicial do meu perfil
+CT-US01-02  Exceção   Senha incorreta
+  Dado que estou cadastrado
+  Quando informo a senha errada 5 vezes seguidas
+  Então vejo "CPF ou senha inválidos" e a conta fica bloqueada por 15 minutos
+
+----------------------------------------------------------------
+SCRUM-38 [US-02] Controle de acesso por papel
+----------------------------------------------------------------
+CT-US02-01  Sucesso   Acesso permitido
+  Dado que estou logado como recepcionista
+  Quando abro o painel da recepção da minha UBS
+  Então a fila do dia é exibida
+CT-US02-02  Exceção   Acesso negado
+  Dado que estou logado como paciente
+  Quando tento acessar a rota do painel da recepção
+  Então o sistema responde 403 e mostra "Acesso não permitido"
+
+----------------------------------------------------------------
+SCRUM-39 [US-04] Autocadastro do paciente com consentimento
+----------------------------------------------------------------
+CT-US04-01  Sucesso   Cadastro com sucesso
+  Dado que estou na tela de cadastro
+  Quando preencho os dados obrigatórios e aceito o termo LGPD
+  Então minha conta é criada e o aceite fica registrado com data e hora
+CT-US04-02  Exceção   Sem consentimento
+  Dado que preenchi os dados
+  Quando tento concluir sem marcar o aceite do termo
+  Então o cadastro não é concluído e vejo a finalidade do uso dos dados
+CT-US04-03  Exceção   CPF inválido
+  Dado que estou na tela de cadastro
+  Quando informo um CPF com dígito verificador errado
+  Então vejo "CPF inválido" no campo
+
+----------------------------------------------------------------
+SCRUM-40 [US-05] Recepção cadastra paciente
+----------------------------------------------------------------
+CT-US05-01  Sucesso   Cadastro presencial
+  Dado que estou logado como recepcionista
+  Quando cadastro o paciente e registro o consentimento verbal
+  Então o paciente fica disponível para entrar na fila
+CT-US05-02  Exceção   Paciente já cadastrado
+  Dado que o CPF já existe na base
+  Quando tento cadastrar de novo
+  Então o sistema abre o cadastro existente em vez de duplicar
+
+----------------------------------------------------------------
+RESULTADO DA EXECUÇÃO (preencher até 29/10)
+----------------------------------------------------------------
+Caso         Data   Resultado (Passou / Falhou)   Bug aberto
+CT-US01-01
+CT-US01-02
+CT-US02-01
+CT-US02-02
+CT-US04-01
+CT-US04-02
+CT-US04-03
+CT-US05-01
+CT-US05-02
