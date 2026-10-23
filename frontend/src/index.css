@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+  font-size: 18px;
+  color: #1a1a1a;
+  background: #ffffff;
+}
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+nav a {
+  margin-right: 12px;
+}
