@@ -1,0 +1,15 @@
+
+PROJETO ARQUITETURAL - FilaSUS (versão inicial)
+Imagem: docs/arquitetura/projeto-arquitetural.png
+
+Stack
+- Front-end: React + TypeScript (Vite), em frontend/
+- Back-end: Java 21 + Spring Boot (API REST, Spring Security com JWT), em backend/
+- Banco de dados: PostgreSQL 16
+- Tempo real: SSE (Server-Sent Events) para a posição na fila (R3)
+- CI: GitHub Actions (build e testes a cada push)
+
+Fluxo
+Navegador (React) -> API REST (Spring Boot) -> PostgreSQL
+O token JWT identifica o perfil (paciente, recepção, profissional, gestor)
+e o Spring Security libera ou nega cada rota (403).
