@@ -7,6 +7,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import br.uepb.filasus.auth.JwtService;
+import br.uepb.filasus.usuario.Perfil;
+import br.uepb.filasus.usuario.Usuario;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -19,6 +23,9 @@ class FilaSusApplicationTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private JwtService jwtService;
+
     @Test
     void contextoSobe() {
         // Garante que a aplicação inicia com o perfil de teste.
@@ -27,7 +34,28 @@ class FilaSusApplicationTests {
     @Test
     void healthCheckResponde() throws Exception {
         mockMvc.perform(get("/actuator/health"))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.status").value(401))
+            .andExpect(jsonPath("$.mensagem").value("Não autenticado"));
+    }
+
+    @Test
+    void healthCheckComTokenValido() throws Exception {
+        Usuario usuario = new Usuario("12345678901", "gestor@ubs.com", "hash", Perfil.GESTOR);
+        String token = jwtService.gerarToken(usuario);
+
+        mockMvc.perform(get("/actuator/health")
+                .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.status").value("UP"));
+    }
+
+    @Test
+    void tokenInvalidoDevolveNaoAutenticado() throws Exception {
+        mockMvc.perform(get("/actuator/health")
+                .header("Authorization", "Bearer token-invalido"))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.status").value(401))
+            .andExpect(jsonPath("$.mensagem").value("Não autenticado"));
     }
 }
