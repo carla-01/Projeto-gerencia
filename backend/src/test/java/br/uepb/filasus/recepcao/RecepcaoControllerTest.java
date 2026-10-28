@@ -27,17 +27,18 @@ class RecepcaoControllerTest {
     private JwtService jwtService;
 
     @Test
-    void recepcionistaAcessaFilaDaRecepcao() throws Exception {
+    void CT_US02_01_recepcionistaAcessaFilaDaRecepcao() throws Exception {
         String token = token(Perfil.RECEPCIONISTA);
 
         mockMvc.perform(get("/api/recepcao/fila")
                 .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk())
+            .andExpect(jsonPath("$.usuarioId").isNotEmpty())
             .andExpect(jsonPath("$.fila").isEmpty());
     }
 
     @Test
-    void pacienteRecebe403NaRecepcao() throws Exception {
+    void CT_US02_02_pacienteRecebe403NaRecepcao() throws Exception {
         String token = token(Perfil.PACIENTE);
 
         mockMvc.perform(get("/api/recepcao/fila")
@@ -45,6 +46,14 @@ class RecepcaoControllerTest {
             .andExpect(status().isForbidden())
             .andExpect(jsonPath("$.status").value(403))
             .andExpect(jsonPath("$.mensagem").value("Acesso não permitido"));
+    }
+
+    @Test
+    void requisicaoSemTokenRecebe401() throws Exception {
+        mockMvc.perform(get("/api/recepcao/fila"))
+            .andExpect(status().isUnauthorized())
+            .andExpect(jsonPath("$.status").value(401))
+            .andExpect(jsonPath("$.mensagem").value("Não autenticado"));
     }
 
     private String token(Perfil perfil) {
