@@ -1,0 +1,464 @@
+/* Cadastro de paciente pela recepção (US05) - protótipo R2 */
+
+.cadrec {
+  --azul: #13238f;
+  --azul-escuro: #0b1560;
+  --azul-claro: #eef0fc;
+  --azul-borda: #c7cdf5;
+  --texto: #111833;
+  --texto-suave: #5b6478;
+  --texto-fraco: #8a91a5;
+  --borda: #d9dde7;
+  --borda-suave: #eceef4;
+  --vermelho: #b42318;
+  --vermelho-fundo: #fef3f2;
+  --vermelho-borda: #fecdca;
+  --verde: #067647;
+  --verde-fundo: #ecfdf3;
+
+  max-width: 1080px;
+}
+
+/* ---------- Cabeçalho ---------- */
+
+.cadrec-cabecalho {
+  margin-bottom: 24px;
+}
+
+.cadrec-rotulo {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--azul);
+}
+
+.cadrec-cabecalho h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.cadrec-cabecalho p:last-child {
+  margin: 0;
+  font-size: 15px;
+  color: var(--texto-suave);
+}
+
+.cadrec-colunas {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cadrec-cartao {
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid var(--borda-suave);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px rgba(16, 24, 40, 0.04);
+}
+
+/* ---------- Formulário ---------- */
+
+.cadrec-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.cadrec-secao {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 22px 20px;
+  border-bottom: 1px solid var(--borda-suave);
+}
+
+.cadrec-secao-titulo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.cadrec-numero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--azul);
+  background: var(--azul-claro);
+  border-radius: 50%;
+}
+
+.cadrec-linha {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cadrec-grupo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.cadrec-grupo > label {
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cadrec-campo {
+  box-sizing: border-box;
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  font: inherit;
+  font-size: 16px; /* 16px evita o zoom automático no iPhone */
+  color: var(--texto);
+  background: #ffffff;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.cadrec-campo::placeholder {
+  color: var(--texto-fraco);
+}
+
+.cadrec-campo:hover {
+  border-color: #c3c8d6;
+}
+
+.cadrec-campo:focus {
+  outline: none;
+  border-color: var(--azul);
+  box-shadow: 0 0 0 4px rgba(19, 35, 143, 0.12);
+}
+
+/* Seta própria no select, igual nos navegadores */
+.cadrec-select {
+  appearance: none;
+  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%235b6478' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
+  cursor: pointer;
+}
+
+.cadrec-campo-erro,
+.cadrec-campo-erro:hover {
+  border-color: var(--vermelho);
+}
+
+.cadrec-campo-erro:focus {
+  border-color: var(--vermelho);
+  box-shadow: 0 0 0 4px rgba(180, 35, 24, 0.12);
+}
+
+.cadrec-erro-campo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 0;
+  font-size: 13px;
+  color: var(--vermelho);
+}
+
+.cadrec-icone-alerta {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Quadro do termo (como o do protótipo P2) */
+.cadrec-termo {
+  padding: 16px;
+  background: #fafbfd;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.cadrec-termo-marcado {
+  background: var(--azul-claro);
+  border-color: var(--azul-borda);
+}
+
+.cadrec-termo-erro {
+  background: var(--vermelho-fundo);
+  border-color: var(--vermelho-borda);
+}
+
+.cadrec-termo-titulo {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.cadrec-termo-texto {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--texto-suave);
+}
+
+.cadrec-consentimento {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.cadrec-consentimento input {
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  flex-shrink: 0;
+  accent-color: var(--azul);
+  cursor: pointer;
+}
+
+.cadrec-alerta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 20px 0;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--vermelho);
+  background: var(--vermelho-fundo);
+  border: 1px solid var(--vermelho-borda);
+  border-radius: 8px;
+}
+
+/* Rodapé com o botão */
+.cadrec-rodape {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 12px;
+  padding: 18px 20px;
+  background: #fafbfd;
+  border-radius: 0 0 14px 14px;
+}
+
+.cadrec-rodape p {
+  margin: 0;
+  font-size: 12px;
+  text-align: center;
+  color: var(--texto-fraco);
+}
+
+.cadrec-botao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 46px;
+  padding: 0 24px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--azul);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.cadrec-botao:hover {
+  background: var(--azul-escuro);
+}
+
+.cadrec-botao:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(19, 35, 143, 0.25);
+}
+
+.cadrec-botao:disabled {
+  background: #8f97cc;
+  cursor: default;
+}
+
+.cadrec-carregando {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: cadrec-girar 0.8s linear infinite;
+}
+
+@keyframes cadrec-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Painel da direita ---------- */
+
+.cadrec-lado {
+  padding: 22px 20px;
+}
+
+.cadrec-estado h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.cadrec-detalhe {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--texto-suave);
+}
+
+.cadrec-estado-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 14px;
+  border-radius: 10px;
+}
+
+.cadrec-estado-icone svg {
+  width: 22px;
+  height: 22px;
+}
+
+.cadrec-estado-neutro {
+  color: var(--texto-suave);
+  background: #f0f2f7;
+}
+
+.cadrec-estado-sucesso {
+  color: var(--verde);
+  background: var(--verde-fundo);
+}
+
+.cadrec-estado-info {
+  color: var(--azul);
+  background: var(--azul-claro);
+}
+
+/* Ficha do paciente cadastrado */
+.cadrec-ficha {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px 16px;
+  margin: 16px 0 0;
+  padding: 14px 0 0;
+  font-size: 14px;
+  border-top: 1px solid var(--borda-suave);
+}
+
+.cadrec-ficha dt {
+  color: var(--texto-fraco);
+}
+
+.cadrec-ficha dd {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.cadrec-registro {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--verde);
+  background: var(--verde-fundo);
+  border-radius: 8px;
+}
+
+/* "Paciente encontrado" (CT-US05-02) */
+.cadrec-encontrado {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: var(--azul-claro);
+  border: 1px solid var(--azul-borda);
+  border-radius: 8px;
+}
+
+.cadrec-encontrado h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--azul);
+}
+
+.cadrec-encontrado p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ---------- Telas maiores ---------- */
+
+@media (min-width: 640px) {
+  .cadrec-secao {
+    padding: 24px 28px;
+  }
+
+  .cadrec-alerta {
+    margin: 24px 28px 0;
+  }
+
+  .cadrec-linha {
+    flex-direction: row;
+  }
+
+  .cadrec-rodape {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 28px;
+  }
+
+  .cadrec-rodape p {
+    text-align: left;
+  }
+
+  .cadrec-botao {
+    width: auto;
+  }
+}
+
+@media (min-width: 1100px) {
+  .cadrec-colunas {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .cadrec-form {
+    flex: 1;
+  }
+
+  .cadrec-lado {
+    position: sticky;
+    top: 36px;
+    width: 310px;
+    flex-shrink: 0;
+  }
+}

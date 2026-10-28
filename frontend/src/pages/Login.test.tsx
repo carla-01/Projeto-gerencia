@@ -71,13 +71,23 @@ describe('US01 - Login por perfil', () => {
     // Cada perfil vai para a sua própria tela inicial.
     const perfis = [
       { perfil: 'PACIENTE', titulo: 'Área do paciente' },
-      { perfil: 'RECEPCIONISTA', titulo: 'Recepção' },
+      { perfil: 'RECEPCIONISTA', titulo: 'Painel da recepção' },
       { perfil: 'PROFISSIONAL', titulo: 'Profissional de saúde' },
       { perfil: 'GESTOR', titulo: 'Gestor' },
     ]
 
     it.each(perfis)('perfil $perfil abre a tela "$titulo"', async ({ perfil, titulo }) => {
-      simularResposta(200, { token: 'token-de-teste', perfil: perfil })
+      // O login devolve o token; o painel da recepção (US02) busca a fila do dia logo depois.
+      vi.spyOn(globalThis, 'fetch').mockImplementation(async (url) => {
+        let corpo: object = { token: 'token-de-teste', perfil: perfil }
+        if (url === '/api/recepcao/fila') {
+          corpo = { usuarioId: '7', fila: [] }
+        }
+        return new Response(JSON.stringify(corpo), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      })
       abrirTelaDeLogin()
 
       entrarCom('12345678901', 'senha123')
