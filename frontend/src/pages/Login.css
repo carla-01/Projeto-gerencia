@@ -217,6 +217,19 @@
   cursor: default;
 }
 
+/* Link para o autocadastro (US04) */
+.login-rodape {
+  margin: 20px 0 0;
+  font-size: 14px;
+  text-align: center;
+  color: var(--texto-suave);
+}
+
+.login-rodape a {
+  font-weight: 600;
+  color: var(--azul);
+}
+
 /* Bolinha girando enquanto espera a resposta do servidor */
 .login-carregando {
   width: 15px;

@@ -17,6 +17,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
+import br.uepb.filasus.lgpd.ProtecaoCpf;
+
 @SpringBootTest
 @ActiveProfiles("test")
 class UsuarioRepositoryTest {
@@ -27,6 +29,14 @@ class UsuarioRepositoryTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private ProtecaoCpf protecaoCpf;
+
+    /** Cria o usuário com o CPF já protegido, como a aplicação faz. */
+    private Usuario novoUsuario(String cpf, String email, String senhaHash, Perfil perfil) {
+        return new Usuario("Usuário de Teste", email, protecaoCpf.hash(cpf), protecaoCpf.cifrar(cpf), senhaHash, perfil);
+    }
+
     @BeforeEach
     void limparTabela() {
         usuarioRepository.deleteAll();
@@ -35,11 +45,11 @@ class UsuarioRepositoryTest {
     @Test
     void salvaUsuarioComSenhaEmBcrypt() {
         String senhaHash = passwordEncoder.encode("senha123");
-        Usuario usuario = new Usuario("12345678901", "maria@email.com", senhaHash, Perfil.PACIENTE);
+        Usuario usuario = novoUsuario("12345678901", "maria@email.com", senhaHash, Perfil.PACIENTE);
 
         usuarioRepository.save(usuario);
 
-        Optional<Usuario> encontrado = usuarioRepository.findByCpf("12345678901");
+        Optional<Usuario> encontrado = usuarioRepository.findByCpfHash(protecaoCpf.hash("12345678901"));
         assertTrue(encontrado.isPresent());
 
         Usuario salvo = encontrado.get();
@@ -55,12 +65,18 @@ class UsuarioRepositoryTest {
         assertEquals(60, salvo.getSenhaHash().length());
         // O hash confere com a senha original.
         assertTrue(passwordEncoder.matches("senha123", salvo.getSenhaHash()));
+
+        // O CPF também não fica em texto puro (DA-SEG-I3-01), mas dá para exibir decifrando.
+        assertNotEquals("12345678901", salvo.getCpfHash());
+        assertFalse(salvo.getCpfCifrado().contains("12345678901"));
+        assertEquals("12345678901", protecaoCpf.decifrar(salvo.getCpfCifrado()));
+        assertNotNull(salvo.getCriadoEm());
     }
 
     @Test
     void encontraUsuarioPorEmail() {
         String senhaHash = passwordEncoder.encode("senha123");
-        usuarioRepository.save(new Usuario("12345678901", "gestor@ubs.com", senhaHash, Perfil.GESTOR));
+        usuarioRepository.save(novoUsuario("12345678901", "gestor@ubs.com", senhaHash, Perfil.GESTOR));
 
         Optional<Usuario> encontrado = usuarioRepository.findByEmail("gestor@ubs.com");
 
@@ -70,7 +86,7 @@ class UsuarioRepositoryTest {
 
     @Test
     void naoEncontraCpfInexistente() {
-        Optional<Usuario> encontrado = usuarioRepository.findByCpf("00000000000");
+        Optional<Usuario> encontrado = usuarioRepository.findByCpfHash(protecaoCpf.hash("00000000000"));
 
         assertFalse(encontrado.isPresent());
     }
@@ -78,9 +94,9 @@ class UsuarioRepositoryTest {
     @Test
     void naoPermiteCpfRepetido() {
         String senhaHash = passwordEncoder.encode("senha123");
-        usuarioRepository.save(new Usuario("12345678901", "um@email.com", senhaHash, Perfil.PACIENTE));
+        usuarioRepository.save(novoUsuario("12345678901", "um@email.com", senhaHash, Perfil.PACIENTE));
 
-        Usuario repetido = new Usuario("12345678901", "outro@email.com", senhaHash, Perfil.RECEPCIONISTA);
+        Usuario repetido = novoUsuario("12345678901", "outro@email.com", senhaHash, Perfil.RECEPCIONISTA);
 
         assertThrows(DataIntegrityViolationException.class, () -> usuarioRepository.saveAndFlush(repetido));
     }
@@ -88,9 +104,9 @@ class UsuarioRepositoryTest {
     @Test
     void naoPermiteEmailRepetido() {
         String senhaHash = passwordEncoder.encode("senha123");
-        usuarioRepository.save(new Usuario("12345678901", "mesmo@email.com", senhaHash, Perfil.PACIENTE));
+        usuarioRepository.save(novoUsuario("12345678901", "mesmo@email.com", senhaHash, Perfil.PACIENTE));
 
-        Usuario repetido = new Usuario("10987654321", "mesmo@email.com", senhaHash, Perfil.PROFISSIONAL);
+        Usuario repetido = novoUsuario("10987654321", "mesmo@email.com", senhaHash, Perfil.PROFISSIONAL);
 
         assertThrows(DataIntegrityViolationException.class, () -> usuarioRepository.saveAndFlush(repetido));
     }
