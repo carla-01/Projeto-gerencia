@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,8 +30,8 @@ import br.uepb.filasus.usuario.Usuario;
 import br.uepb.filasus.usuario.UsuarioRepository;
 
 /**
- * Testes do POST /pacientes/autocadastro (US-04 - SCRUM-39).
- * Só com dados fictícios.
+ * Cenários Gherkin da US04 - Autocadastro do paciente com consentimento (SCRUM-39),
+ * pelo POST /pacientes/autocadastro. Só com dados fictícios.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -81,8 +82,11 @@ class PacienteControllerTest {
             .content(objectMapper.writeValueAsString(pedido)));
     }
 
-    /** CT-US04-01: a conta é criada e o aceite fica registrado com data e hora. */
+    // CT-US04-01 - Cadastro com sucesso
+    // Dado que estou na tela de cadastro / Quando preencho os dados obrigatórios e aceito o termo LGPD /
+    // Então minha conta é criada e o aceite fica registrado com data e hora
     @Test
+    @DisplayName("CT-US04-01 - Cadastro com sucesso: cria a conta e registra o aceite com data e hora")
     void cadastroComSucessoRegistraOAceite() throws Exception {
         autocadastrar(pedido("529.982.247-25", "maria@email.com", true))
             .andExpect(status().isCreated())
@@ -112,6 +116,7 @@ class PacienteControllerTest {
     }
 
     @Test
+    @DisplayName("CT-US04-01 - Cadastro com sucesso: a conta criada entra com CPF e senha")
     void depoisDoCadastroOPacienteEntraComCpfESenha() throws Exception {
         autocadastrar(pedido(CPF, "maria@email.com", true)).andExpect(status().isCreated());
 
@@ -122,8 +127,11 @@ class PacienteControllerTest {
             .andExpect(jsonPath("$.perfil").value("PACIENTE"));
     }
 
-    /** CT-US04-02: sem o aceite, o cadastro não é concluído e mostra a finalidade dos dados. */
+    // CT-US04-02 - Sem consentimento
+    // Dado que preenchi os dados / Quando tento concluir sem marcar o aceite do termo /
+    // Então o cadastro não é concluído e vejo a finalidade do uso dos dados
     @Test
+    @DisplayName("CT-US04-02 - Sem consentimento: não cria nada e devolve a finalidade do uso dos dados")
     void semAceiteNaoCadastraEMostraAFinalidade() throws Exception {
         autocadastrar(pedido(CPF, "maria@email.com", false))
             .andExpect(status().isBadRequest())
@@ -135,8 +143,11 @@ class PacienteControllerTest {
         assertEquals(0, consentimentoRepository.count());
     }
 
-    /** CT-US04-03: CPF com dígito verificador errado. */
+    // CT-US04-03 - CPF inválido
+    // Dado que estou na tela de cadastro / Quando informo um CPF com dígito verificador errado /
+    // Então vejo "CPF inválido" no campo
     @Test
+    @DisplayName("CT-US04-03 - CPF inválido: devolve \"CPF inválido\" no campo cpf e não cadastra")
     void cpfInvalidoNaoCadastra() throws Exception {
         autocadastrar(pedido("52998224700", "maria@email.com", true))
             .andExpect(status().isBadRequest())
@@ -147,6 +158,7 @@ class PacienteControllerTest {
     }
 
     @Test
+    @DisplayName("Campo obrigatório faltando devolve 400 com o nome do campo")
     void campoObrigatorioFaltandoDiz400ComOCampo() throws Exception {
         AutocadastroRequest semCartao = new AutocadastroRequest("Maria da Silva", CPF, "", null,
             "maria@email.com", "senhaForte123", null, true);
@@ -157,6 +169,7 @@ class PacienteControllerTest {
     }
 
     @Test
+    @DisplayName("CPF já cadastrado devolve 409 e não duplica o paciente")
     void cpfJaCadastradoDiz409() throws Exception {
         autocadastrar(pedido(CPF, "maria@email.com", true)).andExpect(status().isCreated());
 
@@ -168,6 +181,7 @@ class PacienteControllerTest {
     }
 
     @Test
+    @DisplayName("E-mail já cadastrado devolve 409 e não duplica o paciente")
     void emailJaCadastradoDiz409() throws Exception {
         autocadastrar(pedido(CPF, "maria@email.com", true)).andExpect(status().isCreated());
 
