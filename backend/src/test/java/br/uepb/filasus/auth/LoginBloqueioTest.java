@@ -11,6 +11,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -105,7 +106,11 @@ class LoginBloqueioTest {
         return usuarioRepository.findByCpfHash(protecaoCpf.hash("12345678901")).get();
     }
 
+    // CT-US01-02 - Senha incorreta
+    // Dado que estou cadastrado / Quando informo a senha errada 5 vezes seguidas /
+    // Então vejo "CPF ou senha inválidos" e a conta fica bloqueada por 15 minutos
     @Test
+    @DisplayName("CT-US01-02 - Senha incorreta: 5 senhas erradas mostram 'CPF ou senha inválidos' e bloqueiam a conta")
     void cincoSenhasErradasBloqueiamAContaPor15Minutos() throws Exception {
         errarSenha(5);
 
@@ -122,6 +127,7 @@ class LoginBloqueioTest {
     }
 
     @Test
+    @DisplayName("CT-US01-02 - Senha incorreta: o bloqueio dura 15 minutos")
     void contaContinuaBloqueadaAos14MinutosELiberaAos15() throws Exception {
         errarSenha(5);
 
