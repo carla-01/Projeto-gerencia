@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.uepb.filasus.lgpd.ProtecaoCpf;
 import br.uepb.filasus.usuario.Perfil;
 import br.uepb.filasus.usuario.Usuario;
 import br.uepb.filasus.usuario.UsuarioRepository;
@@ -48,15 +49,23 @@ class AuthControllerTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    private ProtecaoCpf protecaoCpf;
+
+    @Autowired
     private JwtService jwtService;
 
     private Usuario gestor;
+
+    /** Cria o usuário com o CPF já protegido, como a aplicação faz. */
+    private Usuario novoUsuario(String cpf, String email, String senhaHash, Perfil perfil) {
+        return new Usuario("Usuário de Teste", email, protecaoCpf.hash(cpf), protecaoCpf.cifrar(cpf), senhaHash, perfil);
+    }
 
     @BeforeEach
     void cadastrarUsuario() {
         usuarioRepository.deleteAll();
         String senhaHash = passwordEncoder.encode("senha123");
-        gestor = usuarioRepository.save(new Usuario("12345678901", "gestor@ubs.com", senhaHash, Perfil.GESTOR));
+        gestor = usuarioRepository.save(novoUsuario("12345678901", "gestor@ubs.com", senhaHash, Perfil.GESTOR));
     }
 
     /** Monta o JSON do corpo da requisição. */
