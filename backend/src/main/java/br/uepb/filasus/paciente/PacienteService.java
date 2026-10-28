@@ -2,6 +2,7 @@ package br.uepb.filasus.paciente;
 
 import java.time.Clock;
 import java.time.Instant;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,6 +121,9 @@ public class PacienteService {
      * recepcionista. O consentimento verbal é guardado como um aceite do termo, igual
      * ao do autocadastro. Paciente e consentimento são salvos juntos: se um falhar,
      * nenhum fica salvo.
+     *
+     * Se o CPF já estiver cadastrado (CT-US05-02), devolve o cadastro existente com
+     * jaCadastrado = true, sem criar outro e sem alterar o que já existe.
      */
     @Transactional
     public CadastroPresencialResponse cadastrarPelaRecepcao(CadastroPresencialRequest request, Long recepcionistaId) {
@@ -135,8 +139,12 @@ public class PacienteService {
         }
 
         String cpfHash = protecaoCpf.hash(cpf);
-        if (pacienteRepository.findByCpfHash(cpfHash).isPresent()) {
-            throw new CadastroDuplicadoException("Já existe um paciente com este CPF");
+        Optional<Paciente> existente = pacienteRepository.findByCpfHash(cpfHash);
+        if (existente.isPresent()) {
+            Paciente paciente = existente.get();
+            log.info("Cadastro presencial: CPF já cadastrado, recepcionista id={} abriu o paciente id={}",
+                recepcionistaId, paciente.getId());
+            return montarResposta(paciente, cpf, true, ultimoConsentimento(paciente.getId()));
         }
 
         Usuario recepcionista = usuarioRepository.getReferenceById(recepcionistaId);
@@ -160,7 +168,30 @@ public class PacienteService {
         log.info("Cadastro presencial: paciente id={} cadastrado pela recepcionista id={} com consentimento verbal (termo versão {})",
             paciente.getId(), recepcionistaId, versaoTermo);
 
-        return new CadastroPresencialResponse(paciente.getId(), paciente.getNome(), paciente.getPrioridade(),
-            consentimento.getVersaoTermo(), consentimento.getAceitoEm());
+        return montarResposta(paciente, cpf, false, consentimento);
+    }
+
+    /** Aceite mais recente do paciente (pode ter vindo do autocadastro ou da recepção). */
+    private Consentimento ultimoConsentimento(Long pacienteId) {
+        Consentimento ultimo = null;
+        for (Consentimento consentimento : consentimentoRepository.findByPacienteId(pacienteId)) {
+            if (ultimo == null || consentimento.getAceitoEm().isAfter(ultimo.getAceitoEm())) {
+                ultimo = consentimento;
+            }
+        }
+        return ultimo;
+    }
+
+    private CadastroPresencialResponse montarResposta(Paciente paciente, String cpf, boolean jaCadastrado,
+                                                      Consentimento consentimento) {
+        String versaoTermo = null;
+        Instant consentimentoEm = null;
+        if (consentimento != null) {
+            versaoTermo = consentimento.getVersaoTermo();
+            consentimentoEm = consentimento.getAceitoEm();
+        }
+
+        return new CadastroPresencialResponse(paciente.getId(), paciente.getNome(), Cpf.mascarar(cpf),
+            paciente.getPrioridade(), paciente.getCriadoEm(), jaCadastrado, versaoTermo, consentimentoEm);
     }
 }

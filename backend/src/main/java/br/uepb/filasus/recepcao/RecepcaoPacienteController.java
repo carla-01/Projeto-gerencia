@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.uepb.filasus.paciente.CadastroDuplicadoException;
 import br.uepb.filasus.paciente.CadastroInvalidoException;
 import br.uepb.filasus.paciente.CadastroPresencialRequest;
 import br.uepb.filasus.paciente.CadastroPresencialResponse;
@@ -25,10 +24,11 @@ import jakarta.validation.Valid;
  * Cadastro de paciente pela recepção (US-05 - SCRUM-40).
  *
  * POST /api/recepcao/pacientes — só para o perfil RECEPCIONISTA (SecurityConfig).
- * - 201 com o paciente e o registro do consentimento verbal quando dá certo
+ * - 201 com o paciente e o registro do consentimento verbal quando cria o cadastro
+ * - 200 com o cadastro existente (jaCadastrado = true) quando o CPF já existe,
+ *   sem criar outro (CT-US05-02)
  * - 400 com { "campo": "...", "mensagem": "..." } quando falta dado, o CPF é
  *   inválido ou o consentimento verbal não foi registrado
- * - 409 com { "mensagem": "..." } quando o CPF já está cadastrado
  * - 401 sem login e 403 para os outros perfis (SecurityConfig)
  */
 @RestController
@@ -48,6 +48,10 @@ public class RecepcaoPacienteController {
         Long recepcionistaId = Long.valueOf(autenticacao.getName());
 
         CadastroPresencialResponse resposta = pacienteService.cadastrarPelaRecepcao(request, recepcionistaId);
+
+        if (resposta.jaCadastrado()) {
+            return ResponseEntity.ok(resposta);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(resposta);
     }
 
@@ -63,12 +67,6 @@ public class RecepcaoPacienteController {
     public ResponseEntity<Map<String, String>> cadastroInvalido(CadastroInvalidoException e) {
         Map<String, String> corpo = Map.of("campo", e.getCampo(), "mensagem", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(corpo);
-    }
-
-    @ExceptionHandler(CadastroDuplicadoException.class)
-    public ResponseEntity<Map<String, String>> cadastroDuplicado(CadastroDuplicadoException e) {
-        Map<String, String> corpo = Map.of("mensagem", e.getMessage());
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(corpo);
     }
 
     /** Dois cadastros iguais ao mesmo tempo: o UNIQUE do banco barra o segundo. */

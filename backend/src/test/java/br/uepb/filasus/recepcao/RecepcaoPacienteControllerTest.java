@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -117,6 +118,8 @@ class RecepcaoPacienteControllerTest {
             .andExpect(jsonPath("$.pacienteId").isNumber())
             .andExpect(jsonPath("$.nome").value("Antônio Lima"))
             .andExpect(jsonPath("$.prioridade").value("IDOSO"))
+            .andExpect(jsonPath("$.jaCadastrado").value(false))
+            .andExpect(jsonPath("$.cpfMascarado").value("529.***.***-25"))
             .andExpect(jsonPath("$.versaoTermo").value("1.0"))
             .andExpect(jsonPath("$.consentimentoEm").isNotEmpty())
             // O CPF não volta na resposta.
@@ -180,16 +183,60 @@ class RecepcaoPacienteControllerTest {
             .andExpect(jsonPath("$.campo").value("cartaoSus"));
     }
 
+    // CT-US05-02 - Paciente já cadastrado
+    // Dado que o CPF já existe na base
+    // Quando tento cadastrar de novo
+    // Então o sistema abre o cadastro existente em vez de duplicar
     @Test
-    void naoDuplicaPacienteComOMesmoCpf() throws Exception {
-        cadastrar(pedido(CPF_PACIENTE, true), recepcionista)
-            .andExpect(status().isCreated());
+    @DisplayName("CT-US05-02 - Paciente já cadastrado: devolve o cadastro existente em vez de duplicar")
+    void cpfJaCadastradoDevolveOCadastroExistente() throws Exception {
+        MvcResult primeiro = cadastrar(pedido(CPF_PACIENTE, true), recepcionista)
+            .andExpect(status().isCreated())
+            .andReturn();
+        Long pacienteId = objectMapper.readTree(primeiro.getResponse().getContentAsString()).get("pacienteId").asLong();
 
-        cadastrar(pedido("529.982.247-25", true), recepcionista)
-            .andExpect(status().isConflict())
-            .andExpect(jsonPath("$.mensagem").value("Já existe um paciente com este CPF"));
+        // Mesmo CPF (agora com máscara), com outro nome e outra prioridade.
+        CadastroPresencialRequest deNovo = new CadastroPresencialRequest("Antonio de Lima", "529.982.247-25",
+            "700999999999999", null, Prioridade.NENHUMA, true);
+
+        cadastrar(deNovo, recepcionista)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.jaCadastrado").value(true))
+            .andExpect(jsonPath("$.pacienteId").value(pacienteId))
+            // Os dados são os do cadastro existente: nada foi alterado.
+            .andExpect(jsonPath("$.nome").value("Antônio Lima"))
+            .andExpect(jsonPath("$.prioridade").value("IDOSO"))
+            .andExpect(jsonPath("$.cpfMascarado").value("529.***.***-25"))
+            .andExpect(jsonPath("$.cadastradoEm").isNotEmpty())
+            .andExpect(jsonPath("$.versaoTermo").value("1.0"));
+
+        // Não duplicou o paciente nem registrou outro consentimento.
+        assertEquals(1, pacienteRepository.count());
+        assertEquals(1, consentimentoRepository.count());
+        assertEquals("700123456789012", pacienteRepository.findById(pacienteId).get().getCartaoSus());
+    }
+
+    @Test
+    @DisplayName("CT-US05-02 - Paciente já cadastrado: também abre quem se cadastrou pelo celular")
+    void cpfDoAutocadastroDevolveOCadastroExistente() throws Exception {
+        // Paciente que fez o autocadastro (US-04): tem login próprio e aceitou o termo pelo celular.
+        Usuario login = usuarioRepository.save(new Usuario("Maria da Silva", "maria@email.com",
+            protecaoCpf.hash(CPF_PACIENTE), protecaoCpf.cifrar(CPF_PACIENTE), "hash", Perfil.PACIENTE));
+        Paciente maria = new Paciente("Maria da Silva", protecaoCpf.hash(CPF_PACIENTE),
+            protecaoCpf.cifrar(CPF_PACIENTE), Prioridade.GESTANTE, Instant.parse("2026-10-21T10:00:00Z"));
+        maria.setUsuario(login);
+        maria = pacienteRepository.save(maria);
+        consentimentoRepository.save(new Consentimento(maria, "1.0", true, Instant.parse("2026-10-21T10:00:00Z")));
+
+        cadastrar(pedido(CPF_PACIENTE, true), recepcionista)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.jaCadastrado").value(true))
+            .andExpect(jsonPath("$.pacienteId").value(maria.getId()))
+            .andExpect(jsonPath("$.nome").value("Maria da Silva"))
+            .andExpect(jsonPath("$.prioridade").value("GESTANTE"));
 
         assertEquals(1, pacienteRepository.count());
+        assertEquals(1, consentimentoRepository.count());
     }
 
     @Test

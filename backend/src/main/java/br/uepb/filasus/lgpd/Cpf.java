@@ -17,6 +17,17 @@ public final class Cpf {
     }
 
     /**
+     * Esconde o meio do CPF (já normalizado) para mostrar na tela:
+     * "52998224725" vira "529.***.***-25" (protótipo R2).
+     */
+    public static String mascarar(String cpf) {
+        if (cpf == null || cpf.length() != 11) {
+            return "";
+        }
+        return cpf.substring(0, 3) + ".***.***-" + cpf.substring(9);
+    }
+
+    /**
      * Confere se o CPF (já normalizado) tem 11 números e os dois dígitos
      * verificadores certos. CPFs com todos os números iguais são inválidos.
      */
