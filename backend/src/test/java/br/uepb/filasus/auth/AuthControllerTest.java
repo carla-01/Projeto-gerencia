@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -65,7 +66,11 @@ class AuthControllerTest {
         return objectMapper.writeValueAsString(request);
     }
 
+    // CT-US01-01 - Login com sucesso
+    // Dado que estou cadastrado e ativo / Quando informo CPF e senha corretos /
+    // Então recebo o token com o meu perfil (a tela usa o perfil para abrir a tela inicial)
     @Test
+    @DisplayName("CT-US01-01 - Login com sucesso: CPF e senha corretos devolvem o token com o perfil")
     void loginComSucessoPorCpf() throws Exception {
         MvcResult resultado = mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,6 +93,7 @@ class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("CT-US01-01 - Login com sucesso: e-mail e senha corretos também entram")
     void loginComSucessoPorEmail() throws Exception {
         mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
