@@ -4,4 +4,10 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    // Em desenvolvimento, as chamadas /auth vão para o back-end Spring na porta 8080.
+    proxy: {
+      '/auth': 'http://localhost:8080',
+    },
+  },
 })
