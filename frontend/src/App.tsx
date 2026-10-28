@@ -1,4 +1,5 @@
-import { Link, Navigate, Route, Routes } from 'react-router-dom'
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import Login from './pages/Login'
 import Pagina from './pages/Pagina'
 
 /**
@@ -9,20 +10,30 @@ import Pagina from './pages/Pagina'
  * - US05 (SCRUM-40): cadastro de paciente pela recepção.
  */
 export default function App() {
+  const location = useLocation()
+
+  // A tela de login ocupa a página inteira, sem o menu provisório do esqueleto.
+  let mostrarMenu = true
+  if (location.pathname === '/login') {
+    mostrarMenu = false
+  }
+
   return (
     <>
-      <nav>
-        <main>
-          <Link to="/login">Login</Link>
-          <Link to="/paciente">Paciente</Link>
-          <Link to="/recepcao">Recepção</Link>
-          <Link to="/profissional">Profissional</Link>
-          <Link to="/gestor">Gestor</Link>
-        </main>
-      </nav>
+      {mostrarMenu && (
+        <nav>
+          <main>
+            <Link to="/login">Login</Link>
+            <Link to="/paciente">Paciente</Link>
+            <Link to="/recepcao">Recepção</Link>
+            <Link to="/profissional">Profissional</Link>
+            <Link to="/gestor">Gestor</Link>
+          </main>
+        </nav>
+      )}
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<Pagina titulo="Entrar" descricao="Tela de login (US01)." />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Pagina titulo="Cadastro do paciente" descricao="Autocadastro com consentimento LGPD (US04)." />} />
         <Route path="/paciente" element={<Pagina titulo="Área do paciente" descricao="Fila e posição do paciente (R2)." />} />
         <Route path="/recepcao" element={<Pagina titulo="Recepção" descricao="Cadastro de paciente pela recepção (US05) e painel da fila." />} />
