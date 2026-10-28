@@ -1,5 +1,7 @@
 package br.uepb.filasus.usuario;
 
+import java.time.Instant;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -53,6 +55,17 @@ public class Usuario {
     /** Usuário inativo não consegue fazer login. */
     @Column(nullable = false)
     private boolean ativo = true;
+
+    /**
+     * Senhas erradas seguidas desde o último login certo (DA-SEG-I2-01).
+     * O "default 0" deixa o ddl-auto criar a coluna mesmo com usuários já salvos.
+     */
+    @Column(name = "tentativas_falhas", nullable = false, columnDefinition = "integer default 0")
+    private int tentativasFalhas = 0;
+
+    /** Até quando a conta está bloqueada. Fica vazio (null) se não estiver bloqueada. */
+    @Column(name = "bloqueado_ate")
+    private Instant bloqueadoAte;
 
     /** Construtor vazio exigido pelo JPA. */
     protected Usuario() {
@@ -108,5 +121,21 @@ public class Usuario {
 
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
+    }
+
+    public int getTentativasFalhas() {
+        return tentativasFalhas;
+    }
+
+    public void setTentativasFalhas(int tentativasFalhas) {
+        this.tentativasFalhas = tentativasFalhas;
+    }
+
+    public Instant getBloqueadoAte() {
+        return bloqueadoAte;
+    }
+
+    public void setBloqueadoAte(Instant bloqueadoAte) {
+        this.bloqueadoAte = bloqueadoAte;
     }
 }
