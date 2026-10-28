@@ -1,0 +1,59 @@
+﻿PRIORIZAÇÃO DO PRODUCT BACKLOG
+
+Projeto: FilaSUS – Fila virtual para Unidades Básicas de Saúde.
+Disciplina: Gerência de Projetos
+Release: R1 – Acesso e Cadastro.
+Responsável: Adrielly Carla Ferreira de Melo (Product Owner da R1).
+Data: 19/10/2026.
+
+#  Critério                 Justificativa
+-  -----------------------  ------------------------------------------------------------
+1  Dependência técnica      Sem login e controle de acesso nenhuma tela funciona; por
+                            isso, US-01 e US-02 vêm primeiro.
+
+2  Obrigação legal e risco  Consentimento LGPD (US-04), prioridade legal (US-11) e
+                            auditoria de acessos (US-20) não podem ficar para o fim do
+                            projeto (RSK02).
+
+3  Valor para o paciente    Entrar na fila e ver a posição (US-06 e US-07) são o núcleo
+                            do produto e abrem a R2.
+
+4  Inclusão                 O cadastro pela recepção (US-05) entra já na R1 para atender
+                            quem não usa celular (RSK05).
+
+5  Diferenciais por último  Painel de TV, aviso e modo contingência ficam no fim ou fora
+                            do MVP, para evitar escopo inflado (RSK01).
+                            
+----------------------------------------------------------------
+BACKLOG ORDENADO
+----------------------------------------------------------------
+#   Chave     História                                 Pts  Release  Sprint  Justificativa
+--  --------  ---------------------------------------  ---  -------  ------  --------------------------------
+1   SCRUM-37  [US-01] Login por perfil                 5    R1       1       Dependência técnica
+2   SCRUM-38  [US-02] Controle de acesso por papel     8    R1       1       Dependência técnica e LGPD
+3   SCRUM-39  [US-04] Autocadastro com consentimento   5    R1       1       Obrigação legal (LGPD)
+4   SCRUM-40  [US-05] Recepção cadastra paciente       3    R1       1       Inclusão (RSK05)
+5   SCRUM-41  [US-06] Entrar na fila                   5    R2       2       Valor central para o paciente
+6   SCRUM-42  [US-07] Ver minha posição                3    R2       2       Valor central para o paciente
+7   SCRUM-43  [US-08] Cancelar minha senha             2    R2       2       Completa o fluxo da fila
+8   SCRUM-44  [US-09] Configurar filas e horários      5    R2       2       Pré-requisito da operação
+9   SCRUM-15  [US-03] Gestor cadastra funcionários     5    R2       3       Pré-requisito da operação
+10  SCRUM-45  [US-10] Check-in na recepção             3    R2       3       Ciclo de atendimento
+11  SCRUM-46  [US-11] Aplicar prioridade legal         5    R2       3       Obrigação legal
+12  SCRUM-47  [US-13] Chamar o próximo                 3    R2       3       Ciclo de atendimento
+13  SCRUM-48  [US-14] Iniciar e finalizar atendimento  3    R2       3       Ciclo de atendimento
+14  SCRUM-49  [US-15] Registrar observação curta       2    R3       4       Apoio ao profissional
+15  SCRUM-50  [US-16] Estimativa de espera             8    R3       4       Valor para o paciente (RSK04)
+16  SCRUM-51  [US-17] Fila em tempo real               8    R3       4       Valor para o paciente
+17  SCRUM-52  [US-12] Remover faltosos                 3    R3       5       Eficiência da fila
+18  SCRUM-53  [US-20] Auditoria de acessos             5    R3       5       LGPD (RSK02)
+19  SCRUM-18  [US-25] Gestor remove funcionário        3    R3       5       Segurança de acesso
+20  SCRUM-54  [US-18] Relatório de tempo de espera     5    R4       6       Gestão
+21  SCRUM-55  [US-19] Volume por horário e faltas      5    R4       6       Gestão
+22  SCRUM-56  [US-21] Excluir meus dados               3    R4       6       LGPD
+23  SCRUM-57  [US-22] Painel de chamada (TV)           3    R4       6       Diferencial
+24  SCRUM-58  [US-23] Aviso "sua vez está chegando"    5    R4       6       Diferencial
+25  SCRUM-59  [US-24] Modo contingência                -    Futuro   -       Diferencial, fora do MVP (RSK01)
+
+Total do MVP (US-01 a US-25, exceto a US-24): 105 story points.
+
