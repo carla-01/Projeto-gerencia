@@ -1,4 +1,5 @@
 import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import Cadastro from './pages/Cadastro'
 import Login from './pages/Login'
 import Pagina from './pages/Pagina'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -17,9 +18,9 @@ export default function App() {
   const location = useLocation()
   const perfil = obterPerfil()
 
-  // A tela de login ocupa a página inteira, sem o menu provisório do esqueleto.
+  // As telas de login e de cadastro ocupam a página inteira, sem o menu provisório do esqueleto.
   let mostrarMenu = true
-  if (location.pathname === '/login') {
+  if (location.pathname === '/login' || location.pathname === '/cadastro') {
     mostrarMenu = false
   }
 
@@ -39,7 +40,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/cadastro" element={<Pagina titulo="Cadastro do paciente" descricao="Autocadastro com consentimento LGPD (US04)." />} />
+        <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/paciente" element={<Pagina titulo="Área do paciente" descricao="Fila e posição do paciente (R2)." />} />
         <Route path="/recepcao" element={
           <ProtectedRoute perfis={['RECEPCIONISTA']}><PainelRecepcao /></ProtectedRoute>

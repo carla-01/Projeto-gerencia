@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ErroLogin, fazerLogin, telaInicialDoPerfil } from '../services/auth'
 import './Login.css'
 
@@ -159,6 +159,10 @@ export default function Login() {
             {enviando && <span className="login-carregando" aria-hidden="true" />}
             {textoBotao}
           </button>
+
+          <p className="login-rodape">
+            Ainda não tem conta? <Link to="/cadastro">Criar conta</Link>
+          </p>
         </form>
       </main>
     </div>
