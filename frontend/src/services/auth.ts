@@ -14,6 +14,27 @@ type RespostaLogin = {
 const CHAVE_TOKEN = 'filasus.token'
 const CHAVE_PERFIL = 'filasus.perfil'
 
+export function obterToken(): string | null {
+  return localStorage.getItem(CHAVE_TOKEN)
+}
+
+export function obterPerfil(): Perfil | null {
+  const perfil = localStorage.getItem(CHAVE_PERFIL)
+  if (perfil === 'PACIENTE' || perfil === 'RECEPCIONISTA' || perfil === 'PROFISSIONAL' || perfil === 'GESTOR') {
+    return perfil
+  }
+  return null
+}
+
+export function estaAutenticado(): boolean {
+  return obterToken() !== null && obterPerfil() !== null
+}
+
+export function fazerLogout(): void {
+  localStorage.removeItem(CHAVE_TOKEN)
+  localStorage.removeItem(CHAVE_PERFIL)
+}
+
 /** Erro com a mensagem que deve aparecer na tela. */
 export class ErroLogin extends Error {}
 

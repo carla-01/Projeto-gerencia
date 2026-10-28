@@ -10,6 +10,7 @@ export default defineConfig({
     // Atenção: o caminho da API não pode começar igual a uma rota de tela (ex.: /cadastro).
     proxy: {
       '/auth': 'http://localhost:8080',
+      '/api': 'http://localhost:8080',
       '/pacientes': 'http://localhost:8080',
     },
   },

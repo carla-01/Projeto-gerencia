@@ -2,6 +2,10 @@ import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Cadastro from './pages/Cadastro'
 import Login from './pages/Login'
 import Pagina from './pages/Pagina'
+import ProtectedRoute from './components/ProtectedRoute'
+import AcessoNegado from './pages/AcessoNegado'
+import PainelRecepcao from './pages/PainelRecepcao'
+import { obterPerfil } from './services/auth'
 
 /**
  * Rotas por perfil, ainda vazias.
@@ -12,6 +16,7 @@ import Pagina from './pages/Pagina'
  */
 export default function App() {
   const location = useLocation()
+  const perfil = obterPerfil()
 
   // As telas de login e de cadastro ocupam a página inteira, sem o menu provisório do esqueleto.
   let mostrarMenu = true
@@ -26,7 +31,7 @@ export default function App() {
           <main>
             <Link to="/login">Login</Link>
             <Link to="/paciente">Paciente</Link>
-            <Link to="/recepcao">Recepção</Link>
+            {perfil === 'RECEPCIONISTA' && <Link to="/recepcao">Recepção</Link>}
             <Link to="/profissional">Profissional</Link>
             <Link to="/gestor">Gestor</Link>
           </main>
@@ -37,7 +42,10 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/paciente" element={<Pagina titulo="Área do paciente" descricao="Fila e posição do paciente (R2)." />} />
-        <Route path="/recepcao" element={<Pagina titulo="Recepção" descricao="Cadastro de paciente pela recepção (US05) e painel da fila." />} />
+        <Route path="/recepcao" element={
+          <ProtectedRoute perfis={['RECEPCIONISTA']}><PainelRecepcao /></ProtectedRoute>
+        } />
+        <Route path="/acesso-negado" element={<AcessoNegado />} />
         <Route path="/profissional" element={<Pagina titulo="Profissional de saúde" descricao="Chamada e atendimento (R2)." />} />
         <Route path="/gestor" element={<Pagina titulo="Gestor" descricao="Configuração e relatórios (R2 a R4)." />} />
         <Route path="*" element={<Pagina titulo="Página não encontrada" descricao="Confira o endereço." />} />
