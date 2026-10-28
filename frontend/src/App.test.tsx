@@ -11,7 +11,7 @@ describe('App', () => {
         <App />
       </MemoryRouter>,
     )
-    expect(screen.getByRole('heading', { name: 'Entrar' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Bem-vindo ao FilaSUS' })).toBeInTheDocument()
   })
 
   it('mostra aviso em rota inexistente', () => {

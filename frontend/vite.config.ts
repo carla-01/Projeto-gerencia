@@ -9,6 +9,7 @@ export default defineConfig({
     // Em desenvolvimento, as chamadas /auth vão para o back-end Spring na porta 8080.
     proxy: {
       '/auth': 'http://localhost:8080',
+      '/api': 'http://localhost:8080',
     },
   },
   // Testes com Vitest (npm test), rodados também no CI.
