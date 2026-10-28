@@ -1,5 +1,7 @@
 # FilaSUS
 
+[![CI](https://github.com/carla-01/Projeto-gerencia/actions/workflows/ci.yml/badge.svg)](https://github.com/carla-01/Projeto-gerencia/actions/workflows/ci.yml)
+
 Projeto da disciplina de Gerência de Projetos (UEPB, 2026.2).
 
 ## Problema
