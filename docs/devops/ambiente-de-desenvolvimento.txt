@@ -1,0 +1,135 @@
+AMBIENTE DE DESENVOLVIMENTO - FilaSUS
+SCRUM-70 · Responsável: Adrielly (DevOps, R1)
+
+Como preparar a máquina, rodar o back-end e o front-end, como a CI funciona,
+o fluxo de branches e commits e o que nunca vai para o repositório.
+
+
+----------------------------------------------------------------
+1. FERRAMENTAS
+----------------------------------------------------------------
+- Git + GitHub Desktop (ou git no terminal)
+- Java 21 (JDK, recomendado Eclipse Temurin 21)
+  Confira com: java -version  -> precisa mostrar "21"
+- Maven 3.9+  (confira com: mvn -v)
+- Node.js 20 LTS ou mais novo, com npm  (confira com: node -v)
+- PostgreSQL 16 (com pgAdmin ou psql)
+- Editor: VS Code ou IntelliJ IDEA
+
+Se tiver mais de um Java instalado, a variável JAVA_HOME tem que apontar
+para o JDK 21. Com Java antigo o back-end não compila.
+
+
+----------------------------------------------------------------
+2. BANCO DE DADOS (PostgreSQL local)
+----------------------------------------------------------------
+Os scripts ficam em docs/devops/banco/ e seguem o DER (docs/arquitetura).
+Rode na ordem, da raiz do repositório (ou abra cada um no Query Tool do pgAdmin):
+
+    psql -U postgres -f docs/devops/banco/01-criar-usuario-e-banco.sql
+    psql -U filasus -d filasus -f docs/devops/banco/02-criar-tabelas.sql
+    psql -U filasus -d filasus -f docs/devops/banco/03-dados-iniciais.sql
+
+- 01: cria o usuário filasus e o banco filasus (fuso America/Fortaleza).
+- 02: cria as 10 tabelas, chaves, restrições e índices.
+- 03: cria os serviços Clínico, Enfermagem e Odontologia com configuração padrão.
+
+Para recriar do zero: DROP DATABASE filasus; DROP USER filasus; e rodar os três.
+
+A estrutura oficial é a dos scripts. O Hibernate (ddl-auto=update) só
+completa o que faltar quando a API sobe.
+
+Os valores padrão estão em backend/src/main/resources/application.properties
+e podem ser trocados por variáveis de ambiente:
+
+    DB_URL        padrão: jdbc:postgresql://localhost:5432/filasus
+    DB_USER       padrão: filasus
+    DB_PASSWORD   padrão: filasus_dev
+    JWT_SECRET    padrão: só para desenvolvimento, nunca usar em produção
+
+Os testes NÃO precisam do PostgreSQL local: usam o perfil "test", com banco
+H2 em memória (backend/src/test/resources/application-test.properties).
+
+
+----------------------------------------------------------------
+3. RODAR O BACK-END (backend/)
+----------------------------------------------------------------
+    cd backend
+    mvn spring-boot:run     # sobe a API em http://localhost:8080
+    mvn verify              # compila e roda todos os testes
+
+Health check: http://localhost:8080/actuator/health  -> {"status":"UP"}
+
+
+----------------------------------------------------------------
+4. RODAR O FRONT-END (frontend/)
+----------------------------------------------------------------
+    cd frontend
+    npm install             # só na primeira vez ou quando o package.json mudar
+    npm run dev             # abre em http://localhost:5173
+    npm run lint            # ESLint
+    npm run build           # build de produção
+    npm test                # testes com Vitest
+
+
+----------------------------------------------------------------
+5. CI (GitHub Actions)
+----------------------------------------------------------------
+Arquivo: .github/workflows/ci.yml (SCRUM-69)
+
+Roda em todo push e em todo pull request, com três jobs:
+- Back-end: Java 21 + mvn verify, contra um PostgreSQL 16 de teste que
+  sobe como container no próprio CI
+- Front-end: npm ci, lint, build e npm test
+- build: check único que só passa se back-end e front-end passarem
+
+O check "build" é obrigatório para fazer merge em main e develop
+(Settings > Branches no GitHub). O badge da CI fica no README.
+PR com a CI vermelha não entra: corrija na própria branch e faça push de novo.
+
+
+----------------------------------------------------------------
+6. FLUXO DE BRANCHES
+----------------------------------------------------------------
+- main: versão entregue em cada release. Protegida, só recebe PR vindo da develop.
+- develop: integração da sprint. Protegida, só recebe PR.
+- Branches de trabalho, sempre criadas a partir da develop atualizada,
+  com a chave do Jira no nome:
+      feature/SCRUM-XX-descricao   (história de usuário)
+      fix/SCRUM-XX-descricao       (correção de bug)
+      docs/SCRUM-XX-descricao      (documentação)
+      ci/SCRUM-XX-descricao        (CI e infraestrutura)
+
+Passo a passo de cada tarefa:
+1. Ir para a develop e fazer Fetch/Pull.
+2. Criar a branch a partir da develop.
+3. Fazer os commits.
+4. Push e abrir o PR para a develop, usando o pull-request-template.txt.
+5. Esperar a CI passar e a revisão da colega (rodízio) antes do merge.
+
+
+----------------------------------------------------------------
+7. COMMITS
+----------------------------------------------------------------
+Formato: SCRUM-XX tipo(escopo): descrição curta no imperativo
+
+Tipos: feat, fix, docs, test, ci, refactor, chore
+
+Exemplos do projeto:
+    SCRUM-37 feat(auth): cria endpoint POST /auth/login com JWT
+    SCRUM-69 ci(github-actions): adiciona pipeline de build e testes a cada push
+
+A chave SCRUM-XX liga o commit ao card no Jira.
+
+
+----------------------------------------------------------------
+8. O QUE NUNCA VAI PARA O REPOSITÓRIO
+----------------------------------------------------------------
+- Senhas, tokens, o JWT_SECRET real e arquivos .env
+- Dependências e builds: frontend/node_modules, frontend/dist, backend/target
+- Arquivos de IDE: .idea/, .vscode/, *.iml
+- Dados reais de pacientes (CPF, nome, telefone etc.): use só dados fictícios (LGPD)
+
+Os .gitignore (raiz, backend/ e frontend/) já cobrem esses arquivos.
+Se o GitHub Desktop mostrar milhares de arquivos alterados, algo está fora
+do .gitignore: não faça commit e avise no grupo.
