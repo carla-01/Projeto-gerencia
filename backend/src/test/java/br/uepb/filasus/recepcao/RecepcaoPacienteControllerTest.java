@@ -164,6 +164,7 @@ class RecepcaoPacienteControllerTest {
     }
 
     @Test
+    @DisplayName("CT-US05-01 - Cadastro presencial: CPF inválido não é cadastrado")
     void cadastroComCpfInvalidoERecusado() throws Exception {
         cadastrar(pedido("123.456.789-00", true), recepcionista)
             .andExpect(status().isBadRequest())
@@ -174,6 +175,7 @@ class RecepcaoPacienteControllerTest {
     }
 
     @Test
+    @DisplayName("CT-US05-01 - Cadastro presencial: sem cartão SUS não é cadastrado")
     void cadastroSemCartaoSusERecusado() throws Exception {
         CadastroPresencialRequest semCartao = new CadastroPresencialRequest("Antônio Lima", CPF_PACIENTE, "",
             null, null, true);
@@ -239,7 +241,9 @@ class RecepcaoPacienteControllerTest {
         assertEquals(1, consentimentoRepository.count());
     }
 
+    // "Dado que estou logado como recepcionista": os outros perfis não podem cadastrar.
     @Test
+    @DisplayName("CT-US05-01 - Cadastro presencial: só a recepcionista cadastra (outros perfis recebem 403)")
     void outroPerfilRecebe403() throws Exception {
         Usuario paciente = usuarioRepository.save(new Usuario("Maria da Silva", "maria@email.com",
             protecaoCpf.hash(CPF_PACIENTE), protecaoCpf.cifrar(CPF_PACIENTE), "hash", Perfil.PACIENTE));
@@ -251,6 +255,7 @@ class RecepcaoPacienteControllerTest {
     }
 
     @Test
+    @DisplayName("CT-US05-01 - Cadastro presencial: sem login recebe 401")
     void semLoginRecebe401() throws Exception {
         mockMvc.perform(post("/api/recepcao/pacientes")
                 .contentType(MediaType.APPLICATION_JSON)
