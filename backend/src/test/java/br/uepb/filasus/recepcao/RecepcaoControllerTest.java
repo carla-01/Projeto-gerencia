@@ -57,7 +57,8 @@ class RecepcaoControllerTest {
     }
 
     private String token(Perfil perfil) {
-        Usuario usuario = new Usuario("12345678901", perfil.name().toLowerCase() + "@filasus.com", "hash", perfil);
+        Usuario usuario = new Usuario("Usuário de Teste", perfil.name().toLowerCase() + "@filasus.com",
+            "cpf-hash", "cpf-cifrado", "hash", perfil);
         return jwtService.gerarToken(usuario);
     }
 }

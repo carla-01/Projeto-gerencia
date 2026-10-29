@@ -1,0 +1,234 @@
+/* Moldura das telas da recepção - protótipos R2 e R3 */
+
+.recepcao-pagina {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f6fa;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  color: #111833;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Celular: barra azul no topo ---------- */
+
+.recepcao-lateral {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+  padding: 12px 16px 10px;
+  background: #101d78;
+  color: #ffffff;
+}
+
+.recepcao-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: auto;
+}
+
+.recepcao-logo-selo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.recepcao-logo-icone {
+  width: 16px;
+  height: 16px;
+}
+
+/* Só o texto ao lado do selo (o selo também é um span e precisa continuar flex) */
+.recepcao-logo div strong {
+  display: block;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+}
+
+.recepcao-logo div span {
+  display: block;
+  font-size: 11px;
+  color: #a9b2ea;
+}
+
+.recepcao-menu {
+  order: 3;
+  width: 100%;
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+.recepcao-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #c9cff0;
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.recepcao-menu-icone {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.recepcao-menu-item:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.recepcao-menu-item-ativo,
+.recepcao-menu-item-ativo:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.16);
+  font-weight: 600;
+}
+
+.recepcao-menu-item:focus-visible,
+.recepcao-sair:focus-visible {
+  outline: 2px solid #a9b2ea;
+  outline-offset: 2px;
+}
+
+/* Perfil e "Sair" (rodapé do protótipo) */
+.recepcao-usuario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.recepcao-avatar {
+  display: none;
+}
+
+.recepcao-usuario-texto strong {
+  display: none;
+}
+
+.recepcao-sair {
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 13px;
+  color: #dfe3fa;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.recepcao-sair:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.recepcao-conteudo {
+  flex: 1;
+  min-width: 0;
+  padding: 24px 16px 40px;
+}
+
+/* ---------- Computador: barra lateral ---------- */
+
+@media (min-width: 900px) {
+  .recepcao-pagina {
+    flex-direction: row;
+  }
+
+  .recepcao-lateral {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    width: 232px;
+    flex-shrink: 0;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 0;
+    padding: 22px 14px 18px;
+    box-sizing: border-box;
+    background: linear-gradient(180deg, #13238f 0%, #0d1866 100%);
+  }
+
+  .recepcao-logo {
+    margin: 0 6px 30px;
+  }
+
+  .recepcao-menu {
+    order: 0;
+    flex-direction: column;
+    gap: 2px;
+    overflow: visible;
+  }
+
+  .recepcao-menu-item {
+    position: relative;
+    padding: 10px 12px;
+  }
+
+  /* Barrinha clara à esquerda da página aberta */
+  .recepcao-menu-item-ativo::before {
+    content: '';
+    position: absolute;
+    left: -14px;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: #ffffff;
+  }
+
+  .recepcao-usuario {
+    margin-top: auto;
+    padding: 14px 8px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .recepcao-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: #13238f;
+    background: #e8ebfb;
+    border-radius: 50%;
+  }
+
+  .recepcao-usuario-texto strong {
+    display: block;
+    font-size: 13px;
+  }
+
+  .recepcao-sair {
+    padding: 0;
+    font-size: 12px;
+    color: #a9b2ea;
+    border: none;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .recepcao-sair:hover {
+    background: transparent;
+  }
+
+  .recepcao-conteudo {
+    padding: 36px 44px 48px;
+  }
+}

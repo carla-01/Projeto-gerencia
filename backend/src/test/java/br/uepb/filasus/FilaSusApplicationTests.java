@@ -41,7 +41,7 @@ class FilaSusApplicationTests {
 
     @Test
     void healthCheckComTokenValido() throws Exception {
-        Usuario usuario = new Usuario("12345678901", "gestor@ubs.com", "hash", Perfil.GESTOR);
+        Usuario usuario = new Usuario("Gestor de Teste", "gestor@ubs.com", "cpf-hash", "cpf-cifrado", "hash", Perfil.GESTOR);
         String token = jwtService.gerarToken(usuario);
 
         mockMvc.perform(get("/actuator/health")

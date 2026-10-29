@@ -2,6 +2,7 @@ package br.uepb.filasus.paciente;
 
 import java.time.Clock;
 import java.time.Instant;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,10 @@ public class PacienteService {
     public static final String FINALIDADE_DOS_DADOS =
         "Para se cadastrar, aceite o termo. Seus dados são usados só para organizar "
         + "a fila de atendimento da UBS, e você pode pedir a exclusão deles quando quiser.";
+
+    /** Mostrada quando a recepção tenta cadastrar sem registrar o consentimento verbal (US-05). */
+    public static final String CONSENTIMENTO_VERBAL_OBRIGATORIO =
+        "Registre o consentimento verbal do paciente antes de cadastrar.";
 
     private static final Logger log = LoggerFactory.getLogger(PacienteService.class);
 
@@ -106,5 +111,87 @@ public class PacienteService {
 
         return new AutocadastroResponse(paciente.getId(), paciente.getNome(), paciente.getPrioridade(),
             consentimento.getVersaoTermo(), consentimento.getAceitoEm());
+    }
+
+    /**
+     * Cadastro presencial feito pela recepcionista (US-05 - SCRUM-40), para quem
+     * não tem celular ou não sabe usar o sistema.
+     *
+     * O paciente fica sem login (usuario nulo) e com cadastradoPor apontando para a
+     * recepcionista. O consentimento verbal é guardado como um aceite do termo, igual
+     * ao do autocadastro. Paciente e consentimento são salvos juntos: se um falhar,
+     * nenhum fica salvo.
+     *
+     * Se o CPF já estiver cadastrado (CT-US05-02), devolve o cadastro existente com
+     * jaCadastrado = true, sem criar outro e sem alterar o que já existe.
+     */
+    @Transactional
+    public CadastroPresencialResponse cadastrarPelaRecepcao(CadastroPresencialRequest request, Long recepcionistaId) {
+        // O @AssertTrue do request já barra isso; a regra fica aqui também
+        // para ninguém conseguir cadastrar sem consentimento chamando o serviço direto.
+        if (!request.consentimentoVerbal()) {
+            throw new CadastroInvalidoException("consentimentoVerbal", CONSENTIMENTO_VERBAL_OBRIGATORIO);
+        }
+
+        String cpf = Cpf.normalizar(request.cpf());
+        if (!Cpf.ehValido(cpf)) {
+            throw new CadastroInvalidoException("cpf", "CPF inválido");
+        }
+
+        String cpfHash = protecaoCpf.hash(cpf);
+        Optional<Paciente> existente = pacienteRepository.findByCpfHash(cpfHash);
+        if (existente.isPresent()) {
+            Paciente paciente = existente.get();
+            log.info("Cadastro presencial: CPF já cadastrado, recepcionista id={} abriu o paciente id={}",
+                recepcionistaId, paciente.getId());
+            return montarResposta(paciente, cpf, true, ultimoConsentimento(paciente.getId()));
+        }
+
+        Usuario recepcionista = usuarioRepository.getReferenceById(recepcionistaId);
+        Instant agora = Instant.now(clock);
+
+        Prioridade prioridade = Prioridade.NENHUMA;
+        if (request.prioridade() != null) {
+            prioridade = request.prioridade();
+        }
+
+        Paciente paciente = new Paciente(request.nome().trim(), cpfHash, protecaoCpf.cifrar(cpf), prioridade, agora);
+        paciente.setCartaoSus(request.cartaoSus());
+        paciente.setTelefone(request.telefone());
+        paciente.setCadastradoPor(recepcionista);
+        paciente = pacienteRepository.save(paciente);
+
+        Consentimento consentimento = consentimentoRepository.save(
+            new Consentimento(paciente, versaoTermo, true, agora));
+
+        // Só ids no log: nome e CPF são dados pessoais.
+        log.info("Cadastro presencial: paciente id={} cadastrado pela recepcionista id={} com consentimento verbal (termo versão {})",
+            paciente.getId(), recepcionistaId, versaoTermo);
+
+        return montarResposta(paciente, cpf, false, consentimento);
+    }
+
+    /** Aceite mais recente do paciente (pode ter vindo do autocadastro ou da recepção). */
+    private Consentimento ultimoConsentimento(Long pacienteId) {
+        Consentimento ultimo = null;
+        for (Consentimento consentimento : consentimentoRepository.findByPacienteId(pacienteId)) {
+            if (ultimo == null || consentimento.getAceitoEm().isAfter(ultimo.getAceitoEm())) {
+                ultimo = consentimento;
+            }
+        }
+        return ultimo;
+    }
+
+    private CadastroPresencialResponse montarResposta(Paciente paciente, String cpf, boolean jaCadastrado,
+                                                      Consentimento consentimento) {
+        String versaoTermo = null;
+        Instant consentimentoEm = null;
+        if (consentimento != null) {
+            versaoTermo = consentimento.getVersaoTermo();
+            consentimentoEm = consentimento.getAceitoEm();
+        }
+
+        return new CadastroPresencialResponse(paciente.getId(), paciente.getNome(), Cpf.mascarar(cpf),
+            paciente.getPrioridade(), paciente.getCriadoEm(), jaCadastrado, versaoTermo, consentimentoEm);
     }
 }

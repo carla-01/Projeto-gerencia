@@ -41,4 +41,11 @@ class CpfTest {
         assertFalse(Cpf.ehValido("11111111111"));
         assertFalse(Cpf.ehValido("00000000000"));
     }
+
+    @Test
+    void mascaraOMeioDoCpf() {
+        assertEquals("529.***.***-25", Cpf.mascarar("52998224725"));
+        assertEquals("", Cpf.mascarar("123"));
+        assertEquals("", Cpf.mascarar(null));
+    }
 }

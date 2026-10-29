@@ -4,6 +4,8 @@ import Login from './pages/Login'
 import Pagina from './pages/Pagina'
 import ProtectedRoute from './components/ProtectedRoute'
 import AcessoNegado from './pages/AcessoNegado'
+import CadastroRecepcao from './pages/CadastroRecepcao'
+import LayoutRecepcao from './components/LayoutRecepcao'
 import PainelRecepcao from './pages/PainelRecepcao'
 import { obterPerfil } from './services/auth'
 
@@ -19,8 +21,12 @@ export default function App() {
   const perfil = obterPerfil()
 
   // As telas de login e de cadastro ocupam a página inteira, sem o menu provisório do esqueleto.
+  // As telas da recepção têm o próprio menu (barra lateral).
   let mostrarMenu = true
   if (location.pathname === '/login' || location.pathname === '/cadastro') {
+    mostrarMenu = false
+  }
+  if (location.pathname.startsWith('/recepcao')) {
     mostrarMenu = false
   }
 
@@ -43,7 +49,14 @@ export default function App() {
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/paciente" element={<Pagina titulo="Área do paciente" descricao="Fila e posição do paciente (R2)." />} />
         <Route path="/recepcao" element={
-          <ProtectedRoute perfis={['RECEPCIONISTA']}><PainelRecepcao /></ProtectedRoute>
+          <ProtectedRoute perfis={['RECEPCIONISTA']}>
+            <LayoutRecepcao><PainelRecepcao /></LayoutRecepcao>
+          </ProtectedRoute>
+        } />
+        <Route path="/recepcao/cadastrar" element={
+          <ProtectedRoute perfis={['RECEPCIONISTA']}>
+            <LayoutRecepcao><CadastroRecepcao /></LayoutRecepcao>
+          </ProtectedRoute>
         } />
         <Route path="/acesso-negado" element={<AcessoNegado />} />
         <Route path="/profissional" element={<Pagina titulo="Profissional de saúde" descricao="Chamada e atendimento (R2)." />} />

@@ -2,6 +2,7 @@ package br.uepb.filasus.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,6 +36,8 @@ public class SecurityConfig {
                 .accessDeniedHandler(accessDeniedHandler))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**", "/api/auth/**").permitAll()
+                // Autocadastro (US-04): quem está se cadastrando ainda não tem login.
+                .requestMatchers(HttpMethod.POST, "/pacientes/autocadastro").permitAll()
                 .requestMatchers("/api/recepcao/**").hasRole("RECEPCIONISTA")
                 .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
