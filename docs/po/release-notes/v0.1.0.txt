@@ -1,0 +1,92 @@
+FILASUS v0.1.0 - R1 - ACESSO E CADASTRO
+Data: 29/10/2026
+PO + DevOps: Adrielly Carla Ferreira de Melo
+SM: Maria Eduarda da Nóbrega
+QA: Mirelle Casimiro Silvino
+
+================================================================
+OBJETIVO DA SPRINT 1
+================================================================
+Usuários entram com o seu perfil, e pacientes são cadastrados com
+consentimento LGPD, por conta própria ou pela recepção.
+
+Resultado: objetivo atingido. As 4 histórias planejadas foram
+entregues e aceitas pela PO na Review de 29/10/2026.
+
+================================================================
+HISTÓRIAS ENTREGUES
+================================================================
+SCRUM-37 [US-01] Login por perfil (5 pts)
+  Responsável: Maria Eduarda da Nóbrega
+  Login com CPF ou e-mail e senha, token JWT por perfil e bloqueio
+  da conta por 15 minutos após 5 senhas erradas.
+
+SCRUM-38 [US-02] Controle de acesso por papel (8 pts)
+  Responsável: Mirelle Casimiro Silvino
+  Cada perfil acessa só as suas rotas; acesso indevido recebe 403
+  "Acesso não permitido" e a tentativa fica registrada no log.
+
+SCRUM-39 [US-04] Autocadastro do paciente com consentimento (5 pts)
+  Responsável: Adrielly Carla Ferreira de Melo
+  Cadastro pelo próprio paciente com aceite do termo LGPD registrado
+  com data e hora; CPF validado e guardado protegido.
+
+SCRUM-40 [US-05] Recepção cadastra paciente (3 pts)
+  Responsável: Maria Eduarda da Nóbrega
+  Cadastro presencial com consentimento verbal; CPF já cadastrado
+  abre o cadastro existente em vez de duplicar.
+
+================================================================
+NÃO CONCLUÍDAS E PARA ONDE FORAM
+================================================================
+Nenhuma.
+
+================================================================
+INFRAESTRUTURA E DOCUMENTAÇÃO
+================================================================
+- Repositório com main e develop protegidas, PR obrigatório com
+  1 aprovação e modelos de PR e de issue.
+- Integração GitHub e Jira (branches, commits e PRs com SCRUM-nn).
+- Esqueletos do back-end (Java 21 + Spring Boot) e do front-end
+  (React + TypeScript).
+- CI no GitHub Actions a cada push e em todo PR: build e testes do
+  back-end e do front-end.
+- Ambiente de desenvolvimento documentado, sem Docker, com os
+  scripts do banco PostgreSQL.
+- Definition of Done, priorização do backlog, projeto arquitetural,
+  DER, plano de qualidade, plano de teste e casos de teste.
+
+================================================================
+CORREÇÕES
+================================================================
+- BUG-01 (Alta): o autocadastro passou a exigir login depois da
+  US-02. Corrigido no PR #14.
+- BUG-02 (Baixa): teste do login no front-end desatualizado após a
+  nova tela da recepção. Corrigido no PR #14.
+- O arquivo da CI, removido sem querer no PR #14, foi restaurado
+  no PR #15.
+
+================================================================
+MÉTRICAS
+================================================================
+Pontos planejados: 21
+Pontos entregues: 21 (velocidade da Sprint 1: 21 pontos)
+Bugs encontrados x corrigidos: 2 x 2
+Testes automatizados: 51 no back-end e 27 no front-end, todos
+passando
+Execuções de CI e taxa de sucesso: 40 execuções, 20 com sucesso (50%)
+
+================================================================
+COMO RODAR ESTA VERSÃO
+================================================================
+Seguir docs/devops/ambiente-de-desenvolvimento.txt.
+Nesta release não há ambiente de homologação: a demonstração roda
+no ambiente local documentado.
+
+================================================================
+PRÓXIMA RELEASE
+================================================================
+R2 - Fila e Atendimento (Sprints 2 e 3, até 26/11/2026)
+PO + DevOps: Maria Eduarda da Nóbrega
+SM: Mirelle Casimiro Silvino
+QA: Adrielly Carla Ferreira de Melo
