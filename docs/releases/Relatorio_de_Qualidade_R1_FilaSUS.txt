@@ -1,0 +1,132 @@
+RELATÓRIO DE QUALIDADE - RELEASE 1 (R1 - Acesso e Cadastro) - FilaSUS
+Tarefa: Q02 [QA] Relatório de qualidade da R1 (SCRUM-89)
+Salvar em: docs/releases/ (entrega até 29/10/2026)
+
+----------------------------------------------------------------
+1. IDENTIFICAÇÃO
+----------------------------------------------------------------
+Projeto: FilaSUS - Fila virtual para Unidades Básicas de Saúde
+Equipe: Adrielly Carla Ferreira de Melo, Maria Eduarda da Nóbrega e Mirelle Casimiro Silvino
+QA responsável: Mirelle Casimiro Silvino
+Release: R1 - Acesso e Cadastro (versão v0.1.0)
+Sprints cobertas: Sprint 0 e Sprint 1 (20/10 a 29/10/2026)
+Versão avaliada: develop, commit 4b1bf1c (CI #39, 29/10/2026)
+Repositório: https://github.com/carla-01/Projeto-gerencia
+Data do relatório: 29/10/2026
+Documentos de apoio: Plano_de_Qualidade v1.1, Plano de Teste v1.1, Casos_de_Teste_Sprint1_FilaSUS.txt, Bugs_Sprint1_FilaSUS.txt
+
+----------------------------------------------------------------
+2. ESCOPO DA RELEASE
+----------------------------------------------------------------
+US-01 Login por perfil (SCRUM-37) - 5 pontos
+US-02 Controle de acesso por papel (SCRUM-38) - 8 pontos
+US-04 Autocadastro do paciente com consentimento (SCRUM-39) - 5 pontos
+US-05 Recepção cadastra paciente (SCRUM-40) - 3 pontos
+Total entregue: 21 pontos em 4 US. Casos de teste: 13 (CT-US01-01 a CT-US05-02), em JUnit 5 + MockMvc (back-end) e Vitest + Testing Library (front-end), executados pelo CI do GitHub Actions.
+
+----------------------------------------------------------------
+3. RESUMO
+----------------------------------------------------------------
+- Bugs: 2 encontrados (1 Alta e 1 Baixa) e 2 corrigidos e retestados. Nenhum bug crítico ou alto em aberto no fechamento da release.
+- Testes: 13 casos; 12 executados e aprovados na develop (CI #39) e 1 pendente (CT-US02-04, log de acesso negado). Na primeira execução na develop (CI #34), 8 dos 12 casos executados passaram.
+- Pipeline: CI #39 verde (Back-end mvn verify, Front-end npm ci/build/test e build). Na develop, 5 de 7 execuções foram verdes (71%), abaixo da meta de 90%.
+- Achado de processo: o merge do PR #14 apagou o ci.yml e a develop ficou sem CI por um período; o workflow foi restaurado em SCRUM-69 (CI #37) e voltou a rodar na develop (CI #39).
+- Conclusão: a R1 está apta para a Review, com a ressalva do CT-US02-04 e das metas de controle de acesso por perfil (Q-08) e estabilidade do CI (Q-05), tratadas na R2.
+
+----------------------------------------------------------------
+4. BUGS ENCONTRADOS x CORRIGIDOS
+----------------------------------------------------------------
+ID      Sev.    US / casos                       Encontrado                         Correção                                   Reteste                         Situação
+BUG-01  Alta    SCRUM-39 / CT-US04-01, 02, 03    28/10, CI #34 (develop, b2632e6)   POST liberado no SecurityConfig (SCRUM-40)  CI #39 verde, 29/10 (4b1bf1c)   Corrigido e retestado
+BUG-02  Baixa   SCRUM-37 / CT-US01-01            28/10, CI #34 (develop, b2632e6)   Correção na feature/SCRUM-40                CI #39 verde, 29/10 (4b1bf1c)   Corrigido e retestado
+
+Descrições:
+BUG-01 - Depois da US02, o POST /pacientes/autocadastro passou a exigir login e responde 401, então o paciente não consegue se cadastrar. Os testes do front-end não pegaram, porque simulam o back-end; o CI da develop pegou na integração.
+BUG-02 - O teste do CT-US01-01 espera a tela "Recepção" para o perfil RECEPCIONISTA, mas a tela passou a ser "Painel da recepção"; o log do CI #36 mostra também um erro não tratado em PainelRecepcao.tsx (linha 58).
+
+Achado de processo (não entra na contagem de bugs de produto):
+- ci.yml apagado no merge do PR #14 (SCRUM-69). Restaurado no CI #37 e confirmado no CI #39.
+
+Balanço: encontrados 2, corrigidos 2, em aberto 0. Bugs escapados (descobertos fora dos testes): 0. Detalhes de cada bug em Bugs_Sprint1_FilaSUS.txt.
+
+----------------------------------------------------------------
+5. MÉTRICAS DO PLANO DE QUALIDADE (RESULTADO R1)
+----------------------------------------------------------------
+ID    Item                              Meta                               Resultado R1                                                        Situação
+Q-01  Cobertura de testes automatizados ≥ 60% a partir da R3               N/A na R1 (JaCoCo ainda não configurado no CI)                      N/A na R1
+Q-02  Bugs críticos e altos em aberto   0 no fechamento da release         0 (BUG-01, Alta, aberto em 28/10 e corrigido em 29/10)             Atingida
+Q-03  Qualidade dos critérios de aceite 100%                               100% (4 de 4 US com Gherkin de sucesso e de exceção)               Atingida
+Q-04  Revisão de código                 100%                               100% (12 de 12 PRs integrados na develop com aprovação)            Atingida
+Q-05  Estabilidade do pipeline          ≥ 90% de runs verdes na develop    71% (5 de 7 runs verdes: #7, #9, #23, #27, #39; vermelhos: #12, #34) Não atingida
+Q-06  Execução dos casos de teste       100% dos casos das US entregues    92% (12 de 13; CT-US02-04 não executado)                           Não atingida
+Q-07  Taxa de aprovação dos testes      ≥ 95% ao fim da release            100% (12 de 12 executados no CI #39); 92% se contar o CT-US02-04; 67% (8 de 12) na primeira execução (CI #34)   Atingida
+Q-08  Controle de acesso (Segurança)    100% dos 4 perfis                  25% (1 de 4 perfis: PACIENTE recebe 403 em /api/recepcao/**)       Não atingida
+Q-09  Proteção de dados pessoais        0 campos em texto claro            0 (tabela usuario: cpf_hash, cpf_cifrado e senha_hash; ProtecaoCpfTest verde no CI #39)   Atingida
+Q-10  Tempo de resposta no pico         < 500 ms (p95)                     N/A na R1 (a partir da R2)                                          N/A na R1
+Q-11  Atualização em tempo real         ≤ 5 s                              N/A na R1 (R3 e R4)                                                 N/A na R1
+Q-12  Disponibilidade em homologação    ≥ 99%                              N/A na R1 (a partir da R2)                                          N/A na R1
+Q-13  Restauração de backup             ≤ 1 h; perda ≤ 24 h                N/A na R1 (a partir da R3)                                          N/A na R1
+Q-14  Densidade de defeitos             Tendência decrescente              0,10 bug por ponto (2 bugs ÷ 21 pontos); primeira medição          Linha de base
+Q-15  Tempo de correção de bugs graves  ≤ 3 dias                          1 dia (BUG-01: aberto em 28/10 às 20:22, corrigido em 29/10)        Atingida
+
+Notas:
+- Q-05: os dois runs vermelhos da develop foram o #12 (merge do PR #9, login) e o #34 (merge do PR #13, US02, com BUG-01 e BUG-02).
+- Q-08: PROFISSIONAL e GESTOR só passam a ter telas com as US da R2; os testes de 403 desses perfis entram na R2.
+- Q-14: 21 pontos = US01 5 + US02 8 + US04 5 + US05 3.
+
+----------------------------------------------------------------
+6. EXECUÇÃO DOS TESTES
+----------------------------------------------------------------
+Caso         Resultado na develop (CI #39)   1ª execução na develop (CI #34)   Bug
+CT-US01-01   Passou                          Falhou (front)                    BUG-02
+CT-US01-02   Passou                          Passou                            -
+CT-US01-03   Passou                          Passou                            -
+CT-US02-01   Passou                          Passou                            -
+CT-US02-02   Passou                          Passou                            -
+CT-US02-03   Passou                          Passou                            -
+CT-US02-04   Pendente (não executado)        Pendente                          -
+CT-US04-01   Passou                          Falhou (back)                     BUG-01
+CT-US04-02   Passou                          Falhou (back)                     BUG-01
+CT-US04-03   Passou                          Falhou (back)                     BUG-01
+CT-US04-04   Passou                          Passou                            -
+CT-US05-01   Passou                          Passou                            -
+CT-US05-02   Passou                          Passou                            -
+
+Execuções do CI usadas:
+CI #27  develop        89f1b93  28/10  verde     antes da US02
+CI #34  develop        b2632e6  28/10  vermelho  merge do PR #13 (US02): BUG-01 e BUG-02
+CI #36  feature/SCRUM-40  6f19692  28/10  Back-end verde, Front-end vermelho
+CI #37  fix/SCRUM-69restaura-ci  29/10  verde  restaura o workflow de CI
+CI #39  develop        4b1bf1c  29/10  verde     versão avaliada neste relatório
+Front-end (Vitest): 18 de 19 em b2632e6 e 27 de 27 em 34f9b32.
+
+----------------------------------------------------------------
+7. REGRESSÃO
+----------------------------------------------------------------
+Regressão executada antes da apresentação da release: CI #39 na develop (4b1bf1c, 29/10), com Back-end (mvn verify), Front-end (npm ci, build, test) e build verdes. Todos os casos executados, inclusive os dos bugs corrigidos (CT-US01-01 e CT-US04-01 a 03), passaram.
+
+----------------------------------------------------------------
+8. VERIFICAÇÃO DA DoD POR US (itens que a QA mede)
+----------------------------------------------------------------
+US      Critérios de aceite validados   Testes escritos e passando   Pipeline de CI sem falhas
+US-01   Sim (CT-US01-01, 02, 03)        Sim                          Sim (CI #39)
+US-02   Sim (CT-US02-01, 02, 03)        Sim; CT-US02-04 pendente     Sim (CI #39)
+US-04   Sim (CT-US04-01 a 04)           Sim                          Sim (CI #39)
+US-05   Sim (CT-US05-01, 02)            Sim                          Sim (CI #39)
+
+----------------------------------------------------------------
+9. RISCOS E AÇÕES PARA A R2
+----------------------------------------------------------------
+- Estabilidade do CI (Q-05, 71%): merge só com CI verde e proteção da develop para exigir o check "CI" antes de integrar.
+- Testes do front-end simulam o back-end e não pegam erro de integração (ocorreu no BUG-01): teste manual ponta a ponta antes de cada Review e teste de integração dos fluxos de login e cadastro.
+- Controle de acesso (Q-08, 25%): testes de 403 por perfil (PROFISSIONAL e GESTOR) junto com as US da R2, e teste do log de acesso negado (CT-US02-04, driver DA-SEG-I1-01).
+- Cobertura (Q-01): configurar o JaCoCo no CI para medir a partir da R3.
+- Desempenho e disponibilidade (Q-10 e Q-12): scripts k6 e monitor UptimeRobot a partir da R2.
+- Automação funcional: arquivos .feature com Cypress + Cucumber a partir da R2, conforme o Plano de Teste.
+
+----------------------------------------------------------------
+10. CONCLUSÃO
+----------------------------------------------------------------
+Critérios de saída do Plano de Teste na R1: cenários planejados executados (12 de 13, com o CT-US02-04 pendente); nenhum bug crítico ou alto em aberto; resultados registrados neste relatório. A R1 pode ir para a Review com a ressalva do CT-US02-04 e das metas Q-05, Q-06 e Q-08, que seguem como ações da R2.
+
+Mirelle Casimiro Silvino - QA - 29/10/2026
