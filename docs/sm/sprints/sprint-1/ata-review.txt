@@ -1,0 +1,54 @@
+ATA DA SPRINT REVIEW - SPRINT 1
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+
+Data: 29/10/2026
+Formato: dia facultativo, sem aula. Review fechada no Jira e apresentada em vídeo
+(link na atividade de fechamento da Release 1 no Classroom).
+Facilitação: Maria Eduarda da Nóbrega (Scrum Master)
+Presentes: Adrielly (PO + DevOps), Maria Eduarda (SM) e Mirelle (QA)
+
+----------------------------------------------------------------
+1. OBJETIVO DA SPRINT
+----------------------------------------------------------------
+Usuários entram com o seu perfil, e pacientes são cadastrados com consentimento LGPD,
+por conta própria ou pela recepção.
+Resultado: ATINGIDO. 21 de 21 pontos entregues.
+
+----------------------------------------------------------------
+2. HISTÓRIAS E DECISÃO DO PO
+----------------------------------------------------------------
+História        Dev             Pontos  Entregue em         Decisão do PO
+SCRUM-37 US01   Maria Eduarda   5       PRs #6, #9 e #11    Aceita
+SCRUM-38 US02   Mirelle         8       PR #13              Aceita
+SCRUM-39 US04   Adrielly        5       PR #12 (+ #14)      Aceita
+SCRUM-40 US05   Maria Eduarda   3       PR #14              Aceita
+
+DoD de cada história verificada pela QA e comentada na issue antes do aceite.
+Não concluídas: nenhuma.
+
+----------------------------------------------------------------
+3. INCREMENTO DEMONSTRADO
+----------------------------------------------------------------
+- Login por perfil com bloqueio após 5 senhas erradas
+- Painel da recepção com acesso negado (403) para outros perfis
+- Autocadastro do paciente com aceite LGPD
+- Cadastro do paciente pela recepção, sem duplicar CPF
+- CI no GitHub Actions, tag v0.1.0 e versão R1 lançada no Jira
+
+----------------------------------------------------------------
+4. BUGS E DESVIOS
+----------------------------------------------------------------
+- BUG-01 (Alta): autocadastro respondia 401 depois da US02. Corrigido no PR #14.
+- BUG-02 (Baixa): teste do login no front-end desatualizado. Corrigido no PR #14.
+- O PR #14 apagou o arquivo da CI; restaurado no PR #15.
+
+----------------------------------------------------------------
+5. FEEDBACK RECEBIDO
+----------------------------------------------------------------
+-
+
+----------------------------------------------------------------
+6. ENCAMINHAMENTOS
+----------------------------------------------------------------
+- Backlog repriorizado pelo PO para a Sprint 2.
+- Papéis da R2: PO + DevOps Maria Eduarda, SM Mirelle e QA Adrielly.
