@@ -1,0 +1,38 @@
+REGISTRO DE DAILIES - SPRINT 1
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+Facilitação e registro: Maria Eduarda da Nóbrega (Scrum Master)
+
+Dailies às segundas e quartas-feiras, às 20h, online, até 15 minutos.
+Cada integrante responde: o que fez, o que vai fazer e o que está travando.
+
+---
+
+## DAILY 1 - quarta-feira, 21/10/2026, 20h
+
+Presentes: Adrielly, Maria Eduarda e Mirelle    Duração: 8 min
+Adrielly: DoD e priorização no repositório; próximo: esqueletos do back e do front
+Maria Eduarda: subtarefas da US01; próximo: entidade Usuario e login
+Mirelle: casos de teste da sprint; próximo: projeto arquitetural
+Impedimentos: IMP-01 (sem Docker)
+
+---
+
+## DAILY 2 - segunda-feira, 26/10/2026, 20h
+
+Presentes: Adrielly, Maria Eduarda e Mirelle    Duração: 10 min
+Adrielly: esqueletos e CI entregues; próximo: ambiente e US04
+Maria Eduarda: login com JWT; próximo: bloqueio após 5 tentativas
+Mirelle: projeto arquitetural; próximo: filtro JWT da US02
+Impedimentos: IMP-03 (arquivos gerados aparecendo para commit)
+
+---
+
+## DAILY 3 - quarta-feira, 28/10/2026, 20h
+
+Presentes: Adrielly, Maria Eduarda e Mirelle    Duração: 9 min
+Adrielly: US04 integrada; próximo: aceite e release
+Maria Eduarda: US01 integrada; próximo: US05
+Mirelle: US02 em revisão; próximo: execução dos testes
+Impedimentos: IMP-04 (autocadastro bloqueado após a US02)
+
+29/10 não teve daily: dia da Review e da Retrospectiva.

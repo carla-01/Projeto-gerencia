@@ -1,0 +1,115 @@
+Calendário de Cerimônias
+
+FilaSUS · Gerência de Projetos (UEPB, 2026.2) · Scrum Master
+
+Sprints: Sprint 1 (20/10 a 29/10) · Sprint 2 (03/11 a 12/11) · Sprint 3 (17/11 a 26/11) ·
+Sprint 4 (01/12 a 10/12) · Sprint 5 (15/12 a 22/12) · Sprint 6 (02/02 a 18/02).
+
+Dailies: segundas e quartas-feiras, às 20h, online, até 15 minutos. Planning, Review e
+Retrospectiva acontecem nos dias de aula.
+
+(Datas de 2026, exceto fevereiro, que é 2027. Ajustar se a professora mudar alguma data.)
+
+  -----------------------------------------------------------------------------------------
+  Data         Dia / hora     Cerimônia                                          Release
+  ------------ -------------- -------------------------------------------------- ----------
+  06/10        Aula           Introdução                                         R1
+
+  08/10        Aula           Configuração do Jira                               R1
+
+  13/10        Aula           Escopo e prazos                                    R1
+
+  16/10        Aula           Planejamento de qualidade e riscos                 R1
+
+  20/10        Ter            Sprint Planning - Sprint 1                         R1
+
+  21/10        Qua 20h        Daily                                              R1
+
+  22/10        Qui            Desenvolvimento (aula)                             R1
+
+  26/10        Seg 20h        Daily                                              R1
+
+  27/10        Ter            Desenvolvimento (aula)                             R1
+
+  28/10        Qua 20h        Daily                                              R1
+
+  29/10        Qui            Review + Retrospectiva Sprint 1 · fim da R1        R1
+
+  03/11        Ter            Sprint Planning - Sprint 2                         R2
+
+  04/11        Qua 20h        Daily                                              R2
+
+  05/11        Qui            Desenvolvimento (aula)                             R2
+
+  09/11        Seg 20h        Daily                                              R2
+
+  10/11        Ter            Desenvolvimento (aula)                             R2
+
+  11/11        Qua 20h        Daily                                              R2
+
+  12/11        Qui            Review + Retrospectiva Sprint 2                    R2
+
+  17/11        Ter            Sprint Planning - Sprint 3                         R2
+
+  18/11        Qua 20h        Daily                                              R2
+
+  19/11        Qui            Desenvolvimento (aula)                             R2
+
+  23/11        Seg 20h        Daily                                              R2
+
+  24/11        Ter            Desenvolvimento (aula)                             R2
+
+  25/11        Qua 20h        Daily                                              R2
+
+  26/11        Qui            Review + Retrospectiva Sprint 3 · fim da R2        R2
+
+  01/12        Ter            Sprint Planning - Sprint 4                         R3
+
+  02/12        Qua 20h        Daily                                              R3
+
+  03/12        Qui            Desenvolvimento (aula)                             R3
+
+  07/12        Seg 20h        Daily                                              R3
+
+  08/12        Ter            Desenvolvimento (aula)                             R3
+
+  09/12        Qua 20h        Daily                                              R3
+
+  10/12        Qui            Review + Retrospectiva Sprint 4                    R3
+
+  15/12        Ter            Sprint Planning - Sprint 5 (curta)                 R3
+
+  16/12        Qua 20h        Daily                                              R3
+
+  17/12        Qui            Desenvolvimento (aula)                             R3
+
+  21/12        Seg 20h        Daily                                              R3
+
+  22/12        Ter            Review + Retrospectiva Sprint 5 · fim da R3        R3
+
+  02/02        Ter            Sprint Planning - Sprint 6                         R4
+
+  03/02        Qua 20h        Daily                                              R4
+
+  04/02        Qui            Desenvolvimento (aula)                             R4
+
+  08/02        Seg 20h        Daily                                              R4
+
+  09/02        Ter            Desenvolvimento (aula)                             R4
+
+  10/02        Qua 20h        Daily                                              R4
+
+  11/02        Qui            Desenvolvimento (aula)                             R4
+
+  15/02        Seg 20h        Daily                                              R4
+
+  16/02        Ter            Review + Retrospectiva Sprint 6 · fim da R4        R4
+
+  18/02        Qui            Demo Day e retrospectiva final                     R4
+
+  23/02        Ter            Prova final                                        —
+  -----------------------------------------------------------------------------------------
+
+Alteração registrada em 29/10/2026: por portaria, 29/10 foi dia facultativo e não houve
+aula. A Sprint Review e a Retrospectiva da Sprint 1 foram fechadas no Jira, e a Review foi
+apresentada à professora em vídeo (até 10 minutos), conforme orientação dela.

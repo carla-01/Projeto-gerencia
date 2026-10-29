@@ -1,0 +1,37 @@
+MÉTRICAS - SPRINT 1
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+Responsável: Maria Eduarda da Nóbrega (Scrum Master)
+
+----------------------------------------------------------------
+1. NÚMEROS
+----------------------------------------------------------------
+Pontos planejados: 21
+Pontos entregues: 21 (relatório de velocidade do Jira)
+Velocidade da Sprint 1: 21 pontos (média até aqui: 21)
+Histórias planejadas x entregues: 4 x 4
+Tickets da sprint: 28, todos concluídos
+Bugs encontrados x corrigidos: 2 x 2
+Impedimentos: 5 registrados, 5 resolvidos
+Pull requests integrados na develop durante a R1: 14 (PRs #1 a #15, exceto o #8,
+  que foi integrado direto na main)
+Execuções da CI e taxa de sucesso: (preencher com a aba Actions)
+
+----------------------------------------------------------------
+2. BURNDOWN
+----------------------------------------------------------------
+docs/sprints/sprint-1/img/burndown-sprint-1.png
+Print da velocidade: docs/sprints/sprint-1/img/velocidade-sprint-1.png
+
+----------------------------------------------------------------
+3. INTERPRETAÇÃO
+----------------------------------------------------------------
+- O trabalho restante ficou em 21 pontos até 28/10 e caiu para 0 entre 28 e 29/10.
+  O burndown ficou acima da linha ideal a sprint inteira porque as histórias só foram
+  movidas para Concluído no fim, depois do aceite, embora o código tenha sido integrado
+  ao longo da sprint (PRs #6 a #14).
+- Entraram tarefas de papel depois do início da sprint (ex.: SCRUM-66 em 21/10). Elas
+  não têm pontos e não mudaram o escopo de 21 pontos.
+- Ajuste para a próxima sprint: mover cada história para Concluído logo após o merge e
+  o aceite, para o burndown mostrar o progresso real.
+- Com a velocidade de 21 pontos, a Sprint 2 pode ser planejada com cerca de 20 pontos,
+  mantendo a folga de 20% combinada para o risco de sobrecarga (RSK07).

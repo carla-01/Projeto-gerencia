@@ -1,0 +1,75 @@
+ATA DA SPRINT PLANNING - SPRINT 1
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+
+Data: 20/10/2026
+Horário: 20:00h às 21:00h
+Local: sala de aula
+Facilitação: Maria Eduarda da Nóbrega (Scrum Master)
+Product Owner + DevOps: Adrielly Carla Ferreira de Melo
+QA: Mirelle Casimiro Silvino
+Presentes: Adrielly, Maria Eduarda e Mirelle
+Período da sprint: 20/10/2026 a 29/10/2026
+
+----------------------------------------------------------------
+1. PAUTA
+----------------------------------------------------------------
+- Capacidade do time
+- Apresentação das histórias pelo PO, em ordem de prioridade
+- Estimativa e confirmação dos responsáveis
+- Plano de testes da Sprint 1 (QA)
+- Apresentação da Definition of Done
+- Revisão dos riscos
+- Definição do Sprint Goal
+
+----------------------------------------------------------------
+2. SPRINT GOAL
+----------------------------------------------------------------
+Usuários entram com o seu perfil, e pacientes são cadastrados com consentimento LGPD,
+por conta própria ou pela recepção.
+
+----------------------------------------------------------------
+3. SPRINT BACKLOG - HISTÓRIAS
+----------------------------------------------------------------
+Chave     História                                            Pontos  Responsável
+SCRUM-37  [US-01] Login por perfil                            5       Maria Eduarda
+SCRUM-38  [US-02] Controle de acesso por papel                8       Mirelle
+SCRUM-39  [US-04] Autocadastro do paciente com consentimento  5       Adrielly
+SCRUM-40  [US-05] Recepção cadastra paciente                  3       Maria Eduarda
+
+Capacidade planejada: 21 story points.
+Definition of Ready conferida nas quatro histórias: formato "Eu como... preciso... de
+modo que...", critérios de aceite em Gherkin, pontos estimados, prioridade definida,
+dependências identificadas e cabem na sprint.
+
+----------------------------------------------------------------
+4. DEPENDÊNCIAS IDENTIFICADAS
+----------------------------------------------------------------
+- US-01 depende dos esqueletos do back-end e do front-end no repositório.
+- US-02 depende da US-01 (login com JWT que identifica o perfil).
+- US-04 depende do esqueleto do back-end (banco e entidade Paciente).
+- US-05 depende da US-01 e da US-02 e reaproveita o cadastro da US-04.
+
+----------------------------------------------------------------
+5. TAREFAS DE PAPEL NA SPRINT
+----------------------------------------------------------------
+PO + DevOps (Adrielly): SCRUM-101 backlog inicial, SCRUM-66 DoD e priorização,
+  SCRUM-100 branches protegidas, SCRUM-102 integração GitHub e Jira, SCRUM-67 e 68
+  esqueletos, SCRUM-69 CI, SCRUM-70 ambiente, SCRUM-71 release notes
+SM (Maria Eduarda): SCRUM-72 cerimônias, atas e métricas da Sprint 1
+QA (Mirelle): SCRUM-17 riscos, SCRUM-23 plano de qualidade, SCRUM-88 plano de testes e
+  casos de teste, SCRUM-89 relatório de qualidade da R1
+Arquitetura: SCRUM-22 projeto arquitetural (Mirelle) e SCRUM-21 DER (Adrielly)
+Drivers e riscos de segurança: SCRUM-16, 19, 20, 73, 74, 75, 90 e 99
+
+----------------------------------------------------------------
+6. QUALIDADE E DEFINITION OF DONE
+----------------------------------------------------------------
+- A QA apresentou o plano de testes e os casos de teste das histórias da Sprint 1.
+- O PO apresentou a Definition of Done ao time.
+- Bugs serão registrados no Jira com o modelo de relato de bug da disciplina.
+
+----------------------------------------------------------------
+7. RISCOS
+----------------------------------------------------------------
+Riscos revisados (docs/sm/registro-de-riscos.txt). Nenhum valor mudou na Planning.
+Atenção da sprint: RSK03 (equipe sem experiência na stack) e RSK07 (sobrecarga).

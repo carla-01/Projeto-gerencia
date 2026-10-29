@@ -1,0 +1,65 @@
+REGISTRO DE IMPEDIMENTOS - RELEASE 1
+FilaSUS · Gerência de Projetos (UEPB, 2026.2) · Scrum Master
+Responsável: Maria Eduarda da Nóbrega (Scrum Master da R1)
+
+Todo impedimento citado em daily, no grupo ou nos comentários do Jira entra aqui no
+mesmo dia. Status: Aberto, Em tratamento ou Resolvido.
+
+----------------------------------------------------------------
+REGISTRO
+----------------------------------------------------------------
+IMP-01
+  Surgiu em: 20/10/2026 
+  Impedimento: a professora não quer Docker; o ambiente e a CI precisavam rodar sem
+  banco em container.
+  Afeta: todas as US (ambiente) e a CI
+  Quem resolveu: Adrielly (DevOps)
+  Status: Resolvido em 21/10/2026 (confirmar) · 1 dia
+  Solução: PostgreSQL 16 instalado na máquina para desenvolvimento e banco H2 em memória
+  nos testes e na CI; passo a passo em docs/devops/ambiente-de-desenvolvimento.txt.
+
+IMP-02
+  Surgiu em: 22/10/2026
+  Impedimento: as histórias dependiam dos esqueletos do back-end e do front-end no
+  repositório para começar.
+  Afeta: US01, US02, US04 e US05
+  Quem resolveu: Adrielly (DevOps)
+  Status: Resolvido em 22/10/2026 · 0 dia
+  Solução: esqueletos entregues nos PRs #3 e #4.
+
+IMP-03
+  Surgiu em: 27/10/2026
+  Impedimento: milhares de arquivos gerados (target, node_modules, dist) aparecendo para
+  commit, por falta de .gitignore em algumas branches.
+  Afeta: todas as integrantes ao commitar
+  Quem resolveu: Adrielly (DevOps)
+  Status: Resolvido em 27/10/2026 · 0 dia
+  Solução: arquivos descartados e .gitignore do back-end e do front-end na develop;
+  branches atualizadas a partir da develop.
+
+IMP-04
+  Surgiu em: 28/10/2026
+  Impedimento: depois do merge da US02, o autocadastro do paciente passou a exigir login
+  e respondia 401 (BUG-01).
+  Afeta: US04
+  Quem resolveu: Maria Eduarda (Dev da US05)
+  Status: Resolvido em 29/10/2026 · 1 dia
+  Solução: rota POST /pacientes/autocadastro liberada no SecurityConfig (PR #14).
+
+IMP-05
+  Surgiu em: 29/10/2026
+  Impedimento: o merge do PR #14 apagou o arquivo da CI (.github/workflows/ci.yml); a CI
+  parou de rodar na develop.
+  Afeta: CI e a tag v0.1.0
+  Quem resolveu: Adrielly (DevOps)
+  Status: Resolvido em 29/10/2026 · 0 dia
+  Solução: arquivo restaurado no PR #15.
+
+----------------------------------------------------------------
+RESUMO DA RELEASE 1
+----------------------------------------------------------------
+Impedimentos registrados: 5
+Resolvidos: 5
+Tempo médio até a resolução: 0,6 dia (conferir depois de confirmar as datas)
+Impedimento recorrente: mudanças de uma história quebrando outra no merge (IMP-04 e
+IMP-05). Virou ação da Retrospectiva da Sprint 1.

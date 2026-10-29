@@ -1,0 +1,53 @@
+ATA DA RETROSPECTIVA - SPRINT 1 (FIM DA RELEASE 1)
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+
+Data: 29/10/2026
+Facilitação: Maria Eduarda da Nóbrega (Scrum Master)
+Presentes: Adrielly, Maria Eduarda e Mirelle
+Os itens abaixo são uma proposta; ajustem com o que o time falou.
+
+----------------------------------------------------------------
+1. O QUE FOI BEM
+----------------------------------------------------------------
+- Sprint Goal atingido: 4 histórias e 21 de 21 pontos.
+- Todo código entrou por PR revisado, com a chave do Jira em branches, commits e PRs.
+- CI rodando a cada push, com testes automatizados no back-end e no front-end.
+- Bugs encontrados pelos testes antes da entrega e corrigidos na própria sprint.
+
+----------------------------------------------------------------
+2. O QUE MELHORAR
+----------------------------------------------------------------
+- As histórias ficaram em "Em andamento" até o último dia: o burndown ficou reto até
+  28/10 e não mostrou o progresso real.
+- Uma história quebrou outra no merge (BUG-01) e um merge apagou o arquivo da CI.
+- Descrições de PR fora do modelo da disciplina no começo da sprint.
+- Atas e documentos de papel deixados para o último dia.
+
+----------------------------------------------------------------
+3. PLANO DE AÇÃO (cada ação vira uma tarefa no Jira)
+----------------------------------------------------------------
+Ação                                                    Responsável     Prazo   Chave
+Mover a US para Concluído logo após o merge e o aceite  PO da R2        12/11   SCRUM-nn
+Revisora confere "Files changed" (arquivos apagados e   SM da R2        12/11   SCRUM-nn
+  impacto em outras US) antes de aprovar
+Merge só com a CI verde                                 DevOps da R2    12/11   SCRUM-nn
+Usar sempre o pull-request-template.txt                 Todas           12/11   SCRUM-nn
+Subir atas e documentos de papel no dia da cerimônia    SM da R2        12/11   SCRUM-nn
+
+----------------------------------------------------------------
+4. AÇÕES DA RETROSPECTIVA ANTERIOR
+----------------------------------------------------------------
+Não se aplica: primeira sprint.
+
+----------------------------------------------------------------
+5. PLANO DE RISCOS INICIAL ACOMPANHADO
+----------------------------------------------------------------
+Riscos que mudaram desde 13/10: RSK01, RSK02, RSK03, RSK05 e RSK09 baixaram; RSK07
+teve o gatilho acionado; RSK13 (regressão entre histórias no merge) é novo.
+Detalhes em docs/sm/registro-de-riscos.txt.
+
+----------------------------------------------------------------
+6. PASSAGEM DO PAPEL DE SM
+----------------------------------------------------------------
+Maria Eduarda passa o papel de Scrum Master para Mirelle Casimiro Silvino na R2.
+Pendências: nenhuma.
