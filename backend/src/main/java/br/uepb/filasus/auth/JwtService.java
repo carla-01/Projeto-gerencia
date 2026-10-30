@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import br.uepb.filasus.usuario.Usuario;
+import br.uepb.filasus.usuario.Perfil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -57,5 +58,21 @@ public class JwtService {
             .build()
             .parseSignedClaims(token)
             .getPayload();
+    }
+
+    /** Valida o token e extrai o usuário e o perfil usados pela autenticação. */
+    public DadosAutenticacaoJwt validarEExtrairDados(String token) {
+        Claims claims = lerToken(token);
+        String usuarioId = claims.getSubject();
+        String perfil = claims.get("perfil", String.class);
+
+        if (usuarioId == null || usuarioId.isBlank() || perfil == null) {
+            throw new IllegalArgumentException("Token JWT sem dados obrigatórios");
+        }
+
+        return new DadosAutenticacaoJwt(usuarioId, Perfil.valueOf(perfil));
+    }
+
+    public record DadosAutenticacaoJwt(String usuarioId, Perfil perfil) {
     }
 }

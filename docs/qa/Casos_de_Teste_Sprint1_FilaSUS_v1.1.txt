@@ -1,0 +1,195 @@
+CASOS DE TESTE - SPRINT 1 - FilaSUS
+QA: Mirelle Casimiro Silvino
+Versão 1.2 - 29/10/2026 (Release 1 / Sprint 1)
+
+Referência da execução:
+  - Ambiente: develop, commit 4b1bf1c
+  - Pipeline: CI #39, GitHub Actions, 29/10/2026
+  - Back-end: mvn verify aprovado
+  - Front-end: npm ci, build e testes aprovados
+  - Resultado final: 12 casos executados e aprovados; 1 caso pendente
+
+----------------------------------------------------------------
+SCRUM-37 [US-01] Login por perfil
+----------------------------------------------------------------
+CT-US01-01  Sucesso   Login com sucesso
+  Dado que estou cadastrado e ativo
+  Quando informo CPF e senha corretos
+  Então sou levado à tela inicial do meu perfil
+  Issue Jira: SCRUM-37
+  Teste automatizado: Login.test.tsx#describe/it CT-US01-01
+  Resultado obtido: Falhou na primeira execução da develop (CI #34), devido à divergência de título "Recepção" versus "Painel da recepção". Passou no reteste da develop no CI #39.
+  Status: Passou
+  Evidência: CI #39, develop, commit 4b1bf1c; BUG-02 corrigido na feature/SCRUM-40
+  Bug aberto: BUG-02 (corrigido e retestado)
+
+CT-US01-02  Exceção   Senha incorreta
+  Dado que estou cadastrado
+  Quando informo a senha errada 5 vezes seguidas
+  Então vejo "CPF ou senha inválidos" e a conta fica bloqueada por 15 minutos
+  Issue Jira: SCRUM-37
+  Teste automatizado: Login.test.tsx#describe/it CT-US01-02
+  Resultado obtido: Passou no CI #39 da develop.
+  Status: Passou
+  Evidência: CI #39, develop, commit 4b1bf1c
+  Bug aberto: N/A
+
+CT-US01-03  Exceção   Bloqueio por 15 minutos após 5 senhas erradas
+  Dado que estou cadastrado
+  Quando informo a senha incorreta cinco vezes seguidas
+  Então a conta fica bloqueada por 15 minutos
+  Issue Jira: SCRUM-37; DA-SEG-I2-01
+  Teste automatizado: LoginBloqueioTest#cincoSenhasErradasBloqueiamAContaPor15Minutos
+  Resultado obtido: Passou no CI #39 da develop.
+  Status: Passou
+  Evidência: CI #39, develop, commit 4b1bf1c
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+SCRUM-38 [US-02] Controle de acesso por papel
+----------------------------------------------------------------
+CT-US02-01  Sucesso   Acesso permitido
+  Dado que estou logado como recepcionista
+  Quando abro o painel da recepção da minha UBS
+  Então a fila do dia é exibida
+  Issue Jira: SCRUM-38
+  Teste automatizado: RecepcaoControllerTest#CT_US02_01_recepcionistaAcessaFilaDaRecepcao
+  Resultado obtido: Passou no CI #39 da develop.
+  Status: Passou
+  Evidência: CI #39, develop, commit 4b1bf1c
+  Bug aberto: N/A
+
+CT-US02-02  Exceção   Acesso negado
+  Dado que estou logado como paciente
+  Quando tento acessar a rota do painel da recepção
+  Então o sistema responde 403 e mostra "Acesso não permitido"
+  Issue Jira: SCRUM-38
+  Teste automatizado: App.test.tsx#CT-US02-02 · RecepcaoControllerTest
+  Resultado obtido: Passou no CI #39 da develop.
+  Status: Passou
+  Evidência: CI #39, develop, commit 4b1bf1c
+  Bug aberto: N/A
+
+CT-US02-03  Exceção   Acesso sem token
+  Dado que não estou autenticado
+  Quando tento acessar a rota protegida do painel da recepção
+  Então o sistema responde 401
+  Issue Jira: SCRUM-38
+  Teste automatizado: RecepcaoControllerTest#requisicaoSemTokenRecebe401
+  Resultado obtido: Passou no CI #39 da develop.
+  Status: Passou
+  Evidência: CI #39, develop, commit 4b1bf1c
+  Bug aberto: N/A
+
+CT-US02-04  Exceção   Tentativa negada registrada no log
+  Dado que uma tentativa de acesso negado é realizada
+  Quando ocorre o acesso não autorizado
+  Então a tentativa é registrada no log
+  Issue Jira: SCRUM-38; DA-SEG-I1-01
+  Teste automatizado: não encontrado
+  Resultado obtido: Não executado na R1.
+  Status: Pendente
+  Evidência: a confirmar (execução manual: gerar acesso negado e registrar a linha do log)
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+SCRUM-39 [US-04] Autocadastro do paciente com consentimento
+----------------------------------------------------------------
+CT-US04-01  Sucesso   Cadastro com sucesso
+  Dado que estou na tela de cadastro
+  Quando preencho os dados obrigatórios e aceito o termo LGPD
+  Então minha conta é criada e o aceite fica registrado com data e hora
+  Issue Jira: SCRUM-39
+  Teste automatizado: PacienteControllerTest#cadastroComSucessoRegistraOAceite · Cadastro.test.tsx
+  Resultado obtido: Falhou no CI #34 por resposta 401 após a integração da US02. Passou no reteste do CI #39 após a correção do SecurityConfig.
+  Status: Passou
+  Evidência: CI #34 (falha), CI #39 verde (reteste), commit 4b1bf1c
+  Bug aberto: BUG-01 (corrigido e retestado)
+
+CT-US04-02  Exceção   Sem consentimento
+  Dado que preenchi os dados
+  Quando tento concluir sem marcar o aceite do termo
+  Então o cadastro não é concluído e vejo a finalidade do uso dos dados
+  Issue Jira: SCRUM-39
+  Teste automatizado: PacienteControllerTest#semAceiteNaoCadastraEMostraAFinalidade · Cadastro.test.tsx
+  Resultado obtido: Falhou no CI #34 por causa de BUG-01. Passou no reteste do CI #39.
+  Status: Passou
+  Evidência: CI #34 (falha), CI #39 verde (reteste), commit 4b1bf1c
+  Bug aberto: BUG-01 (corrigido e retestado)
+
+CT-US04-03  Exceção   CPF inválido
+  Dado que estou na tela de cadastro
+  Quando informo um CPF com dígito verificador errado
+  Então vejo "CPF inválido" no campo
+  Issue Jira: SCRUM-39
+  Teste automatizado: PacienteControllerTest#cpfInvalidoNaoCadastra · Cadastro.test.tsx
+  Resultado obtido: Falhou no CI #34 por causa de BUG-01. Passou no reteste do CI #39.
+  Status: Passou
+  Evidência: CI #34 (falha), CI #39 verde (reteste), commit 4b1bf1c
+  Bug aberto: BUG-01 (corrigido e retestado)
+
+CT-US04-04  Exceção   CPF e senha ilegíveis no banco
+  Dado que finalizei o cadastro
+  Quando consulto os dados armazenados
+  Então o CPF não aparece em texto claro e a proteção dos dados é mantida
+  Issue Jira: SCRUM-39; DA-SEG-I3-01
+  Teste automatizado: ProtecaoCpfTest#hashTem64CaracteresENaoMostraOCpf
+  Resultado obtido: Passou no CI #39 da develop.
+  Status: Passou
+  Evidência: ProtecaoCpfTest verde; CI #39, develop, commit 4b1bf1c
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+SCRUM-40 [US-05] Recepção cadastra paciente
+----------------------------------------------------------------
+CT-US05-01  Sucesso   Cadastro presencial
+  Dado que estou logado como recepcionista
+  Quando cadastro o paciente e registro o consentimento verbal
+  Então o paciente fica disponível para entrar na fila
+  Issue Jira: SCRUM-40
+  Teste automatizado: RecepcaoPacienteControllerTest#cadastroPresencialComConsentimentoVerbal · CadastroRecepcao.test.tsx
+  Resultado obtido: Passou no CI #39 da develop.
+  Status: Passou
+  Evidência: CI #39, develop, commit 4b1bf1c
+  Bug aberto: N/A
+
+CT-US05-02  Exceção   Paciente já cadastrado
+  Dado que o CPF já existe na base
+  Quando tento cadastrar de novo
+  Então o sistema abre o cadastro existente em vez de duplicar
+  Issue Jira: SCRUM-40
+  Teste automatizado: RecepcaoPacienteControllerTest#cpfJaCadastradoDevolveOCadastroExistente · CadastroRecepcao.test.tsx
+  Resultado obtido: Passou no CI #39 da develop.
+  Status: Passou
+  Evidência: CI #39, develop, commit 4b1bf1c
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+RESULTADO DA EXECUÇÃO - CI #39
+----------------------------------------------------------------
+Caso         Data         Resultado final   Bug aberto
+CT-US01-01   29/10/2026   Passou            BUG-02 (corrigido e retestado)
+CT-US01-02   29/10/2026   Passou            N/A
+CT-US01-03   29/10/2026   Passou            N/A
+CT-US02-01   29/10/2026   Passou            N/A
+CT-US02-02   29/10/2026   Passou            N/A
+CT-US02-03   29/10/2026   Passou            N/A
+CT-US02-04   -            Pendente          N/A
+CT-US04-01   29/10/2026   Passou            BUG-01 (corrigido e retestado)
+CT-US04-02   29/10/2026   Passou            BUG-01 (corrigido e retestado)
+CT-US04-03   29/10/2026   Passou            BUG-01 (corrigido e retestado)
+CT-US04-04   29/10/2026   Passou            N/A
+CT-US05-01   29/10/2026   Passou            N/A
+CT-US05-02   29/10/2026   Passou            N/A
+
+----------------------------------------------------------------
+RESUMO DA EXECUÇÃO
+----------------------------------------------------------------
+Total de casos: 13
+Casos executados: 12
+Casos aprovados: 12
+Taxa de aprovação dos executados: 100%
+Casos pendentes: 1 (CT-US02-04)
+Bugs encontrados na release: 2
+Bugs corrigidos e retestados: 2
+Bugs em aberto: 0

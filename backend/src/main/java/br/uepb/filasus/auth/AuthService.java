@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.uepb.filasus.lgpd.Cpf;
+import br.uepb.filasus.lgpd.ProtecaoCpf;
 import br.uepb.filasus.usuario.Usuario;
 import br.uepb.filasus.usuario.UsuarioRepository;
 
@@ -36,15 +38,18 @@ public class AuthService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final ProtecaoCpf protecaoCpf;
     private final Clock clock;
 
     public AuthService(UsuarioRepository usuarioRepository,
                        PasswordEncoder passwordEncoder,
                        JwtService jwtService,
+                       ProtecaoCpf protecaoCpf,
                        Clock clock) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.protecaoCpf = protecaoCpf;
         this.clock = clock;
     }
 
@@ -136,9 +141,9 @@ public class AuthService {
             return usuarioRepository.findByEmail(loginLimpo);
         }
 
-        // O CPF é salvo só com números, então tiramos pontos e traço
-        // caso o usuário digite "123.456.789-01".
-        String cpf = loginLimpo.replace(".", "").replace("-", "");
-        return usuarioRepository.findByCpf(cpf);
+        // O banco não tem o CPF, só o hash dele: tiramos pontos e traço
+        // (caso o usuário digite "123.456.789-01") e buscamos pelo hash.
+        String cpf = Cpf.normalizar(loginLimpo);
+        return usuarioRepository.findByCpfHash(protecaoCpf.hash(cpf));
     }
 }

@@ -1,0 +1,166 @@
+BUGS ENCONTRADOS - SPRINT 1 - FilaSUS
+QA: Mirelle Casimiro Silvino
+Versão 1.2 - 29/10/2026 (Release 1 / Sprint 1)
+
+Resumo final:
+  Bugs encontrados: 2
+  Bugs corrigidos e retestados: 2
+  Bugs em aberto: 0
+
+Observação: os IDs BUG-01 e BUG-02 são provisórios. As chaves reais do Jira não foram informadas nos documentos da release.
+
+################################################################
+
+TÍTULO: [BUG] Autocadastro responde 401 depois do controle de acesso
+ID PROVISÓRIO: BUG-01
+CHAVE NO JIRA: a confirmar
+RELEASE: R1 - Acesso e Cadastro
+SPRINT: 1
+US RELACIONADA: SCRUM-39 / US-04 - Autocadastro do paciente com consentimento
+CASOS RELACIONADOS: CT-US04-01, CT-US04-02, CT-US04-03
+SEVERIDADE: Alta
+PRIORIDADE: Alta
+RESPONSÁVEL: Maria Eduarda da Nóbrega
+REPORTADO POR: Mirelle Casimiro Silvino (QA)
+SITUAÇÃO: Corrigido e retestado
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+Depois da integração da US02 na develop, o POST /pacientes/autocadastro passou a exigir autenticação e respondeu 401. Como o paciente ainda não está autenticado no fluxo de autocadastro, não conseguia concluir o cadastro.
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: local com PostgreSQL 16 e CI do GitHub Actions com H2
+Navegador / versão: não se aplica
+Sistema operacional: Windows
+Versão / commit / branch: develop, commit b2632e6, merge do PR #13 (CI #34)
+US de origem: SCRUM-39, feature/SCRUM-39-autocadastro-paciente
+Versão corrigida: develop, commit 4b1bf1c, CI #39
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. Atualizar a develop para o commit b2632e6.
+2. Executar o mvn verify ou subir a aplicação.
+3. Chamar POST /pacientes/autocadastro sem token, com dados fictícios e aceite do termo LGPD marcado.
+4. Observar a resposta HTTP.
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+CT-US04-01: a conta é criada e o aceite é registrado com data e hora.
+CT-US04-02: sem consentimento, o cadastro não é concluído e a finalidade do uso dos dados é exibida.
+CT-US04-03: um CPF com dígito verificador inválido recebe a mensagem "CPF inválido".
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+A rota respondeu 401 em vez de processar o autocadastro. CT-US04-01, CT-US04-02 e CT-US04-03 falharam no back-end da develop durante o CI #34.
+
+----------------------------------------------------------------
+CORREÇÃO
+----------------------------------------------------------------
+O POST /pacientes/autocadastro foi liberado no SecurityConfig, mantendo protegidas as demais rotas.
+
+----------------------------------------------------------------
+RETESTE
+----------------------------------------------------------------
+Data: 29/10/2026
+Run: CI #39, develop, commit 4b1bf1c
+Resultado: verde
+Reteste: CT-US04-01, CT-US04-02 e CT-US04-03 aprovados
+Situação: corrigido e retestado
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+- CI #27: develop, commit 89f1b93, verde, antes da integração da US02.
+- CI #34: develop, commit b2632e6, vermelho, encontrou BUG-01.
+- CI #39: develop, commit 4b1bf1c, verde, reteste aprovado.
+- Saída detalhada do mvn verify ou PacienteControllerTest: a anexar.
+
+################################################################
+
+TÍTULO: [BUG] Teste de login espera "Recepção", mas a tela exibe "Painel da recepção"
+ID PROVISÓRIO: BUG-02
+CHAVE NO JIRA: a confirmar
+RELEASE: R1 - Acesso e Cadastro
+SPRINT: 1
+US RELACIONADA: SCRUM-37 / US-01 - Login por perfil
+CASOS RELACIONADOS: CT-US01-01
+SEVERIDADE: Baixa
+PRIORIDADE: Baixa
+RESPONSÁVEL: Maria Eduarda da Nóbrega
+REPORTADO POR: Mirelle Casimiro Silvino (QA)
+SITUAÇÃO: Corrigido e retestado
+
+----------------------------------------------------------------
+DESCRIÇÃO
+----------------------------------------------------------------
+O teste de login CT-US01-01 esperava o título "Recepção" para o perfil RECEPCIONISTA, enquanto a tela passou a exibir "Painel da recepção". A divergência fez o teste front-end falhar e deixou o CI vermelho.
+
+----------------------------------------------------------------
+AMBIENTE
+----------------------------------------------------------------
+Ambiente: local e CI do GitHub Actions
+Navegador / versão: não se aplica
+Sistema operacional: Windows
+Versão / commit / branch: develop, commit b2632e6 (CI #34)
+US de origem: SCRUM-37, feature/SCRUM-37-login-por-perfil
+Versão corrigida: develop, commit 4b1bf1c, CI #39
+
+----------------------------------------------------------------
+PASSOS PARA REPRODUZIR
+----------------------------------------------------------------
+1. Atualizar a develop para o commit b2632e6.
+2. Executar o Vitest no front-end.
+3. Executar Login.test.tsx, caso CT-US01-01, com o perfil RECEPCIONISTA.
+4. Observar o título exibido e a asserção do teste.
+
+----------------------------------------------------------------
+RESULTADO ESPERADO
+----------------------------------------------------------------
+Após login com CPF e senha corretos, o usuário deve ser levado à tela inicial correspondente ao seu perfil.
+
+----------------------------------------------------------------
+RESULTADO OBTIDO
+----------------------------------------------------------------
+O teste esperava "Recepção", mas a interface exibiu "Painel da recepção". No CI #34, 18 de 19 testes front-end passaram e CT-US01-01 falhou.
+
+----------------------------------------------------------------
+CORREÇÃO
+----------------------------------------------------------------
+O teste foi ajustado para considerar o título atualizado da tela, e o fluxo foi corrigido na branch SCRUM-40/40 utilizada pela integração da R1.
+
+----------------------------------------------------------------
+RETESTE
+----------------------------------------------------------------
+Data: 29/10/2026
+Run: CI #39, develop, commit 4b1bf1c
+Resultado: verde
+Reteste: CT-US01-01 aprovado no front-end
+Situação: corrigido e retestado
+
+----------------------------------------------------------------
+EVIDÊNCIAS
+----------------------------------------------------------------
+- CI #34: develop, commit b2632e6, vermelho, falha de CT-US01-01.
+- Feature/SCRUM-40: commit 34f9b32, 27 de 27 testes front-end aprovados.
+- CI #39: develop, commit 4b1bf1c, verde, reteste aprovado.
+- Saída detalhada do Vitest para CT-US01-01: a anexar.
+
+################################################################
+
+BALANÇO FINAL DA SPRINT 1
+----------------------------------------------------------------
+Bugs encontrados: 2 (1 Alta e 1 Baixa)
+Bugs corrigidos: 2
+Bugs retestados: 2
+Bugs em aberto: 0
+Bugs críticos em aberto: 0
+Bugs altos em aberto: 0
+
+Achado de processo não contabilizado como bug de produto:
+O ci.yml foi apagado pelo merge do PR #14. Foi restaurado pela SCRUM-69.

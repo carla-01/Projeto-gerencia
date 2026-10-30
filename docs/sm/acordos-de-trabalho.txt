@@ -1,0 +1,85 @@
+Acordos de Trabalho do Time
+
+FilaSUS · Gerência de Projetos (UEPB, 2026.2) · Scrum Master
+
+Time: Adrielly Carla Ferreira de Melo, Maria Eduarda da Nóbrega e Mirelle Casimiro Silvino
+
+Vigência: Release 1 a Release 4 (06/10/2026 a 18/02/2027). Revisados em cada
+Retrospectiva.
+
+Responsável pelo documento: Maria Eduarda da Nóbrega (Scrum Master da R1)
+
+1. Cerimônias
+
+1.  Dailies às segundas e quartas-feiras, às 20h, com no máximo 15 minutos. Cada
+    integrante responde: o que fez, o que vai fazer e o que está travando.
+
+2.  Sprint Planning no primeiro dia de cada sprint; Sprint Review e Retrospectiva no
+    último dia, nas datas do calendário de cerimônias.
+
+3.  Quem não puder participar de uma cerimônia avisa no grupo antes e deixa a sua
+    atualização por escrito na tarefa de cerimônias da sprint.
+
+2. Comunicação
+
+1.  Dúvida de regra de negócio vira comentário na história no Jira; o PO responde em até
+    24 horas.
+
+2.  Impedimento é avisado no mesmo dia em que surgir; a Scrum Master registra e sinaliza
+    no Jira.
+
+3.  Avisos rápidos pelo grupo do time; decisões ficam registradas no Jira ou nas atas.
+
+3. Jira e board
+
+1.  O board é atualizado a cada mudança de situação da issue (Em andamento, Em revisão,
+    Concluído).
+
+2.  Ninguém move história para Concluído: só o PO, depois do checklist da Definition of
+    Done feito pela QA.
+
+3.  Bugs são registrados com o modelo de relato de bug da disciplina, vinculados à
+    história.
+
+4. Código e repositório
+
+1.  Todo commit leva a chave do Jira (ex.: SCRUM-40 feat: ...); branch sai de develop.
+
+2.  Todo código entra por Pull Request para develop, com uma revisora, em rodízio:
+    Adrielly → Maria Eduarda → Mirelle → Adrielly.
+
+3.  PR é revisado em até 24 horas. O CI precisa estar verde antes do merge.
+
+4.  Proibido commitar senha, token, arquivo .env ou dado real de paciente.
+
+5. Papéis
+
+Os papéis de PO + DevOps, Scrum Master e QA rodam a cada release. As três integrantes são
+Dev Team em todas as releases.
+
+  -------------------------------------------------------------------------------------------
+  Release                   PO + DevOps           Scrum Master          QA
+  ------------------------- --------------------- --------------------- ---------------------
+  R1 - Acesso e Cadastro    Adrielly              Maria Eduarda         Mirelle
+
+  R2 - Fila e Atendimento   Maria Eduarda         Mirelle               Adrielly
+
+  R3 - Tempo real e         Mirelle               Adrielly              Maria Eduarda
+  Qualidade                                                             
+
+  R4 - Gestão e Demo Day    Adrielly              Maria Eduarda         Mirelle
+  -------------------------------------------------------------------------------------------
+
+6. Aprovação do time
+
+Cada integrante comenta "De acordo" na issue de acordos de trabalho no Jira.
+
+  -----------------------------------------------------------------------------------------
+  Integrante                                   De acordo em
+  -------------------------------------------- --------------------------------------------
+  Adrielly                                     21/10
+
+  Maria Eduarda                                21/10
+
+  Mirelle                                      21/10
+  -----------------------------------------------------------------------------------------

@@ -23,14 +23,21 @@ para o JDK 21. Com Java antigo o back-end não compila.
 ----------------------------------------------------------------
 2. BANCO DE DADOS (PostgreSQL local)
 ----------------------------------------------------------------
-Crie o usuário e o banco usados pelo ambiente de desenvolvimento
-(no psql ou no Query Tool do pgAdmin, conectado como postgres):
+Os scripts ficam em docs/devops/banco/ e seguem o DER (docs/arquitetura).
+Rode na ordem, da raiz do repositório (ou abra cada um no Query Tool do pgAdmin):
 
-    CREATE USER filasus WITH PASSWORD 'filasus_dev';
-    CREATE DATABASE filasus OWNER filasus;
+    psql -U postgres -f docs/devops/banco/01-criar-usuario-e-banco.sql
+    psql -U filasus -d filasus -f docs/devops/banco/02-criar-tabelas.sql
+    psql -U filasus -d filasus -f docs/devops/banco/03-dados-iniciais.sql
 
-As tabelas são criadas sozinhas pelo Hibernate quando a API sobe
-(spring.jpa.hibernate.ddl-auto=update).
+- 01: cria o usuário filasus e o banco filasus (fuso America/Fortaleza).
+- 02: cria as 10 tabelas, chaves, restrições e índices.
+- 03: cria os serviços Clínico, Enfermagem e Odontologia com configuração padrão.
+
+Para recriar do zero: DROP DATABASE filasus; DROP USER filasus; e rodar os três.
+
+A estrutura oficial é a dos scripts. O Hibernate (ddl-auto=update) só
+completa o que faltar quando a API sobe.
 
 Os valores padrão estão em backend/src/main/resources/application.properties
 e podem ser trocados por variáveis de ambiente:

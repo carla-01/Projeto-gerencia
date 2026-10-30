@@ -1,0 +1,53 @@
+REGISTRO DE RISCOS - ACOMPANHAMENTO DA RELEASE 1
+FilaSUS · Gerência de Projetos (UEPB, 2026.2) · Scrum Master
+Responsável pelo acompanhamento: Maria Eduarda da Nóbrega (Scrum Master da R1)
+
+Escala: Probabilidade (P) e Impacto (I) de 1 a 5. Exposição = P x I.
+Alto: 15 ou mais · Médio: 8 a 14 · Baixo: abaixo de 8.
+A análise de riscos baseada em defeitos (atributos de qualidade) está em
+docs/qa/GP_RiscoBaseadoDefeitos.xlsx.
+
+As reavaliações abaixo são a proposta para a Retrospectiva de 29/10. O time confirma
+os valores antes do commit.
+
+----------------------------------------------------------------
+1. MATRIZ (PLANO INICIAL x FIM DA R1)
+----------------------------------------------------------------
+ID     Risco                                       Inicial (P x I)   Fim da R1 (P x I)   Dono
+RSK01  Escopo inflado                              4 x 4 = 16        3 x 4 = 12          Adrielly (PO)
+RSK02  Vazamento de dados pessoais de saúde        3 x 5 = 15        2 x 5 = 10          Adrielly (PO)
+RSK03  Equipe sem experiência na stack             4 x 3 = 12        3 x 3 = 9           Maria Eduarda (SM)
+RSK04  Estimativa de espera imprecisa              4 x 3 = 12        4 x 3 = 12          Adrielly (PO)
+RSK05  Baixa familiaridade digital do público      4 x 3 = 12        3 x 3 = 9           Mirelle (QA)
+RSK06  Internet instável na UBS                    3 x 4 = 12        3 x 4 = 12          Adrielly (PO)
+RSK07  Equipe pequena e sobrecarga no semestre     4 x 4 = 16        4 x 4 = 16          Maria Eduarda (SM)
+RSK08  Saída ou afastamento de um integrante       2 x 5 = 10        2 x 5 = 10          Maria Eduarda (SM)
+RSK09  Estimativas otimistas                       4 x 3 = 12        3 x 3 = 9           Adrielly (PO)
+RSK10  Falha de testes de carga e tempo real       3 x 4 = 12        3 x 4 = 12          Mirelle (QA)
+RSK11  Perda de dados do ambiente                  2 x 4 = 8         2 x 4 = 8           Adrielly (PO)
+RSK12  Mudança de requisitos pela professora       3 x 2 = 6         3 x 2 = 6           Adrielly (PO)
+RSK13  (novo) Regressão entre histórias no merge   -                 3 x 4 = 12          Maria Eduarda (SM)
+
+----------------------------------------------------------------
+2. HISTÓRICO DE REAVALIAÇÕES
+----------------------------------------------------------------
+20/10 · Planning da Sprint 1 · todos
+  Revisão inicial. Nenhum valor mudou.
+
+29/10 · Retrospectiva da Sprint 1
+  RSK01: P 4 -> 3. As 4 US planejadas foram entregues sem entrar escopo novo de
+         histórias; só tarefas de papel foram ajustadas durante a sprint.
+  RSK02: P 3 -> 2. CPF guardado com hash e cifrado, senha com BCrypt, 403 nas rotas
+         sem permissão e apenas dados fictícios no repositório.
+  RSK03: P 4 -> 3. A velocidade da Sprint 1 foi 100% do planejado; o gatilho (abaixo de
+         60%) não aconteceu.
+  RSK05: P 4 -> 3. A US05 (recepção cadastra paciente) foi entregue.
+  RSK07: sem mudança. Gatilho aconteceu: as US ficaram em "Em andamento" até o último
+         dia (burndown reto até 28/10). Ação: mover cada US para Concluído logo após o
+         merge e o aceite.
+  RSK09: P 4 -> 3. Nenhum ponto deixou de ser concluído; o gatilho (mais de 30%) não
+         aconteceu.
+  RSK13: risco novo. Na R1, a US02 quebrou o autocadastro da US04 (BUG-01) e o merge da
+         US05 apagou o arquivo da CI. Ação preventiva: revisora confere em "Files
+         changed" se algum arquivo foi apagado e se a mudança afeta outra US; merge só
+         com a CI verde. Gatilho: CI vermelha na develop ou arquivo removido sem motivo.

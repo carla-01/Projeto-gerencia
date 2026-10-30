@@ -1,0 +1,345 @@
+/* Tela de login (US01) - cores e textos do protótipo P1 / P1b */
+
+.login-pagina {
+  --azul: #13238f;
+  --azul-escuro: #0b1560;
+  --texto: #111833;
+  --texto-suave: #5b6478;
+  --texto-fraco: #8a91a5;
+  --borda: #d9dde7;
+  --fundo: #f5f6fa;
+  --vermelho: #b42318;
+  --vermelho-fundo: #fef3f2;
+  --vermelho-borda: #fecdca;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--fundo);
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  color: var(--texto);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Painel azul (celular: barra do topo) ---------- */
+
+.login-marca {
+  position: relative;
+  overflow: hidden;
+  background: var(--azul);
+  color: #ffffff;
+  padding: 14px 20px;
+}
+
+.login-logo {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.login-logo-selo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.login-logo-icone {
+  width: 16px;
+  height: 16px;
+}
+
+/* Texto de apresentação e cruz de fundo: só no computador */
+.login-marca-texto,
+.login-marca-fundo {
+  display: none;
+}
+
+/* ---------- Formulário ---------- */
+
+.login-conteudo {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 32px 20px 40px;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form h1 {
+  margin: 0 0 8px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.login-descricao {
+  margin: 0 0 28px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--texto-suave);
+}
+
+.login-form label {
+  margin-bottom: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+.login-campo-grupo {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.login-campo-icone {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translateY(-50%);
+  color: var(--texto-fraco);
+  pointer-events: none;
+}
+
+.login-campo {
+  box-sizing: border-box;
+  width: 100%;
+  height: 46px;
+  padding: 0 14px 0 42px;
+  font: inherit;
+  font-size: 16px; /* 16px evita o zoom automático no iPhone */
+  color: var(--texto);
+  background: #ffffff;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.login-campo::placeholder {
+  color: var(--texto-fraco);
+}
+
+.login-campo:hover {
+  border-color: #c3c8d6;
+}
+
+.login-campo:focus {
+  outline: none;
+  border-color: var(--azul);
+  box-shadow: 0 0 0 4px rgba(19, 35, 143, 0.12);
+}
+
+.login-campo-erro,
+.login-campo-erro:hover {
+  border-color: var(--vermelho);
+}
+
+.login-campo-erro:focus {
+  border-color: var(--vermelho);
+  box-shadow: 0 0 0 4px rgba(180, 35, 24, 0.12);
+}
+
+/* Caixa vermelha do protótipo P1b */
+.login-erro {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 22px;
+  padding: 12px 14px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--vermelho);
+  background: var(--vermelho-fundo);
+  border: 1px solid var(--vermelho-borda);
+  border-radius: 8px;
+}
+
+.login-erro-icone {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+}
+
+.login-erro strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.login-botao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 46px;
+  margin-top: 8px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--azul);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.login-botao:hover {
+  background: var(--azul-escuro);
+}
+
+.login-botao:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(19, 35, 143, 0.25);
+}
+
+.login-botao:disabled {
+  background: #8f97cc;
+  cursor: default;
+}
+
+/* Link para o autocadastro (US04) */
+.login-rodape {
+  margin: 20px 0 0;
+  font-size: 14px;
+  text-align: center;
+  color: var(--texto-suave);
+}
+
+.login-rodape a {
+  font-weight: 600;
+  color: var(--azul);
+}
+
+/* Bolinha girando enquanto espera a resposta do servidor */
+.login-carregando {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: login-girar 0.8s linear infinite;
+}
+
+@keyframes login-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Computador (768px ou mais) ---------- */
+
+@media (min-width: 768px) {
+  .login-pagina {
+    flex-direction: row;
+  }
+
+  .login-marca {
+    width: 44%;
+    max-width: 560px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 44px 56px;
+    background: linear-gradient(155deg, #1a2fa8 0%, var(--azul) 45%, var(--azul-escuro) 100%);
+  }
+
+  .login-logo {
+    font-size: 20px;
+  }
+
+  .login-logo-selo {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+
+  .login-logo-icone {
+    width: 18px;
+    height: 18px;
+  }
+
+  .login-marca-texto {
+    position: relative;
+    z-index: 1;
+    display: block;
+    max-width: 400px;
+    margin-bottom: 24px;
+  }
+
+  .login-marca-rotulo {
+    margin: 0 0 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #a9b2ea;
+  }
+
+  .login-marca-texto h2 {
+    margin: 0 0 14px;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .login-marca-texto p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #c9cff0;
+  }
+
+  /* Cruz grande e bem clara no fundo do painel, só de enfeite */
+  .login-marca-fundo {
+    display: block;
+    position: absolute;
+    right: -90px;
+    top: 50%;
+    width: 360px;
+    height: 360px;
+    transform: translateY(-55%);
+    color: rgba(255, 255, 255, 0.05);
+  }
+
+  .login-conteudo {
+    align-items: center;
+    padding: 48px;
+  }
+
+  /* Cartão branco em volta do formulário */
+  .login-form {
+    max-width: 420px;
+    padding: 40px 36px;
+    /* Branco um pouco transparente, deixando o fundo aparecer */
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(20, 30, 90, 0.08);
+  }
+
+  .login-form h1 {
+    font-size: 28px;
+  }
+}

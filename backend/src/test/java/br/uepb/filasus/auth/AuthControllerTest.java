@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.uepb.filasus.lgpd.ProtecaoCpf;
 import br.uepb.filasus.usuario.Perfil;
 import br.uepb.filasus.usuario.Usuario;
 import br.uepb.filasus.usuario.UsuarioRepository;
@@ -48,15 +50,23 @@ class AuthControllerTest {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    private ProtecaoCpf protecaoCpf;
+
+    @Autowired
     private JwtService jwtService;
 
     private Usuario gestor;
+
+    /** Cria o usuário com o CPF já protegido, como a aplicação faz. */
+    private Usuario novoUsuario(String cpf, String email, String senhaHash, Perfil perfil) {
+        return new Usuario("Usuário de Teste", email, protecaoCpf.hash(cpf), protecaoCpf.cifrar(cpf), senhaHash, perfil);
+    }
 
     @BeforeEach
     void cadastrarUsuario() {
         usuarioRepository.deleteAll();
         String senhaHash = passwordEncoder.encode("senha123");
-        gestor = usuarioRepository.save(new Usuario("12345678901", "gestor@ubs.com", senhaHash, Perfil.GESTOR));
+        gestor = usuarioRepository.save(novoUsuario("12345678901", "gestor@ubs.com", senhaHash, Perfil.GESTOR));
     }
 
     /** Monta o JSON do corpo da requisição. */
@@ -65,7 +75,11 @@ class AuthControllerTest {
         return objectMapper.writeValueAsString(request);
     }
 
+    // CT-US01-01 - Login com sucesso
+    // Dado que estou cadastrado e ativo / Quando informo CPF e senha corretos /
+    // Então recebo o token com o meu perfil (a tela usa o perfil para abrir a tela inicial)
     @Test
+    @DisplayName("CT-US01-01 - Login com sucesso: CPF e senha corretos devolvem o token com o perfil")
     void loginComSucessoPorCpf() throws Exception {
         MvcResult resultado = mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,6 +102,7 @@ class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("CT-US01-01 - Login com sucesso: e-mail e senha corretos também entram")
     void loginComSucessoPorEmail() throws Exception {
         mockMvc.perform(post("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)

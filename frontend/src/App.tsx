@@ -1,5 +1,13 @@
-import { Link, Navigate, Route, Routes } from 'react-router-dom'
+import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import Cadastro from './pages/Cadastro'
+import Login from './pages/Login'
 import Pagina from './pages/Pagina'
+import ProtectedRoute from './components/ProtectedRoute'
+import AcessoNegado from './pages/AcessoNegado'
+import CadastroRecepcao from './pages/CadastroRecepcao'
+import LayoutRecepcao from './components/LayoutRecepcao'
+import PainelRecepcao from './pages/PainelRecepcao'
+import { obterPerfil } from './services/auth'
 
 /**
  * Rotas por perfil, ainda vazias.
@@ -9,23 +17,48 @@ import Pagina from './pages/Pagina'
  * - US05 (SCRUM-40): cadastro de paciente pela recepção.
  */
 export default function App() {
+  const location = useLocation()
+  const perfil = obterPerfil()
+
+  // As telas de login e de cadastro ocupam a página inteira, sem o menu provisório do esqueleto.
+  // As telas da recepção têm o próprio menu (barra lateral).
+  let mostrarMenu = true
+  if (location.pathname === '/login' || location.pathname === '/cadastro') {
+    mostrarMenu = false
+  }
+  if (location.pathname.startsWith('/recepcao')) {
+    mostrarMenu = false
+  }
+
   return (
     <>
-      <nav>
-        <main>
-          <Link to="/login">Login</Link>
-          <Link to="/paciente">Paciente</Link>
-          <Link to="/recepcao">Recepção</Link>
-          <Link to="/profissional">Profissional</Link>
-          <Link to="/gestor">Gestor</Link>
-        </main>
-      </nav>
+      {mostrarMenu && (
+        <nav>
+          <main>
+            <Link to="/login">Login</Link>
+            <Link to="/paciente">Paciente</Link>
+            {perfil === 'RECEPCIONISTA' && <Link to="/recepcao">Recepção</Link>}
+            <Link to="/profissional">Profissional</Link>
+            <Link to="/gestor">Gestor</Link>
+          </main>
+        </nav>
+      )}
       <Routes>
         <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<Pagina titulo="Entrar" descricao="Tela de login (US01)." />} />
-        <Route path="/cadastro" element={<Pagina titulo="Cadastro do paciente" descricao="Autocadastro com consentimento LGPD (US04)." />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/paciente" element={<Pagina titulo="Área do paciente" descricao="Fila e posição do paciente (R2)." />} />
-        <Route path="/recepcao" element={<Pagina titulo="Recepção" descricao="Cadastro de paciente pela recepção (US05) e painel da fila." />} />
+        <Route path="/recepcao" element={
+          <ProtectedRoute perfis={['RECEPCIONISTA']}>
+            <LayoutRecepcao><PainelRecepcao /></LayoutRecepcao>
+          </ProtectedRoute>
+        } />
+        <Route path="/recepcao/cadastrar" element={
+          <ProtectedRoute perfis={['RECEPCIONISTA']}>
+            <LayoutRecepcao><CadastroRecepcao /></LayoutRecepcao>
+          </ProtectedRoute>
+        } />
+        <Route path="/acesso-negado" element={<AcessoNegado />} />
         <Route path="/profissional" element={<Pagina titulo="Profissional de saúde" descricao="Chamada e atendimento (R2)." />} />
         <Route path="/gestor" element={<Pagina titulo="Gestor" descricao="Configuração e relatórios (R2 a R4)." />} />
         <Route path="*" element={<Pagina titulo="Página não encontrada" descricao="Confira o endereço." />} />
