@@ -1,0 +1,118 @@
+PLANO DA RELEASE 2 - FILA E ATENDIMENTO
+
+Projeto: FilaSUS – Fila virtual para Unidades Básicas de Saúde.
+Disciplina: Gerência de Projetos
+Responsável: Maria Eduarda da Nóbrega (Product Owner + DevOps da R2).
+Atualizado em: 03/11/2026, na Sprint Planning da Sprint 2.
+
+----------------------------------------------------------------
+VISÃO DA RELEASE
+----------------------------------------------------------------
+Release:          R2 - Fila e Atendimento
+Período:          03/11 a 26/11/2026 (Sprints 2 e 3)
+Versão no Jira:   R2 - Fila e Atendimento
+Tag no GitHub:    v0.2.0
+Escopo:           34 pontos em 9 histórias
+
+Meta da release:
+O paciente entra na fila do serviço pelo celular, acompanha a sua
+posição e pode cancelar a senha; a recepção faz o check-in com a
+prioridade legal; e o profissional chama o próximo e registra o início
+e o fim do atendimento.
+
+----------------------------------------------------------------
+PAPÉIS DA RELEASE VIGENTE
+----------------------------------------------------------------
+Papel                Integrante
+-------------------  ----------------------------------
+PO + DevOps          Maria Eduarda da Nóbrega
+Scrum Master         Mirelle Casimiro Silvino
+QA                   Adrielly Carla Ferreira de Melo
+Dev Team             Adrielly, Maria Eduarda e Mirelle
+
+Recebe os papéis da R1 (PO + DevOps Adrielly, SM Maria Eduarda e QA
+Mirelle). Na R3 a PO + DevOps passa para a Mirelle.
+As responsabilidades de cada papel estão no README do repositório.
+
+----------------------------------------------------------------
+SPRINT 2 - 03/11 a 12/11/2026
+----------------------------------------------------------------
+Sprint Goal: O paciente entra na fila do serviço, vê sua posição e
+pode cancelar a senha.
+
+Capacidade: 15 pontos (velocidade da Sprint 1 de 21 pontos, com
+folga de 20% pelo RSK07).
+
+#  Chave     História                            Pts  Dev            Revisa o PR
+-  --------  ----------------------------------  ---  -------------  -------------
+1  SCRUM-41  US06 - Entrar na fila                5   Adrielly       Maria Eduarda
+2  SCRUM-42  US07 - Ver minha posição             3   Adrielly       Maria Eduarda
+3  SCRUM-43  US08 - Cancelar minha senha          2   Maria Eduarda  Mirelle
+4  SCRUM-44  US09 - Configurar filas e horários   5   Mirelle        Adrielly
+                                          Total: 15
+
+Tarefas da sprint:
+- SCRUM-114 a 118: ações da retrospectiva da Sprint 1.
+- SCRUM-119 (T12): refinamento do backlog após a Review da R1.
+- SCRUM-120 (T13): deploy automatizado em homologação.
+- SCRUM-122 (T15): modelos de issue e PR na pasta .github.
+- SCRUM-123 (T16): Cucumber e Cypress no CI com @smoke.
+- SCRUM-124 e 125: pendências da R1 (log de acesso negado e controle
+  de acesso por perfil).
+
+----------------------------------------------------------------
+SPRINT 3 - 17/11 a 26/11/2026 (planejada)
+----------------------------------------------------------------
+#  Chave     História                                Pts  Dev            Revisa o PR
+-  --------  --------------------------------------  ---  -------------  -------------
+1  SCRUM-15  US03 - Gestor cadastra funcionários      5   Mirelle        Adrielly
+2  SCRUM-45  US10 - Check-in na recepção              3   Maria Eduarda  Mirelle
+3  SCRUM-46  US11 - Aplicar prioridade legal          5   Adrielly       Maria Eduarda
+4  SCRUM-47  US13 - Chamar o próximo                  3   Adrielly       Maria Eduarda
+5  SCRUM-48  US14 - Iniciar e finalizar atendimento   3   Mirelle        Adrielly
+                                              Total: 19
+
+Tarefa da sprint: SCRUM-121 (T14), relatório do pipeline da R2.
+
+Atenção: a Sprint 3 soma 19 pontos, acima da capacidade de 15. Na
+Planning de 17/11 a PO confirma o escopo com a velocidade real da
+Sprint 2; se não couber, a US14 (SCRUM-48) passa para a R3.
+A Sprint 3 é criada no Jira no dia da Planning dela.
+
+----------------------------------------------------------------
+CALENDÁRIO
+----------------------------------------------------------------
+Data         Evento
+-----------  -----------------------------------------------------
+03/11        Sprint Planning da Sprint 2 e refinamento pós-Review
+05 e 10/11   Desenvolvimento da Sprint 2 e deploy em homologação
+12/11        Review e Retrospectiva da Sprint 2
+17/11        Sprint Planning da Sprint 3
+19 e 24/11   Desenvolvimento da Sprint 3 e relatório do pipeline
+26/11        Review, Retrospectiva, release notes v0.2.0 e passagem
+             do papel
+
+Dailies: segundas e quartas, às 20h (conduzidas pela SM).
+
+----------------------------------------------------------------
+DEFINITION OF DONE
+----------------------------------------------------------------
+A mesma da R1, na planilha (docs/po/definition-of-done.txt).
+Em cada história, a QA registra a conferência da DoD em comentário na
+própria issue antes do aceite da PO.
+
+----------------------------------------------------------------
+ENTREGAS DE DEVOPS DA R2
+----------------------------------------------------------------
+- Deploy automatizado em homologação a cada merge na develop; a partir
+  daí o aceite das histórias é feito em homologação.
+- Modelos de issue e PR em .github/ISSUE_TEMPLATE e
+  .github/pull_request_template.md.
+- Cucumber e Cypress no CI, com os cenários @smoke.
+- Relatório do pipeline da R2 em docs/releases/, com execuções, taxa de
+  sucesso, falhas e causas.
+
+----------------------------------------------------------------
+HISTÓRICO
+----------------------------------------------------------------
+03/11/2026 - Plano criado na Planning da Sprint 2 (Maria Eduarda).
