@@ -2,9 +2,10 @@
 
 Projeto: FilaSUS – Fila virtual para Unidades Básicas de Saúde.
 Disciplina: Gerência de Projetos
-Release: R1 – Acesso e Cadastro.
-Responsável: Adrielly Carla Ferreira de Melo (Product Owner da R1).
-Data: 19/10/2026.
+Release vigente: R2 – Fila e Atendimento (03/11 a 26/11/2026).
+Responsável: Maria Eduarda da Nóbrega (Product Owner da R2).
+Versão inicial: 19/10/2026, por Adrielly Carla Ferreira de Melo (PO da R1).
+Última atualização: 03/11/2026, refinamento após a Review da R1.
 
 #  Critério                 Justificativa
 -  -----------------------  ------------------------------------------------------------
@@ -23,6 +24,30 @@ Data: 19/10/2026.
 
 5  Diferenciais por último  Painel de TV, aviso e modo contingência ficam no fim ou fora
                             do MVP, para evitar escopo inflado (RSK01).
+
+----------------------------------------------------------------
+HISTÓRICO DE REPRIORIZAÇÃO
+----------------------------------------------------------------
+03/11/2026 - Refinamento após a Review da R1 (SCRUM-119)
+Responsável: Maria Eduarda da Nóbrega (PO da R2)
+
+- R1 concluída: SCRUM-37, 38, 39 e 40 aceitas na Review de 29/10
+  (21 de 21 pontos).
+- Ordem das histórias da R2 mantida. A Sprint 2 continua com US06,
+  US07, US08 e US09 (15 pontos), dentro da capacidade combinada de
+  15 pontos (velocidade de 21 com folga de 20%, RSK07).
+- US06 depende dos horários e do limite da US09: a US06 começa com
+  uma fila de exemplo nos dados iniciais, para as duas andarem juntas.
+- Entraram na Sprint 2 duas pendências da R1 apontadas no feedback:
+  SCRUM-124 (CT-US02-04, log de acesso negado) e SCRUM-125
+  (controle de acesso por perfil, Q-08 em 25%). Têm prioridade
+  porque fecham a US02, base de segurança das histórias da R2.
+- Entraram na Sprint 2 as ações da retrospectiva da Sprint 1
+  (SCRUM-114 a 118) e as tarefas de DevOps da R2 (SCRUM-120, 122 e
+  123). O relatório do pipeline (SCRUM-121) fica para a Sprint 3.
+- Pontos das histórias sem mudança.
+
+Este histórico é atualizado depois de cada Review.
                             
 ----------------------------------------------------------------
 BACKLOG ORDENADO
