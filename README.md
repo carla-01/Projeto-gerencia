@@ -38,4 +38,6 @@ Todas as integrantes fazem parte do Dev Team em todas as releases.
 ## Links
 
 - Jira (backlog): https://filasusgp.atlassian.net/jira/software/projects/SCRUM/boards/1/backlog
-- Modelos de issue e PR: pasta `issue_template/` e arquivo `pull-request-template.txt`
+- Modelos de issue: pasta `.github/ISSUE_TEMPLATE/` (história de usuário e relato de bug)
+- Modelo de PR: `.github/pull_request_template.md` (o GitHub preenche sozinho ao abrir o PR)
+- Fichas preenchidas das histórias e dos bugs do backlog: pasta `issue_template/`
