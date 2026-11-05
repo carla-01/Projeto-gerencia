@@ -104,7 +104,7 @@ Passo a passo de cada tarefa:
 1. Ir para a develop e fazer Fetch/Pull.
 2. Criar a branch a partir da develop.
 3. Fazer os commits.
-4. Push e abrir o PR para a develop, usando o pull-request-template.txt.
+4. Push e abrir o PR para a develop, usando o .github/pull_request_template.md.
 5. Esperar a CI passar e a revisão da colega (rodízio) antes do merge.
 
 

@@ -2,7 +2,6 @@
 name: História de usuário
 about: Nova US no formato "Eu como... preciso... de modo que..." com critérios em Gherkin
 title: "[USxx] <título curto>"
-labels: user-story
 ---
 
 <!-- A US oficial fica no Jira. Use este modelo para escrever a descrição e colar lá. -->
