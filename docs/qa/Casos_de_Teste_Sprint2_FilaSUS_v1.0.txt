@@ -1,0 +1,44 @@
+CASOS DE TESTE - SPRINT 2 - FilaSUS
+QA: Adrielly Carla Ferreira de Melo
+Versão 1.0 - 04/11/2026 (Release 2 / Sprint 2, de 03/11 a 12/11)
+
+Referência da execução:
+  - Ambiente: branch test/SCRUM-124-log-acesso-negado, commit ed7fc82
+  - Pipeline: CI #69, GitHub Actions, 04/11/2026
+  - Back-end: mvn verify aprovado (cenários .feature executados pelo Cucumber)
+  - Resultado final: 1 caso executado e aprovado
+
+----------------------------------------------------------------
+SCRUM-38 [US-02] Controle de acesso por papel
+----------------------------------------------------------------
+CT-US02-04  Exceção   Tentativa negada registrada no log
+  Caso pendente da Sprint 1 (Casos_de_Teste_Sprint1_FilaSUS_v1.1.txt), repriorizado em 03/11 para fechar a US02.
+  Dado que estou logado como paciente
+  Quando tento acessar a rota do painel da recepção "/api/recepcao/fila"
+  Então o sistema responde 403
+  E o log registra "Acesso negado" com o perfil "PACIENTE", o método "GET" e a rota "/api/recepcao/fila"
+  E o log não mostra o token de acesso
+  Issue Jira: SCRUM-124 (tarefa); SCRUM-38; DA-SEG-I1-01
+  Teste automatizado: backend/src/test/resources/features/US02-log-acesso-negado.feature · CucumberTest (passos em ControleDeAcessoSteps)
+  Resultado obtido: Passou na execução local do mvn verify em 04/11/2026 e no CI #69.
+  Status: Passou
+  Evidência: CI #69, commit ed7fc82; linha do log: "Acesso negado: usuario=..., perfil=PACIENTE, metodo=GET, rota=/api/recepcao/fila, dataHora=..."
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+RESULTADO DA EXECUÇÃO - CI #69
+----------------------------------------------------------------
+Caso         Data         Resultado final   Bug aberto
+CT-US02-04   04/11/2026   Passou            N/A
+
+----------------------------------------------------------------
+RESUMO DA EXECUÇÃO
+----------------------------------------------------------------
+Total de casos: 1
+Casos executados: 1
+Casos aprovados: 1
+Taxa de aprovação dos executados: 100%
+Casos pendentes: 0
+Bugs encontrados na sprint: 0
+Bugs corrigidos e retestados: 0
+Bugs em aberto: 0
