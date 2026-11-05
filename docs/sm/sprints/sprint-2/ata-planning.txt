@@ -1,0 +1,110 @@
+ATA DA SPRINT PLANNING - SPRINT 2
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+
+Data: 03/11/2026
+Horário: <confirmar início> às <confirmar fim>
+Local: <confirmar>
+Facilitação: Mirelle Casimiro Silvino (Scrum Master)
+Product Owner + DevOps: Maria Eduarda da Nóbrega
+QA: Adrielly Carla Ferreira de Melo
+Presentes: <confirmar: Adrielly, Maria Eduarda e Mirelle>
+Período da sprint: 03/11/2026 a 12/11/2026
+
+----------------------------------------------------------------
+1. PAUTA
+----------------------------------------------------------------
+- Ações da retrospectiva da Sprint 1
+- Capacidade do time
+- Apresentação das histórias pela PO, em ordem de prioridade
+- Estimativa e confirmação dos responsáveis
+- Plano de testes da Sprint 2 (QA)
+- Definição do Sprint Goal
+- Apresentação da Definition of Done
+- Revisão dos riscos
+
+----------------------------------------------------------------
+2. SPRINT GOAL
+----------------------------------------------------------------
+O paciente entra na fila do serviço, vê sua posição e pode cancelar a senha.
+
+----------------------------------------------------------------
+3. SPRINT BACKLOG - HISTÓRIAS
+----------------------------------------------------------------
+Chave     História                                            Pontos  Responsável
+SCRUM-41  [US-06] Entrar na fila                              5       Adrielly
+SCRUM-42  [US-07] Ver minha posição                           3       Adrielly
+SCRUM-43  [US-08] Cancelar minha senha                        2       Maria Eduarda
+SCRUM-44  [US-09] Configurar filas e horários                 5       Mirelle
+
+Capacidade planejada: 15 story points. A velocidade da Sprint 1 foi de 21 pontos; a
+proposta considera a folga de 20% do RSK07.
+Definition of Ready conferida nas quatro histórias: formato "Eu como... preciso... de
+modo que...", critérios de aceite em Gherkin, pontos estimados, prioridade definida,
+dependências identificadas e cabem na sprint.
+Mudança de pontos no planning poker: <confirmar: nenhuma>.
+
+----------------------------------------------------------------
+4. DEPENDÊNCIAS IDENTIFICADAS
+----------------------------------------------------------------
+- US-06 depende do login (SCRUM-37) e do cadastro do paciente (SCRUM-39 e SCRUM-40). Os
+  horários e o limite vêm da US-09; até ela entrar, usa uma fila de exemplo nos dados
+  iniciais.
+- US-07 depende da US-06 (entidades Fila e Senha).
+- US-08 depende da US-06 (senha ativa).
+- US-09 depende do login (SCRUM-37) e do controle de acesso (SCRUM-38).
+
+----------------------------------------------------------------
+5. AÇÕES DA RETROSPECTIVA DA SPRINT 1
+----------------------------------------------------------------
+Ação                                                    Responsável     Chave      Situação
+Mover a US para Concluído logo após o merge e o aceite  Maria Eduarda   SCRUM-114  Na Sprint 2
+Revisora confere "Files changed" antes de aprovar       Mirelle         SCRUM-115  Na Sprint 2
+Merge só com a CI verde                                 Maria Eduarda   SCRUM-116  Na Sprint 2
+Usar sempre o modelo de PR                              Mirelle         SCRUM-117  Na Sprint 2
+Subir atas e documentos no dia da cerimônia             Mirelle         SCRUM-118  Na Sprint 2
+
+As ações são acompanhadas durante a sprint e conferidas na Review de 12/11.
+
+----------------------------------------------------------------
+6. TAREFAS DE PAPEL NA SPRINT
+----------------------------------------------------------------
+PO + DevOps (Maria Eduarda): SCRUM-119 refinamento e plano da release, SCRUM-120 deploy
+  em homologação, SCRUM-122 modelos de issue e PR na pasta .github, SCRUM-123 Cucumber e
+  Cypress no CI
+SM (Mirelle): SCRUM-<chave> atas, métricas e burndown da Sprint 2
+QA (Adrielly): SCRUM-<chave> plano de testes e casos de teste da Sprint 2
+Pendências da R1: SCRUM-124 log de acesso negado (Adrielly) e SCRUM-125 controle de
+  acesso por perfil (Mirelle)
+Ficam para a Sprint 3: SCRUM-121 relatório do pipeline e a T15, release notes da R2
+
+----------------------------------------------------------------
+7. PAPÉIS DA RELEASE 2
+----------------------------------------------------------------
+PO + DevOps: Maria Eduarda · Scrum Master: Mirelle · QA: Adrielly
+Dev Team: as três integrantes. Os papéis estão no README e em
+docs/po/plano-da-release-2.txt.
+
+----------------------------------------------------------------
+8. QUALIDADE E DEFINITION OF DONE
+----------------------------------------------------------------
+- A QA apresentou o plano de testes da Sprint 2: as 4 histórias e a regressão da Sprint
+  1, com testes funcionais derivados do Gherkin e automatizados no CI, em ambiente local
+  e, quando existir, em homologação, sempre com dados fictícios.
+- Critério de saída: todos os casos executados e nenhum bug Crítico ou Alto aberto.
+- A PO apresentou a Definition of Done ao time, a mesma planilha da R1. A QA registra a
+  conferência da DoD em comentário na issue antes do aceite da PO.
+- Bugs serão registrados no Jira com o modelo de relato de bug, vinculados à história.
+
+----------------------------------------------------------------
+9. RISCOS
+----------------------------------------------------------------
+Riscos revisados (docs/sm/registro-de-riscos.txt).
+Riscos reavaliados: <confirmar: listar os que mudaram ou escrever "Nenhum valor mudou">.
+Atenção da sprint: RSK07 (sobrecarga) e RSK13 (regressão entre histórias no merge).
+
+----------------------------------------------------------------
+10. ACOMPANHAMENTO DA SPRINT
+----------------------------------------------------------------
+- Dailies às segundas e quartas, às 20h.
+- Impedimentos com sinalizador no Jira e no docs/sm/registro-de-impedimentos.txt.
+- Burndown acompanhado pela SM durante a sprint.
