@@ -3,8 +3,8 @@ QA: Adrielly Carla Ferreira de Melo
 Versão 1.0 - 04/11/2026 (Release 2 / Sprint 2, de 03/11 a 12/11)
 
 Referência da execução:
-  - Ambiente: branch test/SCRUM-124-log-acesso-negado, commit <hash>
-  - Pipeline: CI #<n>, GitHub Actions, <data>
+  - Ambiente: branch test/SCRUM-124-log-acesso-negado, commit ed7fc82
+  - Pipeline: CI #69, GitHub Actions, 04/11/2026
   - Back-end: mvn verify aprovado (cenários .feature executados pelo Cucumber)
   - Resultado final: 1 caso executado e aprovado
 
@@ -20,13 +20,13 @@ CT-US02-04  Exceção   Tentativa negada registrada no log
   E o log não mostra o token de acesso
   Issue Jira: SCRUM-124 (tarefa); SCRUM-38; DA-SEG-I1-01
   Teste automatizado: backend/src/test/resources/features/US02-log-acesso-negado.feature · CucumberTest (passos em ControleDeAcessoSteps)
-  Resultado obtido: Passou na execução local do mvn verify em 04/11/2026 e no CI #<n>.
+  Resultado obtido: Passou na execução local do mvn verify em 04/11/2026 e no CI #69.
   Status: Passou
-  Evidência: CI #<n>, commit <hash>; linha do log: "Acesso negado: usuario=..., perfil=PACIENTE, metodo=GET, rota=/api/recepcao/fila, dataHora=..."
+  Evidência: CI #69, commit ed7fc82; linha do log: "Acesso negado: usuario=..., perfil=PACIENTE, metodo=GET, rota=/api/recepcao/fila, dataHora=..."
   Bug aberto: N/A
 
 ----------------------------------------------------------------
-RESULTADO DA EXECUÇÃO - CI #<n>
+RESULTADO DA EXECUÇÃO - CI #69
 ----------------------------------------------------------------
 Caso         Data         Resultado final   Bug aberto
 CT-US02-04   04/11/2026   Passou            N/A
