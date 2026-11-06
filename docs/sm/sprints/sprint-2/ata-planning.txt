@@ -2,12 +2,12 @@ ATA DA SPRINT PLANNING - SPRINT 2
 FilaSUS · Gerência de Projetos (UEPB, 2026.2)
 
 Data: 03/11/2026
-Horário: <confirmar início> às <confirmar fim>
-Local: <confirmar>
+Horário: 20:00h
+Local: Google Meet
 Facilitação: Mirelle Casimiro Silvino (Scrum Master)
 Product Owner + DevOps: Maria Eduarda da Nóbrega
 QA: Adrielly Carla Ferreira de Melo
-Presentes: <confirmar: Adrielly, Maria Eduarda e Mirelle>
+Presentes: Adrielly, Maria Eduarda e Mirelle
 Período da sprint: 03/11/2026 a 12/11/2026
 
 ----------------------------------------------------------------
@@ -41,7 +41,7 @@ proposta considera a folga de 20% do RSK07.
 Definition of Ready conferida nas quatro histórias: formato "Eu como... preciso... de
 modo que...", critérios de aceite em Gherkin, pontos estimados, prioridade definida,
 dependências identificadas e cabem na sprint.
-Mudança de pontos no planning poker: <confirmar: nenhuma>.
+Estimativa: mantidos os pontos já definidos no backlog; nenhuma mudança na Planning.
 
 ----------------------------------------------------------------
 4. DEPENDÊNCIAS IDENTIFICADAS
@@ -71,8 +71,8 @@ As ações são acompanhadas durante a sprint e conferidas na Review de 12/11.
 PO + DevOps (Maria Eduarda): SCRUM-119 refinamento e plano da release, SCRUM-120 deploy
   em homologação, SCRUM-122 modelos de issue e PR na pasta .github, SCRUM-123 Cucumber e
   Cypress no CI
-SM (Mirelle): SCRUM-<chave> atas, métricas e burndown da Sprint 2
-QA (Adrielly): SCRUM-<chave> plano de testes e casos de teste da Sprint 2
+SM (Mirelle): SCRUM-127 atas, métricas e burndown da Sprint 2
+QA (Adrielly): SCRUM-126 plano de testes e casos de teste da Sprint 2
 Pendências da R1: SCRUM-124 log de acesso negado (Adrielly) e SCRUM-125 controle de
   acesso por perfil (Mirelle)
 Ficam para a Sprint 3: SCRUM-121 relatório do pipeline e a T15, release notes da R2
@@ -99,7 +99,7 @@ docs/po/plano-da-release-2.txt.
 9. RISCOS
 ----------------------------------------------------------------
 Riscos revisados (docs/sm/registro-de-riscos.txt).
-Riscos reavaliados: <confirmar: listar os que mudaram ou escrever "Nenhum valor mudou">.
+Riscos reavaliados: nenhum valor mudou em relação ao fim da R1.
 Atenção da sprint: RSK07 (sobrecarga) e RSK13 (regressão entre histórias no merge).
 
 ----------------------------------------------------------------
