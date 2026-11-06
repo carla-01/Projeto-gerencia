@@ -55,11 +55,44 @@ class ServicoControllerTest {
                     """))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.nome").value("Clínico"))
-            .andExpect(jsonPath("$.horarioAbertura").value("07:00:00"))
-            .andExpect(jsonPath("$.horarioFechamento").value("12:00:00"));
+            .andExpect(jsonPath("$.horarioAbertura").value("07:00"))
+            .andExpect(jsonPath("$.horarioFechamento").value("12:00"));
 
         assertEquals(1, servicoRepository.count());
         assertEquals(1, configuracaoServicoRepository.count());
+    }
+
+    @Test
+    void nomeDuplicadoRecebe409() throws Exception {
+        mockMvc.perform(post("/api/gestor/servicos")
+                .header("Authorization", "Bearer " + token(Perfil.GESTOR))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(corpo("07:00", "12:00")))
+            .andExpect(status().isCreated());
+
+        mockMvc.perform(post("/api/gestor/servicos")
+                .header("Authorization", "Bearer " + token(Perfil.GESTOR))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(corpo("08:00", "13:00")))
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.mensagem").value("Serviço já cadastrado"));
+    }
+
+    @Test
+    void nomeEmBrancoRecebe400ComMensagem() throws Exception {
+        mockMvc.perform(post("/api/gestor/servicos")
+                .header("Authorization", "Bearer " + token(Perfil.GESTOR))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {
+                      "nome": " ",
+                      "horarioAbertura": "07:00",
+                      "horarioFechamento": "12:00"
+                    }
+                    """))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.campo").value("nome"))
+            .andExpect(jsonPath("$.mensagem").value("Nome do serviço é obrigatório"));
     }
 
     @Test

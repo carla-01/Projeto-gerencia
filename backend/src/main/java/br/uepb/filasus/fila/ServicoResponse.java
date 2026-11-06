@@ -2,7 +2,13 @@ package br.uepb.filasus.fila;
 
 import java.time.LocalTime;
 
-public record ServicoResponse(Long id, String nome, LocalTime horarioAbertura, LocalTime horarioFechamento) {
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+public record ServicoResponse(
+    Long id,
+    String nome,
+    @JsonFormat(pattern = "HH:mm") LocalTime horarioAbertura,
+    @JsonFormat(pattern = "HH:mm") LocalTime horarioFechamento) {
 
     public ServicoResponse(Servico servico, ConfiguracaoServico configuracao) {
         this(servico.getId(), servico.getNome(),

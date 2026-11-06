@@ -2,8 +2,11 @@ package br.uepb.filasus.fila;
 
 import java.util.Map;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,5 +33,24 @@ public class ServicoController {
     @ExceptionHandler(HorarioInvalidoException.class)
     public ResponseEntity<Map<String, String>> horarioInvalido(HorarioInvalidoException exception) {
         return ResponseEntity.badRequest().body(Map.of("mensagem", exception.getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> dadosInvalidos(MethodArgumentNotValidException exception) {
+        FieldError erro = exception.getBindingResult().getFieldErrors().get(0);
+        Map<String, String> corpo = Map.of("campo", erro.getField(), "mensagem", erro.getDefaultMessage());
+        return ResponseEntity.badRequest().body(corpo);
+    }
+
+    @ExceptionHandler(ServicoDuplicadoException.class)
+    public ResponseEntity<Map<String, String>> servicoDuplicado(ServicoDuplicadoException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(Map.of("mensagem", exception.getMessage()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Map<String, String>> servicoSimultaneo(DataIntegrityViolationException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+            .body(Map.of("mensagem", "Serviço já cadastrado"));
     }
 }

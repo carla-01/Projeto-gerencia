@@ -31,6 +31,8 @@ public class ConfiguracaoServico {
     private LocalTime horaFechamento;
 
     @Column(name = "limite_senhas_dia", nullable = false)
+    // Provisório: enquanto a SCRUM-132 não implementa a configuração do limite, este valor pode fazer
+    // a US06 aceitar apenas uma senha por dia. Substitua por configuração da US09 na SCRUM-132.
     private int limiteSenhasDia = 1;
 
     protected ConfiguracaoServico() {

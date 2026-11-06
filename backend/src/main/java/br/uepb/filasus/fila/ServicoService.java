@@ -21,7 +21,12 @@ public class ServicoService {
             throw new HorarioInvalidoException();
         }
 
-        Servico servico = servicoRepository.save(new Servico(request.nome().trim()));
+        String nome = request.nome().trim();
+        if (servicoRepository.existsByNomeIgnoreCase(nome)) {
+            throw new ServicoDuplicadoException();
+        }
+
+        Servico servico = servicoRepository.save(new Servico(nome));
         ConfiguracaoServico configuracao = configuracaoServicoRepository.save(
             new ConfiguracaoServico(servico, request.horarioAbertura(), request.horarioFechamento()));
         return new ServicoResponse(servico, configuracao);
