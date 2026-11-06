@@ -39,6 +39,7 @@ public class SecurityConfig {
                 // Autocadastro (US-04): quem está se cadastrando ainda não tem login.
                 .requestMatchers(HttpMethod.POST, "/pacientes/autocadastro").permitAll()
                 .requestMatchers("/api/recepcao/**").hasRole("RECEPCIONISTA")
+                .requestMatchers("/api/gestor/servicos/**").hasRole("GESTOR")
                 .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
