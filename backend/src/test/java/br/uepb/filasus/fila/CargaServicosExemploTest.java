@@ -26,12 +26,16 @@ class CargaServicosExemploTest {
     private SenhaRepository senhaRepository;
 
     @Autowired
+    private ConfiguracaoServicoRepository configuracaoServicoRepository;
+
+    @Autowired
     private ApplicationContext contexto;
 
     @BeforeEach
     @AfterEach
     void limparTabelas() {
         senhaRepository.deleteAll();
+        configuracaoServicoRepository.deleteAll();
         servicoRepository.deleteAll();
     }
 

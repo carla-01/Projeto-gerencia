@@ -39,6 +39,9 @@ class SenhaRepositoryTest {
     private ServicoRepository servicoRepository;
 
     @Autowired
+    private ConfiguracaoServicoRepository configuracaoServicoRepository;
+
+    @Autowired
     private PacienteRepository pacienteRepository;
 
     @Autowired
@@ -50,6 +53,7 @@ class SenhaRepositoryTest {
     @BeforeEach
     void criarServicoEPaciente() {
         senhaRepository.deleteAll();
+        configuracaoServicoRepository.deleteAll();
         servicoRepository.deleteAll();
         clinico = servicoRepository.save(new Servico("Clínico"));
         paciente = pacienteRepository.save(new Paciente("Paciente Fictício", protecaoCpf.hash(CPF),
