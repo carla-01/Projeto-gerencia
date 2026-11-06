@@ -11,8 +11,8 @@ import jakarta.persistence.Table;
  * Serviço da UBS (clínico, enfermagem, odontologia...). Tabela "servico" do DER.
  *
  * Cada serviço tem a sua fila do dia (US-06 - SCRUM-41).
- * O horário de funcionamento e o limite de senhas por dia ficam na tabela
- * configuracao_servico e entram com a US-09 (configurar filas e horários).
+ * O horário de funcionamento e o limite de senhas por dia ficam na
+ * ConfiguracaoServico, cadastrada pelo gestor na US-09 (configurar filas e horários).
  */
 @Entity
 @Table(name = "servico")
