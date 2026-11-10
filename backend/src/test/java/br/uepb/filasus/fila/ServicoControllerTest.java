@@ -116,6 +116,9 @@ class ServicoControllerTest {
                 .content(corpo("07:00", "12:00")))
             .andExpect(status().isForbidden())
             .andExpect(jsonPath("$.mensagem").value("Acesso não permitido"));
+
+        assertEquals(0, servicoRepository.count());
+        assertEquals(0, configuracaoServicoRepository.count());
     }
 
     @Test
@@ -125,6 +128,9 @@ class ServicoControllerTest {
                 .content(corpo("07:00", "12:00")))
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.mensagem").value("Não autenticado"));
+
+        assertEquals(0, servicoRepository.count());
+        assertEquals(0, configuracaoServicoRepository.count());
     }
 
     private void validarHorarioNaoSalva(String abertura, String fechamento) throws Exception {

@@ -248,5 +248,7 @@ class CancelamentoSenhaControllerTest {
 
         mockMvc.perform(post("/api/paciente/senhas/" + minha.getId() + "/cancelar"))
             .andExpect(status().isUnauthorized());
+
+        assertEquals(StatusSenha.AGUARDANDO, statusNoBanco(minha));
     }
 }
