@@ -234,6 +234,8 @@ class EntradaFilaControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"servicoId\": " + clinico.getId() + "}"))
             .andExpect(status().isForbidden());
+
+        assertEquals(0, senhaRepository.count());
     }
 
     @Test
@@ -242,6 +244,8 @@ class EntradaFilaControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"servicoId\": " + clinico.getId() + "}"))
             .andExpect(status().isUnauthorized());
+
+        assertEquals(0, senhaRepository.count());
     }
 
     @Test
