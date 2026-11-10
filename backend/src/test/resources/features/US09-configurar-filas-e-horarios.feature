@@ -8,6 +8,7 @@ Funcionalidade: Configurar filas e horários
   Quero configurar os serviços da UBS
   Para definir os horários de funcionamento e o limite diário de senhas
 
+  @smoke
   Cenário: CT-US09-01 - Configuração salva
     Dado que estou autenticado no painel do gestor
     Quando defino o serviço "Clínico" das 07:00 às 12:00 com limite de 40 senhas

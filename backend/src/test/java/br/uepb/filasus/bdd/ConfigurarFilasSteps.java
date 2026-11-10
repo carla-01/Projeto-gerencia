@@ -20,18 +20,23 @@ import br.uepb.filasus.fila.ConfiguracaoServicoRepository;
 import br.uepb.filasus.fila.Servico;
 import br.uepb.filasus.fila.ServicoRepository;
 import br.uepb.filasus.fila.ServicoRequest;
+import br.uepb.filasus.lgpd.ProtecaoCpf;
 import br.uepb.filasus.usuario.Perfil;
 import br.uepb.filasus.usuario.Usuario;
+import br.uepb.filasus.usuario.UsuarioRepository;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.pt.Dado;
 import io.cucumber.java.pt.Entao;
 import io.cucumber.java.pt.Quando;
 
-/** Passos da US09 - Configurar filas e horários (SCRUM-44). */
+/** Passos da US09 - Configurar filas e horários (SCRUM-44). Dados fictícios. */
 public class ConfigurarFilasSteps {
 
     private static final String NOME_SERVICO = "Clínico";
+
+    /** CPF fictício, só para o hash e a cifra; não é validado aqui. */
+    private static final String CPF_GESTOR = "52998224725";
 
     @Autowired
     private MockMvc mockMvc;
@@ -43,11 +48,18 @@ public class ConfigurarFilasSteps {
     private JwtService jwtService;
 
     @Autowired
+    private ProtecaoCpf protecaoCpf;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
     private ServicoRepository servicoRepository;
 
     @Autowired
     private ConfiguracaoServicoRepository configuracaoServicoRepository;
 
+    private Usuario gestor;
     private String tokenGestor;
     private Long servicoExistenteId;
     private long quantidadeServicosAntes;
@@ -59,15 +71,22 @@ public class ConfigurarFilasSteps {
         removerServicoDoCenario();
     }
 
+    /** Apaga o serviço e o gestor que o cenário criou, para não atrapalhar os outros testes. */
     @After("@us09")
-    public void limparServicoDepoisDoCenario() {
+    public void limparDadosDepoisDoCenario() {
         removerServicoDoCenario();
+        if (gestor != null) {
+            usuarioRepository.delete(gestor);
+            gestor = null;
+        }
+        tokenGestor = null;
     }
 
     @Dado("que estou autenticado no painel do gestor")
     public void queEstouLogadoComoGestor() {
-        Usuario gestor = new Usuario("Gestor de Teste", "gestor.bdd@exemplo.test",
-            "cpf-hash", "cpf-cifrado", "hash", Perfil.GESTOR);
+        // Salvo no banco para o token sair com o id real do usuário no "sub".
+        gestor = usuarioRepository.save(new Usuario("Gestor Fictício", "gestor.bdd@exemplo.test",
+            protecaoCpf.hash(CPF_GESTOR), protecaoCpf.cifrar(CPF_GESTOR), "hash", Perfil.GESTOR));
         tokenGestor = jwtService.gerarToken(gestor);
     }
 
@@ -130,6 +149,7 @@ public class ConfigurarFilasSteps {
     }
 
     private JsonNode corpo() throws Exception {
+        // Sem charset no Content-Type o MockMvc leria em ISO-8859-1 e estragaria os acentos.
         return objectMapper.readTree(resposta.getResponse().getContentAsString(StandardCharsets.UTF_8));
     }
 
