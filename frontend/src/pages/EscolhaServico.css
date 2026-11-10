@@ -1,0 +1,221 @@
+/* Escolha de serviço do paciente (US06) - pensada primeiro para o celular */
+
+.fila {
+  --azul: #13238f;
+  --azul-escuro: #0b1560;
+  --azul-claro: #eef0fc;
+  --texto: #111833;
+  --texto-suave: #5b6478;
+  --texto-fraco: #8a91a5;
+  --borda-suave: #eceef4;
+  --vermelho: #b42318;
+  --vermelho-fundo: #fef3f2;
+  --vermelho-borda: #fecdca;
+  --verde: #067647;
+  --verde-fundo: #ecfdf3;
+
+  box-sizing: border-box;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  color: var(--texto);
+}
+
+/* ---------- Cabeçalho ---------- */
+
+.fila-cabecalho {
+  margin-bottom: 20px;
+}
+
+.fila-rotulo {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--azul);
+}
+
+.fila-cabecalho h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.fila-cabecalho p:last-child {
+  margin: 0;
+  font-size: 15px;
+  color: var(--texto-suave);
+}
+
+.fila-cartao {
+  box-sizing: border-box;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid var(--borda-suave);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px rgba(16, 24, 40, 0.04);
+}
+
+.fila-secao-titulo {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.fila-detalhe {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--texto-suave);
+}
+
+/* ---------- Lista de serviços ---------- */
+
+.fila-lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fila-servico {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+  border-top: 1px solid var(--borda-suave);
+}
+
+.fila-servico:first-child {
+  border-top: none;
+}
+
+.fila-servico-nome {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.fila-situacao {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+.fila-aberta {
+  color: var(--verde);
+  background: var(--verde-fundo);
+}
+
+.fila-fechada {
+  color: var(--texto-suave);
+  background: #f0f2f7;
+}
+
+.fila-botao {
+  flex-shrink: 0;
+  min-height: 44px; /* área de toque confortável no celular */
+  padding: 0 18px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--azul);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.fila-botao:hover {
+  background: var(--azul-escuro);
+}
+
+.fila-botao:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(19, 35, 143, 0.25);
+}
+
+.fila-botao:disabled {
+  background: #c3c8d6;
+  cursor: default;
+}
+
+/* ---------- Alerta ---------- */
+
+.fila-alerta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--vermelho);
+  background: var(--vermelho-fundo);
+  border: 1px solid var(--vermelho-borda);
+  border-radius: 8px;
+}
+
+.fila-icone-alerta {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ---------- Senha gerada ---------- */
+
+.fila-senha {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.fila-senha h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.fila-senha-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 12px;
+  color: var(--verde);
+  background: var(--verde-fundo);
+  border-radius: 12px;
+}
+
+.fila-senha-icone svg {
+  width: 24px;
+  height: 24px;
+}
+
+.fila-senha-servico {
+  margin: 0 0 16px;
+  font-size: 15px;
+  color: var(--texto-suave);
+}
+
+.fila-senha-rotulo {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--texto-fraco);
+}
+
+.fila-senha-numero {
+  margin: 0 0 16px;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--azul);
+}

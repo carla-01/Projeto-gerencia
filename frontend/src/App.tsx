@@ -7,6 +7,7 @@ import AcessoNegado from './pages/AcessoNegado'
 import CadastroRecepcao from './pages/CadastroRecepcao'
 import LayoutRecepcao from './components/LayoutRecepcao'
 import PainelRecepcao from './pages/PainelRecepcao'
+import EscolhaServico from './pages/EscolhaServico'
 import { obterPerfil } from './services/auth'
 
 /**
@@ -15,6 +16,7 @@ import { obterPerfil } from './services/auth'
  * - US02 (SCRUM-38): bloqueia as rotas que o perfil logado não pode abrir.
  * - US04 (SCRUM-39): tela de autocadastro do paciente.
  * - US05 (SCRUM-40): cadastro de paciente pela recepção.
+ * - US06 (SCRUM-137): o paciente escolhe o serviço e entra na fila.
  */
 export default function App() {
   const location = useLocation()
@@ -47,7 +49,11 @@ export default function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
-        <Route path="/paciente" element={<Pagina titulo="Área do paciente" descricao="Fila e posição do paciente (R2)." />} />
+        <Route path="/paciente" element={
+          <ProtectedRoute perfis={['PACIENTE']}>
+            <EscolhaServico />
+          </ProtectedRoute>
+        } />
         <Route path="/recepcao" element={
           <ProtectedRoute perfis={['RECEPCIONISTA']}>
             <LayoutRecepcao><PainelRecepcao /></LayoutRecepcao>
