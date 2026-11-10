@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
@@ -47,21 +48,26 @@ class CargaServicosExemploTest {
 
     @Test
     void criaOsTresServicosAtivos() {
-        new CargaServicosExemplo(servicoRepository).run(null);
+        new CargaServicosExemplo(servicoRepository, configuracaoServicoRepository).run(null);
 
         List<String> nomes = servicoRepository.findAll().stream().map(Servico::getNome).sorted().toList();
         assertEquals(List.of("Clínico", "Enfermagem", "Odontologia"), nomes);
         assertTrue(servicoRepository.findAll().stream().allMatch(Servico::isAtivo));
+        assertEquals(3, configuracaoServicoRepository.count());
+        assertEquals(40, limiteDe("Clínico"));
+        assertEquals(60, limiteDe("Enfermagem"));
+        assertEquals(20, limiteDe("Odontologia"));
     }
 
     @Test
     void naoDuplicaSeRodarDuasVezes() {
-        CargaServicosExemplo carga = new CargaServicosExemplo(servicoRepository);
+        CargaServicosExemplo carga = new CargaServicosExemplo(servicoRepository, configuracaoServicoRepository);
 
         carga.run(null);
         carga.run(null);
 
         assertEquals(3, servicoRepository.count());
+        assertEquals(3, configuracaoServicoRepository.count());
     }
 
     @Test
@@ -70,9 +76,27 @@ class CargaServicosExemploTest {
         odontologia.setAtivo(false);
         servicoRepository.save(odontologia);
 
-        new CargaServicosExemplo(servicoRepository).run(null);
+        new CargaServicosExemplo(servicoRepository, configuracaoServicoRepository).run(null);
 
         assertEquals(3, servicoRepository.count());
         assertFalse(servicoRepository.findByNomeAndAtivoTrue("Odontologia").isPresent());
+    }
+
+    @Test
+    void preservaConfiguracaoExistente() {
+        Servico clinico = servicoRepository.save(new Servico("Clínico"));
+        configuracaoServicoRepository.save(new ConfiguracaoServico(clinico,
+            LocalTime.of(8, 0), LocalTime.of(16, 0), 9));
+
+        new CargaServicosExemplo(servicoRepository, configuracaoServicoRepository).run(null);
+
+        assertEquals(9, limiteDe("Clínico"));
+        assertEquals(LocalTime.of(8, 0),
+            configuracaoServicoRepository.findByServico_Id(clinico.getId()).orElseThrow().getHoraAbertura());
+    }
+
+    private int limiteDe(String nome) {
+        Servico servico = servicoRepository.findByNome(nome).orElseThrow();
+        return configuracaoServicoRepository.findByServico_Id(servico.getId()).orElseThrow().getLimiteSenhasDia();
     }
 }

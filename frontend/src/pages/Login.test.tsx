@@ -83,6 +83,10 @@ describe('US01 - Login por perfil', () => {
         if (url === '/api/recepcao/fila') {
           corpo = { usuarioId: '7', fila: [] }
         }
+        // A área do paciente (US06) busca os serviços logo depois do login.
+        if (url === '/api/paciente/servicos') {
+          corpo = []
+        }
         return new Response(JSON.stringify(corpo), {
           status: 200,
           headers: { 'Content-Type': 'application/json' },

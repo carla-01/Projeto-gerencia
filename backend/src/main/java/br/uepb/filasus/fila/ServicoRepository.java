@@ -1,5 +1,6 @@
 package br.uepb.filasus.fila;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,8 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
     /** Usado na entrada na fila (US-06): só serviço ativo recebe senha. */
     Optional<Servico> findByNomeAndAtivoTrue(String nome);
 
-    /** Usado pela carga da fila de exemplo para não duplicar serviços. */
-    boolean existsByNome(String nome);
+    Optional<Servico> findByNome(String nome);
+
+    /** Serviços que aparecem na tela de escolha do paciente (US-06). */
+    List<Servico> findByAtivoTrueOrderByNomeAsc();
 }

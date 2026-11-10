@@ -115,6 +115,20 @@ class SenhaRepositoryTest {
     }
 
     @Test
+    void contaSenhasSeparadamentePorServicoEDia() {
+        Servico enfermagem = servicoRepository.save(new Servico("Enfermagem"));
+        senhaRepository.save(novaSenha(1, HOJE));
+        senhaRepository.save(novaSenha(2, HOJE));
+        senhaRepository.save(novaSenha(1, HOJE.plusDays(1)));
+        senhaRepository.save(new Senha(enfermagem, paciente, 1, HOJE,
+            Prioridade.NENHUMA, Instant.now()));
+
+        assertEquals(2, senhaRepository.countByServicoAndDataRef(clinico, HOJE));
+        assertEquals(1, senhaRepository.countByServicoAndDataRef(clinico, HOJE.plusDays(1)));
+        assertEquals(1, senhaRepository.countByServicoAndDataRef(enfermagem, HOJE));
+    }
+
+    @Test
     void encontraSoASenhaAtivaDoPacienteNoDia() {
         Senha cancelada = novaSenha(1, HOJE);
         cancelada.setStatus(StatusSenha.CANCELADA);

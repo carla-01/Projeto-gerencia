@@ -46,20 +46,16 @@ class ServicoControllerTest {
         mockMvc.perform(post("/api/gestor/servicos")
                 .header("Authorization", "Bearer " + token(Perfil.GESTOR))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    {
-                      "nome": "Clínico",
-                      "horarioAbertura": "07:00",
-                      "horarioFechamento": "12:00"
-                    }
-                    """))
+                .content(corpo("07:00", "12:00")))
             .andExpect(status().isCreated())
             .andExpect(jsonPath("$.nome").value("Clínico"))
             .andExpect(jsonPath("$.horarioAbertura").value("07:00"))
-            .andExpect(jsonPath("$.horarioFechamento").value("12:00"));
+            .andExpect(jsonPath("$.horarioFechamento").value("12:00"))
+            .andExpect(jsonPath("$.limiteSenhasDia").value(20));
 
         assertEquals(1, servicoRepository.count());
         assertEquals(1, configuracaoServicoRepository.count());
+        assertEquals(20, configuracaoServicoRepository.findAll().get(0).getLimiteSenhasDia());
     }
 
     @Test
@@ -87,12 +83,19 @@ class ServicoControllerTest {
                     {
                       "nome": " ",
                       "horarioAbertura": "07:00",
-                      "horarioFechamento": "12:00"
+                      "horarioFechamento": "12:00",
+                      "limiteSenhasDia": 20
                     }
                     """))
             .andExpect(status().isBadRequest())
             .andExpect(jsonPath("$.campo").value("nome"))
             .andExpect(jsonPath("$.mensagem").value("Nome do serviço é obrigatório"));
+    }
+
+    @Test
+    void limiteZeroOuNegativoRecebe400() throws Exception {
+        validarLimiteNaoSalva(0);
+        validarLimiteNaoSalva(-1);
     }
 
     @Test
@@ -136,14 +139,32 @@ class ServicoControllerTest {
         assertEquals(0, configuracaoServicoRepository.count());
     }
 
+    private void validarLimiteNaoSalva(int limite) throws Exception {
+        mockMvc.perform(post("/api/gestor/servicos")
+                .header("Authorization", "Bearer " + token(Perfil.GESTOR))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(corpo("07:00", "12:00", limite)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.campo").value("limiteSenhasDia"))
+            .andExpect(jsonPath("$.mensagem").value("Limite de senhas por dia deve ser maior que zero"));
+
+        assertEquals(0, servicoRepository.count());
+        assertEquals(0, configuracaoServicoRepository.count());
+    }
+
     private String corpo(String abertura, String fechamento) {
+        return corpo(abertura, fechamento, 20);
+    }
+
+    private String corpo(String abertura, String fechamento, int limite) {
         return """
             {
               "nome": "Clínico",
               "horarioAbertura": "%s",
-              "horarioFechamento": "%s"
+              "horarioFechamento": "%s",
+              "limiteSenhasDia": %d
             }
-            """.formatted(abertura, fechamento);
+            """.formatted(abertura, fechamento, limite);
     }
 
     private String token(Perfil perfil) {

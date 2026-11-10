@@ -8,10 +8,12 @@ public record ServicoResponse(
     Long id,
     String nome,
     @JsonFormat(pattern = "HH:mm") LocalTime horarioAbertura,
-    @JsonFormat(pattern = "HH:mm") LocalTime horarioFechamento) {
+    @JsonFormat(pattern = "HH:mm") LocalTime horarioFechamento,
+    int limiteSenhasDia) {
 
     public ServicoResponse(Servico servico, ConfiguracaoServico configuracao) {
         this(servico.getId(), servico.getNome(),
-            configuracao.getHoraAbertura(), configuracao.getHoraFechamento());
+            configuracao.getHoraAbertura(), configuracao.getHoraFechamento(),
+            configuracao.getLimiteSenhasDia());
     }
 }
