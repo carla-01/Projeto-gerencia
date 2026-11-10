@@ -40,6 +40,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/pacientes/autocadastro").permitAll()
                 .requestMatchers("/api/recepcao/**").hasRole("RECEPCIONISTA")
                 .requestMatchers("/api/gestor/servicos/**").hasRole("GESTOR")
+                // Entrada na fila (US-06): só o próprio paciente tira a senha.
+                .requestMatchers("/api/paciente/**").hasRole("PACIENTE")
                 .anyRequest().authenticated())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
