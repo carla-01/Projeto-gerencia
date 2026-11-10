@@ -1,4 +1,4 @@
-/* Escolha de serviço do paciente (US06) - pensada primeiro para o celular */
+/* Área do paciente: escolha de serviço (US06) e posição na fila (US07) - pensada primeiro para o celular */
 
 .fila {
   --azul: #13238f;
@@ -167,10 +167,30 @@
   flex-shrink: 0;
 }
 
-/* ---------- Senha gerada ---------- */
+/* ---------- Aviso de sucesso ---------- */
+
+.fila-aviso {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--verde);
+  background: var(--verde-fundo);
+  border-radius: 8px;
+}
+
+/* ---------- Senha e posição (US07) ---------- */
+
+.fila-minhas-senhas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
 
 .fila-senha {
-  margin-bottom: 16px;
   text-align: center;
 }
 
@@ -180,21 +200,50 @@
   font-weight: 700;
 }
 
-.fila-senha-icone {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
+.fila-senha-dados {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
   margin-bottom: 12px;
-  color: var(--verde);
-  background: var(--verde-fundo);
-  border-radius: 12px;
 }
 
-.fila-senha-icone svg {
-  width: 24px;
-  height: 24px;
+.fila-senha-dados > div {
+  padding: 12px 8px;
+  background: var(--azul-claro);
+  border-radius: 10px;
+}
+
+.fila-senha-dados .fila-senha-numero {
+  margin: 0;
+  font-size: 44px;
+}
+
+.fila-senha-frente {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.fila-botao-secundario {
+  min-height: 44px; /* área de toque confortável no celular */
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--azul);
+  background: #ffffff;
+  border: 1px solid var(--azul);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.fila-botao-secundario:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(19, 35, 143, 0.25);
+}
+
+.fila-botao-secundario:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 .fila-senha-servico {

@@ -87,6 +87,10 @@ describe('US01 - Login por perfil', () => {
         if (url === '/api/paciente/servicos') {
           corpo = []
         }
+        // E as senhas ativas com a posição na fila (US07).
+        if (url === '/api/paciente/senhas') {
+          corpo = []
+        }
         return new Response(JSON.stringify(corpo), {
           status: 200,
           headers: { 'Content-Type': 'application/json' },

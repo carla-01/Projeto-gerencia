@@ -1,8 +1,8 @@
 /**
- * Entrada na fila pelo paciente (US06 - SCRUM-137).
+ * Fila do paciente (US06 - SCRUM-137 e US07 - SCRUM-140).
  *
  * Chama o GET /api/paciente/servicos e o POST /api/paciente/senhas do back-end
- * (SCRUM-136) com o token do paciente.
+ * (SCRUM-136) e o GET /api/paciente/senhas (SCRUM-139) com o token do paciente.
  */
 import { obterToken } from './auth'
 
@@ -13,13 +13,19 @@ export type ServicoDisponivel = {
   aberta: boolean
 }
 
-/** Senha gerada. A posição na fila entra com a US07. */
+/** Senha gerada ao entrar na fila. */
 export type SenhaGerada = {
   id: number
   numero: number
   servico: string
   data: string
   status: string
+}
+
+/** Senha ativa do paciente com a posição na fila (US07). posicao = pessoasAFrente + 1. */
+export type PosicaoNaFila = SenhaGerada & {
+  posicao: number
+  pessoasAFrente: number
 }
 
 /** O que a tela deve fazer com o erro. */
@@ -42,7 +48,7 @@ function cabecalhos(): Record<string, string> {
   }
 }
 
-/** Trata as respostas de erro que as duas chamadas têm em comum. */
+/** Trata as respostas de erro que as chamadas têm em comum. */
 async function erroDaResposta(resposta: Response, mensagemPadrao: string): Promise<ErroFila> {
   if (resposta.status === 401) {
     return new ErroFila('sem-login', 'Sua sessão expirou. Entre de novo.')
@@ -58,11 +64,11 @@ async function erroDaResposta(resposta: Response, mensagemPadrao: string): Promi
   return new ErroFila('servidor', mensagemPadrao)
 }
 
-export async function listarServicos(): Promise<ServicoDisponivel[]> {
-  const mensagemPadrao = 'Não foi possível carregar os serviços. Tente de novo.'
+/** GET que devolve uma lista. */
+async function buscarLista<T>(url: string, mensagemPadrao: string): Promise<T[]> {
   let resposta: Response
   try {
-    resposta = await fetch('/api/paciente/servicos', { headers: cabecalhos() })
+    resposta = await fetch(url, { headers: cabecalhos() })
   } catch {
     throw new ErroFila('servidor', 'Não foi possível conectar ao servidor. Tente de novo.')
   }
@@ -71,11 +77,20 @@ export async function listarServicos(): Promise<ServicoDisponivel[]> {
     throw await erroDaResposta(resposta, mensagemPadrao)
   }
 
-  const servicos = await resposta.json()
-  if (!Array.isArray(servicos)) {
+  const lista = await resposta.json()
+  if (!Array.isArray(lista)) {
     throw new ErroFila('servidor', mensagemPadrao)
   }
-  return servicos
+  return lista
+}
+
+export function listarServicos(): Promise<ServicoDisponivel[]> {
+  return buscarLista('/api/paciente/servicos', 'Não foi possível carregar os serviços. Tente de novo.')
+}
+
+/** Senhas ativas de hoje do paciente, com a posição. Lista vazia quando ele não está em nenhuma fila. */
+export function listarMinhasSenhas(): Promise<PosicaoNaFila[]> {
+  return buscarLista('/api/paciente/senhas', 'Não foi possível carregar a sua posição na fila. Tente de novo.')
 }
 
 export async function entrarNaFila(servicoId: number): Promise<SenhaGerada> {
