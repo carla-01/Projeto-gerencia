@@ -13,8 +13,5 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
     /** Usado na entrada na fila (US-06): só serviço ativo recebe senha. */
     Optional<Servico> findByNomeAndAtivoTrue(String nome);
 
-    /** Usado pela carga da fila de exemplo para não duplicar serviços. */
-    boolean existsByNome(String nome);
-
     Optional<Servico> findByNome(String nome);
 }

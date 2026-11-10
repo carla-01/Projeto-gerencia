@@ -11,7 +11,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -25,8 +25,9 @@ class FilaServiceTest {
 
     private static final Long SERVICO_ID = 10L;
     private static final LocalDate HOJE = LocalDate.of(2026, 11, 9);
+    private static final ZoneId FUSO_UBS = ZoneId.of("America/Fortaleza");
     private static final Clock RELOGIO = Clock.fixed(
-        Instant.parse("2026-11-09T10:00:00Z"), ZoneOffset.UTC);
+        Instant.parse("2026-11-09T12:00:00Z"), FUSO_UBS);
 
     @Mock
     private ConfiguracaoServicoRepository configuracaoServicoRepository;
@@ -50,6 +51,15 @@ class FilaServiceTest {
     }
 
     @Test
+    void converteDozeHorasUtcParaNoveHorasNoHorarioDaUbs() {
+        configurar(7, 17, 10);
+        when(senhaRepository.countByServicoAndDataRef(servico, HOJE)).thenReturn(9L);
+        Clock meioDiaUtc = Clock.fixed(Instant.parse("2026-11-09T12:00:00Z"), FUSO_UBS);
+
+        assertTrue(filaService(meioDiaUtc).estaAberta(SERVICO_ID));
+    }
+
+    @Test
     void fechaQuandoAtingeOLimiteDiario() {
         configurar(7, 17, 10);
         when(senhaRepository.countByServicoAndDataRef(servico, HOJE)).thenReturn(10L);
@@ -61,7 +71,7 @@ class FilaServiceTest {
     void ficaFechadaForaDoHorarioDeFuncionamento() {
         configurar(7, 17, 10);
         Clock antesDaAbertura = Clock.fixed(
-            Instant.parse("2026-11-09T06:59:00Z"), ZoneOffset.UTC);
+            Instant.parse("2026-11-09T09:59:00Z"), FUSO_UBS);
 
         assertFalse(filaService(antesDaAbertura).estaAberta(SERVICO_ID));
         verify(senhaRepository, never()).countByServicoAndDataRef(servico, HOJE);
@@ -73,12 +83,24 @@ class FilaServiceTest {
         when(senhaRepository.countByServicoAndDataRef(servico, HOJE)).thenReturn(0L);
 
         Clock horarioAbertura = Clock.fixed(
-            Instant.parse("2026-11-09T07:00:00Z"), ZoneOffset.UTC);
+            Instant.parse("2026-11-09T10:00:00Z"), FUSO_UBS);
         assertTrue(filaService(horarioAbertura).estaAberta(SERVICO_ID));
 
         Clock horarioFechamento = Clock.fixed(
-            Instant.parse("2026-11-09T17:00:00Z"), ZoneOffset.UTC);
+            Instant.parse("2026-11-09T20:00:00Z"), FUSO_UBS);
         assertFalse(filaService(horarioFechamento).estaAberta(SERVICO_ID));
+    }
+
+    @Test
+    void usaDataLocalDaUbsNaContagemDoLimite() {
+        configurar(7, 22, 10);
+        LocalDate diaLocal = LocalDate.of(2026, 11, 9);
+        when(senhaRepository.countByServicoAndDataRef(servico, diaLocal)).thenReturn(9L);
+        Clock depoisDaMeiaNoiteUtc = Clock.fixed(
+            Instant.parse("2026-11-10T00:30:00Z"), FUSO_UBS);
+
+        assertTrue(filaService(depoisDaMeiaNoiteUtc).estaAberta(SERVICO_ID));
+        verify(senhaRepository).countByServicoAndDataRef(servico, diaLocal);
     }
 
     @Test
