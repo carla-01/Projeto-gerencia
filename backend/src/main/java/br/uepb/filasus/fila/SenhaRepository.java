@@ -33,4 +33,20 @@ public interface SenhaRepository extends JpaRepository<Senha, Long> {
     default Optional<Senha> buscarSenhaAtiva(Paciente paciente, Servico servico, LocalDate dataRef) {
         return findFirstByPacienteAndServicoAndDataRefAndStatusIn(paciente, servico, dataRef, STATUS_ATIVOS);
     }
+
+    List<Senha> findByPacienteAndDataRefAndStatusInOrderByNumeroAsc(
+        Paciente paciente, LocalDate dataRef, Collection<StatusSenha> status);
+
+    /** Senhas do paciente que ainda estão valendo no dia, uma por serviço (US-07). */
+    default List<Senha> buscarSenhasAtivas(Paciente paciente, LocalDate dataRef) {
+        return findByPacienteAndDataRefAndStatusInOrderByNumeroAsc(paciente, dataRef, STATUS_ATIVOS);
+    }
+
+    long countByServicoAndDataRefAndStatusInAndNumeroLessThan(
+        Servico servico, LocalDate dataRef, Collection<StatusSenha> status, int numero);
+
+    /** Quantas senhas ainda na fila do serviço vêm antes do número informado, no dia (US-07). */
+    default long contarAFrente(Servico servico, LocalDate dataRef, int numero) {
+        return countByServicoAndDataRefAndStatusInAndNumeroLessThan(servico, dataRef, STATUS_ATIVOS, numero);
+    }
 }
