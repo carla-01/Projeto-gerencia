@@ -7,6 +7,7 @@ import AcessoNegado from './pages/AcessoNegado'
 import CadastroRecepcao from './pages/CadastroRecepcao'
 import LayoutRecepcao from './components/LayoutRecepcao'
 import PainelRecepcao from './pages/PainelRecepcao'
+import ConfigurarFilas from './pages/ConfigurarFilas'
 import EscolhaServico from './pages/EscolhaServico'
 import { obterPerfil } from './services/auth'
 
@@ -42,6 +43,7 @@ export default function App() {
             {perfil === 'RECEPCIONISTA' && <Link to="/recepcao">Recepção</Link>}
             <Link to="/profissional">Profissional</Link>
             <Link to="/gestor">Gestor</Link>
+            {perfil === 'GESTOR' && <Link to="/gestor/configurar-filas">Configurar filas</Link>}
           </main>
         </nav>
       )}
@@ -67,6 +69,11 @@ export default function App() {
         <Route path="/acesso-negado" element={<AcessoNegado />} />
         <Route path="/profissional" element={<Pagina titulo="Profissional de saúde" descricao="Chamada e atendimento (R2)." />} />
         <Route path="/gestor" element={<Pagina titulo="Gestor" descricao="Configuração e relatórios (R2 a R4)." />} />
+        <Route path="/gestor/configurar-filas" element={
+          <ProtectedRoute perfis={['GESTOR']}>
+            <ConfigurarFilas />
+          </ProtectedRoute>
+        } />
         <Route path="*" element={<Pagina titulo="Página não encontrada" descricao="Confira o endereço." />} />
       </Routes>
     </>
