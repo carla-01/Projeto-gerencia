@@ -9,11 +9,7 @@ export type DadosConfiguracaoFila = {
 
 const URL_CONFIGURACAO = '/api/gestor/servicos'
 
-/**
- * Cria configuração de serviço usando a sessão atual do gestor.
- * TODO: alinhar os nomes e o limite diário com o DTO do back-end; o endpoint atual
- * ainda declara nome/horarioAbertura/horarioFechamento e não recebe limiteSenhas.
- */
+/** Cria o serviço com horário de funcionamento e limite diário, usando a sessão atual do gestor. */
 export async function salvarConfiguracaoFila(dados: DadosConfiguracaoFila): Promise<void> {
   const token = obterToken()
   if (token === null) {
@@ -28,7 +24,13 @@ export async function salvarConfiguracaoFila(dados: DadosConfiguracaoFila): Prom
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(dados),
+      // Nomes do ServicoRequest do back-end (SCRUM-131 e SCRUM-132).
+      body: JSON.stringify({
+        nome: dados.servico,
+        horarioAbertura: dados.horaInicio,
+        horarioFechamento: dados.horaFim,
+        limiteSenhasDia: dados.limiteSenhas,
+      }),
     })
   } catch {
     throw new Error('Não foi possível conectar ao servidor. Tente de novo.')
@@ -43,5 +45,21 @@ export async function salvarConfiguracaoFila(dados: DadosConfiguracaoFila): Prom
   if (resposta.status === 403) {
     throw new Error('Acesso não permitido')
   }
+  if (resposta.status === 400 || resposta.status === 409) {
+    // O back-end explica o erro, por exemplo "Horário inválido" ou "Serviço já cadastrado".
+    const mensagem = await lerMensagem(resposta)
+    if (mensagem !== null) {
+      throw new Error(mensagem)
+    }
+  }
   throw new Error('Não foi possível salvar a configuração agora. Tente de novo.')
+}
+
+async function lerMensagem(resposta: Response): Promise<string | null> {
+  try {
+    const corpo = await resposta.json()
+    return typeof corpo?.mensagem === 'string' ? corpo.mensagem : null
+  } catch {
+    return null
+  }
 }
