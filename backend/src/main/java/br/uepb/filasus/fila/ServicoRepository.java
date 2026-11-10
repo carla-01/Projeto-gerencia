@@ -15,4 +15,6 @@ public interface ServicoRepository extends JpaRepository<Servico, Long> {
 
     /** Usado pela carga da fila de exemplo para não duplicar serviços. */
     boolean existsByNome(String nome);
+
+    Optional<Servico> findByNome(String nome);
 }
