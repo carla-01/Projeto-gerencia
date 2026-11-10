@@ -82,17 +82,100 @@ jobs:
       - name: Testes
         run: npm test
 
+  # Cenários @smoke de ponta a ponta (SCRUM-123): sobe o back-end e o front-end
+  # e roda no Cypress os cenários Gherkin de frontend/cypress/e2e.
+  smoke:
+    name: Smoke (Cypress + Cucumber)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: filasus_test
+          POSTGRES_USER: filasus
+          POSTGRES_PASSWORD: filasus_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U filasus -d filasus_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/filasus_test
+      SPRING_DATASOURCE_USERNAME: filasus
+      SPRING_DATASOURCE_PASSWORD: filasus_ci
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependências do front-end
+        working-directory: frontend
+        run: npm ci
+
+      - name: Subir o back-end
+        working-directory: backend
+        run: |
+          mvn -B spring-boot:run > back-end.log 2>&1 &
+          for tentativa in $(seq 1 60); do
+            if curl --silent --output /dev/null http://localhost:8080/actuator/health; then
+              exit 0
+            fi
+            sleep 5
+          done
+          cat back-end.log
+          exit 1
+
+      - name: Subir o front-end
+        working-directory: frontend
+        run: |
+          npm run dev > front-end.log 2>&1 &
+          for tentativa in $(seq 1 30); do
+            if curl --silent --output /dev/null http://localhost:5173; then
+              exit 0
+            fi
+            sleep 2
+          done
+          cat front-end.log
+          exit 1
+
+      - name: Rodar os cenários @smoke
+        working-directory: frontend
+        run: npm run cy:smoke
+
+      - name: Guardar os prints da falha
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prints-do-smoke
+          path: frontend/cypress/screenshots
+          if-no-files-found: ignore
+
   # Check único "build" exigido nas branches protegidas (main e develop).
-  # Só passa se back-end e front-end passarem.
+  # Só passa se back-end, front-end e smoke passarem.
   build:
     name: build
     runs-on: ubuntu-latest
-    needs: [backend, frontend]
+    needs: [backend, frontend, smoke]
     if: always()
     steps:
       - name: Conferir resultado
         run: |
-          if [ "${{ needs.backend.result }}" != "success" ] || [ "${{ needs.frontend.result }}" != "success" ]; then
-            echo "Back-end: ${{ needs.backend.result }} | Front-end: ${{ needs.frontend.result }}"
+          if [ "${{ needs.backend.result }}" != "success" ] || [ "${{ needs.frontend.result }}" != "success" ] || [ "${{ needs.smoke.result }}" != "success" ]; then
+            echo "Back-end: ${{ needs.backend.result }} | Front-end: ${{ needs.frontend.result }} | Smoke: ${{ needs.smoke.result }}"
             exit 1
           fi
