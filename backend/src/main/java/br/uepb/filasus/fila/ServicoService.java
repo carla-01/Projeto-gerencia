@@ -28,7 +28,8 @@ public class ServicoService {
 
         Servico servico = servicoRepository.save(new Servico(nome));
         ConfiguracaoServico configuracao = configuracaoServicoRepository.save(
-            new ConfiguracaoServico(servico, request.horarioAbertura(), request.horarioFechamento()));
+            new ConfiguracaoServico(servico, request.horarioAbertura(), request.horarioFechamento(),
+                request.limiteSenhasDia()));
         return new ServicoResponse(servico, configuracao);
     }
 }

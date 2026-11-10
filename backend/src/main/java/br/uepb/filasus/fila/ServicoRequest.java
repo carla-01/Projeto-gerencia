@@ -4,6 +4,7 @@ import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,6 +20,10 @@ public record ServicoRequest(
 
     @NotNull(message = "Horário de fechamento é obrigatório")
     @JsonFormat(pattern = "HH:mm")
-    LocalTime horarioFechamento
+    LocalTime horarioFechamento,
+
+    @NotNull(message = "Limite de senhas por dia é obrigatório")
+    @Min(value = 1, message = "Limite de senhas por dia deve ser maior que zero")
+    Integer limiteSenhasDia
 ) {
 }

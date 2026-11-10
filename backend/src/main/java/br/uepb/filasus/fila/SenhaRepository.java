@@ -24,6 +24,8 @@ public interface SenhaRepository extends JpaRepository<Senha, Long> {
     @Query("select coalesce(max(s.numero), 0) from Senha s where s.servico = :servico and s.dataRef = :dataRef")
     int maiorNumeroDoDia(@Param("servico") Servico servico, @Param("dataRef") LocalDate dataRef);
 
+    long countByServicoAndDataRef(Servico servico, LocalDate dataRef);
+
     Optional<Senha> findFirstByPacienteAndServicoAndDataRefAndStatusIn(
         Paciente paciente, Servico servico, LocalDate dataRef, Collection<StatusSenha> status);
 
