@@ -31,17 +31,22 @@ type BackEndSimulado = {
   /** Respostas do GET /api/paciente/senhas, na ordem; a última se repete. */
   senhas?: RespostaSimulada[]
   entrada?: RespostaSimulada
+  /** Resposta do POST /api/paciente/senhas/{id}/cancelar (US08). */
+  cancelamento?: RespostaSimulada
 }
 
 function simularBackEnd({
   servicos = SERVICOS,
   senhas = [{ status: 200, corpo: [] }],
   entrada = { status: 201, corpo: {} },
+  cancelamento = { status: 200, corpo: {} },
 }: BackEndSimulado = {}) {
   let consultasDeSenha = 0
   return vi.spyOn(globalThis, 'fetch').mockImplementation(async (url, opcoes) => {
     let resposta: RespostaSimulada = { status: 200, corpo: servicos }
-    if (url === '/api/paciente/senhas' && opcoes?.method === 'POST') {
+    if (String(url).endsWith('/cancelar')) {
+      resposta = cancelamento
+    } else if (url === '/api/paciente/senhas' && opcoes?.method === 'POST') {
       resposta = entrada
     } else if (url === '/api/paciente/senhas') {
       resposta = senhas[Math.min(consultasDeSenha, senhas.length - 1)]
@@ -231,6 +236,78 @@ describe('Área do paciente', () => {
 
       expect(await screen.findByRole('alert')).toHaveTextContent('Não foi possível carregar a sua posição na fila')
       expect(await screen.findByText('Clínico')).toBeInTheDocument()
+    })
+  })
+
+  describe('US08 - Cancelar minha senha', () => {
+    it('CT-US08-01: cancela a senha depois de confirmar e a opção de entrar volta', async () => {
+      const fetch = simularBackEnd({
+        senhas: [
+          { status: 200, corpo: [SENHA_CLINICO] },
+          { status: 200, corpo: [] },
+        ],
+        cancelamento: { status: 200, corpo: { ...SENHA_CLINICO, status: 'CANCELADA' } },
+      })
+      abrirComoPaciente()
+
+      fireEvent.click(await screen.findByRole('button', { name: 'Cancelar a senha de Clínico' }))
+      expect(screen.getByText('Tem certeza? Você vai sair da fila de Clínico.')).toBeInTheDocument()
+      fireEvent.click(screen.getByRole('button', { name: 'Sim, cancelar' }))
+
+      expect(await screen.findByRole('status')).toHaveTextContent('Sua senha de Clínico foi cancelada.')
+      expect(screen.queryByRole('heading', { name: 'Sua senha' })).not.toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Entrar na fila de Clínico' })).toBeEnabled()
+
+      // Confere o que foi enviado: a senha certa, com o token do paciente.
+      const envio = fetch.mock.calls.find(([url]) => String(url).endsWith('/cancelar'))
+      expect(envio?.[0]).toBe('/api/paciente/senhas/9/cancelar')
+      expect(envio?.[1]?.method).toBe('POST')
+      const cabecalhos = envio?.[1]?.headers as Record<string, string>
+      expect(cabecalhos.Authorization).toBe('Bearer token-paciente')
+    })
+
+    it('não cancela se o paciente desistir na confirmação', async () => {
+      const fetch = simularBackEnd({ senhas: [{ status: 200, corpo: [SENHA_CLINICO] }] })
+      abrirComoPaciente()
+
+      fireEvent.click(await screen.findByRole('button', { name: 'Cancelar a senha de Clínico' }))
+      fireEvent.click(screen.getByRole('button', { name: 'Não, manter a senha' }))
+
+      expect(screen.getByRole('heading', { name: 'Sua senha' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Cancelar a senha de Clínico' })).toBeInTheDocument()
+      const envio = fetch.mock.calls.find(([url]) => String(url).endsWith('/cancelar'))
+      expect(envio).toBeUndefined()
+    })
+
+    it('também pode cancelar depois do check-in', async () => {
+      simularBackEnd({ senhas: [{ status: 200, corpo: [{ ...SENHA_CLINICO, status: 'PRESENTE' }] }] })
+      abrirComoPaciente()
+
+      expect(await screen.findByRole('button', { name: 'Cancelar a senha de Clínico' })).toBeInTheDocument()
+    })
+
+    it('CT-US08-02: o botão de cancelar não aparece quando o atendimento já começou', async () => {
+      simularBackEnd({ senhas: [{ status: 200, corpo: [{ ...SENHA_CLINICO, status: 'EM_ATENDIMENTO' }] }] })
+      abrirComoPaciente()
+
+      expect(await screen.findByRole('heading', { name: 'Sua senha' })).toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Cancelar a senha de Clínico' })).not.toBeInTheDocument()
+    })
+
+    it('mostra o aviso do back-end quando o paciente foi chamado antes de confirmar', async () => {
+      simularBackEnd({
+        senhas: [
+          { status: 200, corpo: [SENHA_CLINICO] },
+          { status: 200, corpo: [] },
+        ],
+        cancelamento: { status: 409, corpo: { mensagem: 'Seu atendimento já começou' } },
+      })
+      abrirComoPaciente()
+
+      fireEvent.click(await screen.findByRole('button', { name: 'Cancelar a senha de Clínico' }))
+      fireEvent.click(screen.getByRole('button', { name: 'Sim, cancelar' }))
+
+      expect(await screen.findByRole('alert')).toHaveTextContent('Seu atendimento já começou')
     })
   })
 
