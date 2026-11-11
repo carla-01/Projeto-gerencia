@@ -268,3 +268,52 @@
   line-height: 1.1;
   color: var(--azul);
 }
+
+/* ---------- Cancelar a senha (US08) ---------- */
+
+.fila-cancelar {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--borda-suave);
+}
+
+.fila-botao-cancelar {
+  min-height: 44px; /* área de toque confortável no celular */
+  padding: 0 16px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--vermelho);
+  background: #ffffff;
+  border: 1px solid var(--vermelho-borda);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.fila-botao-cancelar:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(180, 35, 24, 0.2);
+}
+
+.fila-botao-cancelar:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.fila-botao-confirmar-cancelamento {
+  color: #ffffff;
+  background: var(--vermelho);
+  border-color: var(--vermelho);
+}
+
+.fila-confirmacao {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: var(--texto);
+}
+
+.fila-confirmacao-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

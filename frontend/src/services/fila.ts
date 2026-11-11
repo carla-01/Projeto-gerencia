@@ -1,8 +1,9 @@
 /**
- * Fila do paciente (US06 - SCRUM-137 e US07 - SCRUM-140).
+ * Fila do paciente (US06 - SCRUM-137, US07 - SCRUM-140 e US08 - SCRUM-129).
  *
  * Chama o GET /api/paciente/servicos e o POST /api/paciente/senhas do back-end
- * (SCRUM-136) e o GET /api/paciente/senhas (SCRUM-139) com o token do paciente.
+ * (SCRUM-136), o GET /api/paciente/senhas (SCRUM-139) e o
+ * POST /api/paciente/senhas/{id}/cancelar (SCRUM-43) com o token do paciente.
  */
 import { obterToken } from './auth'
 
@@ -107,6 +108,25 @@ export async function entrarNaFila(servicoId: number): Promise<SenhaGerada> {
   }
 
   if (resposta.status === 201) {
+    return resposta.json()
+  }
+  throw await erroDaResposta(resposta, mensagemPadrao)
+}
+
+/** Cancela a senha do paciente (US08). O back-end recusa se o atendimento já começou. */
+export async function cancelarSenha(senhaId: number): Promise<SenhaGerada> {
+  const mensagemPadrao = 'Não foi possível cancelar a senha agora. Tente de novo.'
+  let resposta: Response
+  try {
+    resposta = await fetch('/api/paciente/senhas/' + senhaId + '/cancelar', {
+      method: 'POST',
+      headers: cabecalhos(),
+    })
+  } catch {
+    throw new ErroFila('servidor', 'Não foi possível conectar ao servidor. Tente de novo.')
+  }
+
+  if (resposta.status === 200) {
     return resposta.json()
   }
   throw await erroDaResposta(resposta, mensagemPadrao)
