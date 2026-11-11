@@ -1,5 +1,5 @@
-# Deploy em homologação do FilaSUS (SCRUM-120), sem Docker:
-# back-end no Koyeb, banco no Neon e front-end no Netlify.
+# Deploy em homologação do FilaSUS (SCRUM-120):
+# back-end no Render, banco no Neon e front-end no Netlify.
 #
 # Quem chama este workflow é o CI (ci.yml), só depois que todos os testes passam
 # num push na develop. Assim uma versão quebrada não vai para a homologação.
@@ -20,31 +20,29 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  # Versões fixas, para o deploy não mudar sozinho quando sair uma versão nova.
-  KOYEB_CLI_VERSAO: '5.12.0'
+  # Versão fixa, para o deploy não mudar sozinho quando sair uma versão nova.
   NETLIFY_CLI_VERSAO: '27.15.0'
 
 jobs:
   backend:
-    name: Back-end (Koyeb)
+    name: Back-end (Render)
     runs-on: ubuntu-latest
 
-    # O token fica só em Settings → Secrets and variables → Actions.
+    # O endereço do deploy hook é secreto: fica só em Settings → Secrets and variables → Actions.
     env:
-      KOYEB_TOKEN: ${{ secrets.KOYEB_TOKEN }}
+      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
 
     steps:
-      - name: Instalar a CLI do Koyeb
-        run: |
-          arquivo="koyeb-cli_${KOYEB_CLI_VERSAO}_linux_amd64.tar.gz"
-          curl -fsSL -o "$arquivo" "https://github.com/koyeb/koyeb-cli/releases/download/v${KOYEB_CLI_VERSAO}/$arquivo"
-          mkdir -p "$HOME/.koyeb/bin"
-          tar -xzf "$arquivo" -C "$HOME/.koyeb/bin" koyeb
-          echo "$HOME/.koyeb/bin" >> "$GITHUB_PATH"
-
-      # O Koyeb baixa a develop, compila o backend/ com o buildpack de Java e publica.
+      # O Render publica exatamente o commit que passou no CI (parâmetro ref).
+      # Ele monta o back-end com o backend/Dockerfile; o andamento aparece no painel do Render.
       - name: Publicar o back-end
-        run: koyeb services redeploy backend --app filasus --token "$KOYEB_TOKEN" --wait --wait-timeout 15m
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "Falta o secret RENDER_DEPLOY_HOOK_URL."
+            exit 1
+          fi
+          curl -fsS -X POST "${RENDER_DEPLOY_HOOK_URL}&ref=${GITHUB_SHA}" > /dev/null
+          echo "Deploy do commit $GITHUB_SHA pedido ao Render."
 
   frontend:
     name: Front-end (Netlify)
@@ -57,7 +55,7 @@ jobs:
     env:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
-      # Endereço público do back-end no Koyeb (Settings → Variables → Actions).
+      # Endereço público do back-end no Render (Settings → Variables → Actions).
       API_URL: ${{ vars.HOMOLOG_API_URL }}
 
     steps:
@@ -76,7 +74,7 @@ jobs:
       - name: Build
         run: npm run build
 
-      # O Netlify repassa as chamadas da API para o Koyeb, então o sistema usa um
+      # O Netlify repassa as chamadas da API para o Render, então o sistema usa um
       # endereço só e não precisa de CORS. A última regra faz as rotas de tela abrirem.
       - name: Regras de redirecionamento do Netlify
         run: |
