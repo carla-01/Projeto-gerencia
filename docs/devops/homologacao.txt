@@ -16,7 +16,9 @@ API (back-end, Koyeb):        <preencher depois do primeiro deploy>
 ----------------------------------------------------------------
 2. COMO O DEPLOY FUNCIONA
 ----------------------------------------------------------------
-Workflow: .github/workflows/deploy-homolog.yml, disparado a cada push na develop.
+Workflow: .github/workflows/deploy-homolog.yml, chamado pelo CI (ci.yml) num push na
+develop, só depois que back-end, front-end e smoke passam. Versão com teste quebrado
+não vai para a homologação.
 Também dá para rodar à mão em Actions → Deploy em homologação → Run workflow.
 
 1. Back-end: o workflow pede ao Koyeb um novo deploy. O Koyeb baixa a develop,

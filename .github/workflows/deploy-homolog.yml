@@ -1,17 +1,28 @@
 # Deploy em homologação do FilaSUS (SCRUM-120), sem Docker:
 # back-end no Koyeb, banco no Neon e front-end no Netlify.
-# Roda a cada push na develop, ou seja, depois de cada merge.
+#
+# Quem chama este workflow é o CI (ci.yml), só depois que todos os testes passam
+# num push na develop. Assim uma versão quebrada não vai para a homologação.
+# Também dá para rodar à mão em Actions → Deploy em homologação → Run workflow.
 name: Deploy em homologação
 
 on:
-  push:
-    branches: [develop]
+  workflow_call:
   workflow_dispatch:
+
+# O token do GitHub só precisa ler o repositório.
+permissions:
+  contents: read
 
 # Um deploy de cada vez: se chegar outro merge, ele espera o atual terminar.
 concurrency:
   group: deploy-homolog
   cancel-in-progress: false
+
+env:
+  # Versões fixas, para o deploy não mudar sozinho quando sair uma versão nova.
+  KOYEB_CLI_VERSAO: '5.12.0'
+  NETLIFY_CLI_VERSAO: '27.15.0'
 
 jobs:
   backend:
@@ -25,7 +36,10 @@ jobs:
     steps:
       - name: Instalar a CLI do Koyeb
         run: |
-          curl -fsSL https://raw.githubusercontent.com/koyeb/koyeb-cli/master/install.sh | sh
+          arquivo="koyeb-cli_${KOYEB_CLI_VERSAO}_linux_amd64.tar.gz"
+          curl -fsSL -o "$arquivo" "https://github.com/koyeb/koyeb-cli/releases/download/v${KOYEB_CLI_VERSAO}/$arquivo"
+          mkdir -p "$HOME/.koyeb/bin"
+          tar -xzf "$arquivo" -C "$HOME/.koyeb/bin" koyeb
           echo "$HOME/.koyeb/bin" >> "$GITHUB_PATH"
 
       # O Koyeb baixa a develop, compila o backend/ com o buildpack de Java e publica.
@@ -49,9 +63,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # A CLI do Netlify exige Node 22.
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
@@ -78,4 +93,4 @@ jobs:
           cat dist/_redirects
 
       - name: Publicar o front-end
-        run: npx --yes netlify-cli deploy --prod --no-build --dir=dist --site "$NETLIFY_SITE_ID" --auth "$NETLIFY_AUTH_TOKEN"
+        run: npx --yes "netlify-cli@${NETLIFY_CLI_VERSAO}" deploy --prod --no-build --dir=dist --site "$NETLIFY_SITE_ID" --auth "$NETLIFY_AUTH_TOKEN"
