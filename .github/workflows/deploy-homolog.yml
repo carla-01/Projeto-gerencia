@@ -1,0 +1,94 @@
+# Deploy em homologação do FilaSUS (SCRUM-120):
+# back-end no Render, banco no Neon e front-end no Netlify.
+#
+# Quem chama este workflow é o CI (ci.yml), só depois que todos os testes passam
+# num push na develop. Assim uma versão quebrada não vai para a homologação.
+# Também dá para rodar à mão em Actions → Deploy em homologação → Run workflow.
+name: Deploy em homologação
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+# O token do GitHub só precisa ler o repositório.
+permissions:
+  contents: read
+
+# Um deploy de cada vez: se chegar outro merge, ele espera o atual terminar.
+concurrency:
+  group: deploy-homolog
+  cancel-in-progress: false
+
+env:
+  # Versão fixa, para o deploy não mudar sozinho quando sair uma versão nova.
+  NETLIFY_CLI_VERSAO: '27.15.0'
+
+jobs:
+  backend:
+    name: Back-end (Render)
+    runs-on: ubuntu-latest
+
+    # O endereço do deploy hook é secreto: fica só em Settings → Secrets and variables → Actions.
+    env:
+      RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+
+    steps:
+      # O Render publica exatamente o commit que passou no CI (parâmetro ref).
+      # Ele monta o back-end com o backend/Dockerfile; o andamento aparece no painel do Render.
+      - name: Publicar o back-end
+        run: |
+          if [ -z "$RENDER_DEPLOY_HOOK_URL" ]; then
+            echo "Falta o secret RENDER_DEPLOY_HOOK_URL."
+            exit 1
+          fi
+          curl -fsS -X POST "${RENDER_DEPLOY_HOOK_URL}&ref=${GITHUB_SHA}" > /dev/null
+          echo "Deploy do commit $GITHUB_SHA pedido ao Render."
+
+  frontend:
+    name: Front-end (Netlify)
+    runs-on: ubuntu-latest
+    needs: backend
+    defaults:
+      run:
+        working-directory: frontend
+
+    env:
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      # Endereço público do back-end no Render (Settings → Variables → Actions).
+      API_URL: ${{ vars.HOMOLOG_API_URL }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # A CLI do Netlify exige Node 22.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      # O Netlify repassa as chamadas da API para o Render, então o sistema usa um
+      # endereço só e não precisa de CORS. A última regra faz as rotas de tela abrirem.
+      - name: Regras de redirecionamento do Netlify
+        run: |
+          if [ -z "$API_URL" ]; then
+            echo "Falta a variável HOMOLOG_API_URL com o endereço do back-end."
+            exit 1
+          fi
+          {
+            echo "/auth/*       $API_URL/auth/:splat       200!"
+            echo "/api/*        $API_URL/api/:splat        200!"
+            echo "/pacientes/*  $API_URL/pacientes/:splat  200!"
+            echo "/*            /index.html                200"
+          } > dist/_redirects
+          cat dist/_redirects
+
+      - name: Publicar o front-end
+        run: npx --yes "netlify-cli@${NETLIFY_CLI_VERSAO}" deploy --prod --no-build --dir=dist --site "$NETLIFY_SITE_ID" --auth "$NETLIFY_AUTH_TOKEN"

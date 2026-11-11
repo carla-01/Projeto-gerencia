@@ -1,0 +1,122 @@
+AMBIENTE DE HOMOLOGAÇÃO - FilaSUS
+SCRUM-120 · Responsável: Maria Eduarda (DevOps, R2)
+
+Onde a homologação roda, como o deploy funciona e como configurar tudo de novo.
+Sem custo e só com dados fictícios.
+Nenhum valor de senha, token ou chave entra neste arquivo.
+
+
+----------------------------------------------------------------
+1. ENDEREÇOS
+----------------------------------------------------------------
+Sistema (front-end, Netlify): <preencher depois do primeiro deploy>
+API (back-end, Render):       <preencher depois do primeiro deploy>
+
+
+----------------------------------------------------------------
+2. COMO O DEPLOY FUNCIONA
+----------------------------------------------------------------
+Workflow: .github/workflows/deploy-homolog.yml, chamado pelo CI (ci.yml) num push na
+develop, só depois que back-end, front-end e smoke passam. Versão com teste quebrado
+não vai para a homologação.
+Também dá para rodar à mão em Actions → Deploy em homologação → Run workflow.
+
+1. Back-end: o workflow chama o deploy hook do Render com o commit que passou no CI.
+   O Render monta o back-end com o backend/Dockerfile e publica. O andamento do build
+   aparece no painel do Render (o workflow não espera o build terminar).
+2. Front-end: o workflow compila o front e publica a pasta dist/ no Netlify.
+   O arquivo _redirects, gerado no workflow, repassa /auth, /api e /pacientes
+   para o back-end. Assim o sistema usa um endereço só e não precisa de CORS.
+
+Docker: o backend/Dockerfile existe só para o Render, que não roda Java sem ele.
+Ninguém usa Docker na máquina; localmente o back-end continua com mvn spring-boot:run.
+
+
+----------------------------------------------------------------
+3. BANCO (Neon)
+----------------------------------------------------------------
+1. Projeto "FilaSUS" no Neon (plano Free), região AWS US East 1 (N. Virginia).
+2. Em Connect (branch production, banco neondb, role neondb_owner, sem pooling),
+   copiar host, banco, usuário e senha.
+3. O Hibernate (ddl-auto=update) cria as tabelas na primeira subida da API.
+
+A string do Neon vem no formato postgresql://usuario:senha@host/banco?sslmode=require.
+O Spring precisa do formato JDBC, sem usuário e senha na URL:
+  jdbc:postgresql://<host>/<banco>?sslmode=require
+
+
+----------------------------------------------------------------
+4. BACK-END (Render)
+----------------------------------------------------------------
+New → Web Service → Public Git Repository:
+  https://github.com/carla-01/Projeto-gerencia
+
+  Name:             filasus-backend
+  Branch:           develop
+  Region:           Virginia (US East), perto do Neon
+  Root Directory:   backend
+  Language:         Docker (usa o backend/Dockerfile)
+  Instance Type:    Free
+  Auto-Deploy:      desligado (quem dispara o deploy é o workflow)
+
+  Variáveis (nomes; os valores ficam só no Render):
+    DB_URL=jdbc:postgresql://<host do Neon>/neondb?sslmode=require
+    DB_USER=neondb_owner
+    DB_PASSWORD           senha do Neon
+    JWT_SECRET            segredo com pelo menos 32 caracteres
+    CPF_CHAVE_HASH        segredo próprio da homologação
+    CPF_CHAVE_CIFRA       segredo próprio da homologação
+    JAVA_TOOL_OPTIONS=-Xmx300m
+
+  O Render informa a porta pela variável PORT, que o back-end já lê.
+  Atenção: se CPF_CHAVE_CIFRA mudar, os CPFs já cadastrados não abrem mais.
+
+  Deploy hook: Settings → Deploy Hook → copiar o endereço (é secreto).
+
+
+----------------------------------------------------------------
+5. FRONT-END (Netlify)
+----------------------------------------------------------------
+Criar um site vazio no Netlify, sem ligar ao repositório: quem publica é o workflow.
+Em Site configuration, copiar o Project ID (NETLIFY_SITE_ID).
+Em User settings → Applications, criar um Personal access token (NETLIFY_AUTH_TOKEN).
+
+
+----------------------------------------------------------------
+6. SEGREDOS E VARIÁVEIS NO GITHUB
+----------------------------------------------------------------
+Settings → Secrets and variables → Actions
+
+  Secrets:
+    RENDER_DEPLOY_HOOK_URL   deploy hook do serviço no Render
+    NETLIFY_AUTH_TOKEN       token pessoal do Netlify
+    NETLIFY_SITE_ID          Project ID do site no Netlify
+
+  Variables:
+    HOMOLOG_API_URL          endereço público do back-end no Render, sem barra no fim
+                             (ex.: https://filasus-backend.onrender.com)
+
+Criar tudo ANTES do merge do workflow; sem isso o primeiro deploy falha.
+
+
+----------------------------------------------------------------
+7. LIMITES DOS PLANOS GRATUITOS
+----------------------------------------------------------------
+Render:  750 horas por mês; o serviço dorme depois de 15 minutos sem acesso e
+         pode levar até 1 minuto para acordar.
+Neon:    1 GB por projeto e 100 horas de processamento por mês; dorme depois de
+         5 minutos parado e acorda no próximo acesso.
+Netlify: site estático no plano Free. O repasse para a API espera até 26 segundos.
+
+Como o Render pode demorar mais que isso para acordar, o primeiro acesso depois de um
+tempo parado pode falhar. Basta tentar de novo. Antes de uma apresentação, abrir o
+sistema alguns minutos antes.
+
+
+----------------------------------------------------------------
+8. CONFERIR SE O DEPLOY DEU CERTO
+----------------------------------------------------------------
+1. Em Actions, o job "Deploy em homologação" do CI terminou verde.
+2. No Render, o último deploy do filasus-backend está "Live".
+3. O endereço do sistema abre a tela de login.
+4. O autocadastro de um paciente fictício funciona e o login entra na área do paciente.
