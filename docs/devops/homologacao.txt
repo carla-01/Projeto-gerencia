@@ -1,0 +1,115 @@
+AMBIENTE DE HOMOLOGAÇÃO - FilaSUS
+SCRUM-120 · Responsável: Maria Eduarda (DevOps, R2)
+
+Onde a homologação roda, como o deploy funciona e como configurar tudo de novo.
+Sem Docker e sem custo. Só com dados fictícios.
+Nenhum valor de senha, token ou chave entra neste arquivo.
+
+
+----------------------------------------------------------------
+1. ENDEREÇOS
+----------------------------------------------------------------
+Sistema (front-end, Netlify): <preencher depois do primeiro deploy>
+API (back-end, Koyeb):        <preencher depois do primeiro deploy>
+
+
+----------------------------------------------------------------
+2. COMO O DEPLOY FUNCIONA
+----------------------------------------------------------------
+Workflow: .github/workflows/deploy-homolog.yml, disparado a cada push na develop.
+Também dá para rodar à mão em Actions → Deploy em homologação → Run workflow.
+
+1. Back-end: o workflow pede ao Koyeb um novo deploy. O Koyeb baixa a develop,
+   compila a pasta backend/ com o buildpack de Java (sem Dockerfile) e publica.
+2. Front-end: o workflow compila o front e publica a pasta dist/ no Netlify.
+   O arquivo _redirects, gerado no workflow, repassa /auth, /api e /pacientes
+   para o back-end. Assim o sistema usa um endereço só e não precisa de CORS.
+
+O resultado de cada deploy fica registrado no Actions.
+
+
+----------------------------------------------------------------
+3. BANCO (Neon)
+----------------------------------------------------------------
+1. Criar o projeto "filasus" no Neon (plano Free).
+2. Em Connect, copiar host, banco, usuário e senha.
+3. O Hibernate (ddl-auto=update) cria as tabelas na primeira subida da API.
+
+A string do Neon vem no formato postgresql://usuario:senha@host/banco?sslmode=require.
+O Spring precisa do formato JDBC, sem usuário e senha na URL:
+  jdbc:postgresql://<host>/<banco>?sslmode=require
+
+
+----------------------------------------------------------------
+4. BACK-END (Koyeb)
+----------------------------------------------------------------
+Criar o App "filasus" com o Service "backend" (Web Service, instância Free).
+Os nomes precisam ser exatamente estes, porque o workflow usa os dois.
+
+  Fonte:            repositório do GitHub, branch develop
+  Builder:          Buildpack
+  Work directory:   backend
+  Run command:      java -jar target/filasus-0.1.0-SNAPSHOT.jar
+  Porta:            8080, protocolo HTTP, rota /
+  Autodeploy:       desligado (quem dispara o deploy é o workflow)
+
+  A versão do Java vem de backend/system.properties (java.runtime.version=21).
+  Se a versão no pom.xml mudar, atualizar o nome do .jar no Run command.
+
+  Variáveis (nomes; os valores ficam só no Koyeb):
+    PORT=8080
+    DB_URL=jdbc:postgresql://<host do Neon>/<banco>?sslmode=require
+    DB_USER               usuário do Neon
+    DB_PASSWORD           senha do Neon (como secret do Koyeb)
+    JWT_SECRET            segredo com pelo menos 32 caracteres
+    CPF_CHAVE_HASH        segredo próprio da homologação
+    CPF_CHAVE_CIFRA       segredo próprio da homologação
+    JAVA_TOOL_OPTIONS=-Xmx300m
+
+  Atenção: se CPF_CHAVE_CIFRA mudar, os CPFs já cadastrados não abrem mais.
+
+
+----------------------------------------------------------------
+5. FRONT-END (Netlify)
+----------------------------------------------------------------
+Criar um site vazio no Netlify, sem ligar ao repositório: quem publica é o workflow.
+Em Site configuration, copiar o Project ID (NETLIFY_SITE_ID).
+Em User settings → Applications, criar um Personal access token (NETLIFY_AUTH_TOKEN).
+
+
+----------------------------------------------------------------
+6. SEGREDOS E VARIÁVEIS NO GITHUB
+----------------------------------------------------------------
+Settings → Secrets and variables → Actions
+
+  Secrets:
+    KOYEB_TOKEN          token de API do Koyeb (Organization settings → API)
+    NETLIFY_AUTH_TOKEN   token pessoal do Netlify
+    NETLIFY_SITE_ID      Project ID do site no Netlify
+
+  Variables:
+    HOMOLOG_API_URL      endereço público do back-end no Koyeb, sem barra no fim
+
+Criar tudo ANTES do merge do workflow; sem isso o primeiro deploy falha.
+
+
+----------------------------------------------------------------
+7. LIMITES DOS PLANOS GRATUITOS
+----------------------------------------------------------------
+Koyeb:   1 instância grátis por organização, 512 MB, dorme depois de 1 hora sem
+         acesso. O cadastro pode pedir cartão para evitar fraude.
+Neon:    1 GB por projeto e 100 horas de processamento por mês; dorme depois de
+         5 minutos parado e acorda no próximo acesso.
+Netlify: site estático no plano Free.
+
+O primeiro acesso depois de um tempo parado demora. Antes de uma apresentação,
+abrir o sistema alguns minutos antes.
+
+
+----------------------------------------------------------------
+8. CONFERIR SE O DEPLOY DEU CERTO
+----------------------------------------------------------------
+1. Em Actions, o workflow "Deploy em homologação" terminou verde.
+2. No Koyeb, o serviço "backend" está Healthy.
+3. O endereço do sistema abre a tela de login.
+4. O autocadastro de um paciente fictício funciona e o login entra na área do paciente.
