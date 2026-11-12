@@ -19,21 +19,20 @@ IMP-06
   de DevOps previa commits em 05/11 e 10/11; o workflow só foi integrado no PR #42 em
   11/11, e os endereços de homologação ainda não estão em docs/devops/homologacao.txt.
   Afeta: SCRUM-120; aceite das histórias em homologação na Review de 12/11.
-  Flag no card do Jira: SCRUM-120, sinalizado em 09/11
-  Quem resolve: Maria Eduarda (DevOps)
-  Status: Em tratamento
-  Solução: workflow de deploy integrado (PR #42), esperando o CI verde antes de
-  publicar. Falta o primeiro deploy e registrar as URLs em docs/devops/homologacao.txt.
-  A SCRUM-120 passa para a Sprint 3, e o aceite da Review de 12/11 é feito no ambiente
-  local, como na R1.
+  Flag no card do Jira: SCRUM-120, sinalizado em 09/11 e retirado em 12/11
+  Quem resolveu: Maria Eduarda (DevOps)
+  Status: Resolvido em 12/11/2026 · 3 dias
+  Solução: a professora definiu a homologação local em 12/11. O aceite da Review de
+  12/11 foi feito no ambiente local, como na R1. O workflow de deploy no Render (PR #42)
+  continua na develop.
 
 ----------------------------------------------------------------
 RESUMO DA SPRINT 2
 ----------------------------------------------------------------
 Impedimentos registrados: 1
-Resolvidos: 0 (IMP-06 em tratamento, segue para a Sprint 3)
-Cards sinalizados com flag no Jira: 1 (SCRUM-120)
-Tempo até a resolução: em aberto (3 dias até o fim da sprint)
+Resolvidos: 1 (IMP-06, em 12/11)
+Cards sinalizados com flag no Jira: 1 (SCRUM-120, flag retirada em 12/11)
+Tempo até a resolução: 3 dias (09/11 a 12/11)
 Impedimento recorrente: nenhum. Ponto de atenção levado para a Retro: a tarefa de
 DevOps atrasou enquanto a mesma integrante era PO e desenvolvia a US08 (RSK07,
 sobrecarga).
