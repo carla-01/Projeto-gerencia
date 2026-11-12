@@ -1,6 +1,0 @@
-# O Render monta a imagem só com o pom.xml e o src/.
-target/
-.idea/
-.vscode/
-*.iml
-.env

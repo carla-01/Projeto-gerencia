@@ -179,14 +179,3 @@ jobs:
             echo "Back-end: ${{ needs.backend.result }} | Front-end: ${{ needs.frontend.result }} | Smoke: ${{ needs.smoke.result }}"
             exit 1
           fi
-
-  # Deploy em homologação (SCRUM-120): só num push na develop e só depois que
-  # back-end, front-end e smoke passaram. Em PR e nas outras branches não roda.
-  deploy-homolog:
-    name: Deploy em homologação
-    needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && needs.build.result == 'success'
-    uses: ./.github/workflows/deploy-homolog.yml
-    secrets: inherit
-    permissions:
-      contents: read
