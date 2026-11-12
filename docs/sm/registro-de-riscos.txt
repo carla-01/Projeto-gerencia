@@ -13,20 +13,21 @@ os valores antes do commit.
 ----------------------------------------------------------------
 1. MATRIZ (PLANO INICIAL x FIM DA R1)
 ----------------------------------------------------------------
-ID     Risco                                       Inicial (P x I)   Fim da R1 (P x I)   Dono
-RSK01  Escopo inflado                              4 x 4 = 16        3 x 4 = 12          Adrielly (PO)
-RSK02  Vazamento de dados pessoais de saúde        3 x 5 = 15        2 x 5 = 10          Adrielly (PO)
-RSK03  Equipe sem experiência na stack             4 x 3 = 12        3 x 3 = 9           Maria Eduarda (SM)
-RSK04  Estimativa de espera imprecisa              4 x 3 = 12        4 x 3 = 12          Adrielly (PO)
-RSK05  Baixa familiaridade digital do público      4 x 3 = 12        3 x 3 = 9           Mirelle (QA)
-RSK06  Internet instável na UBS                    3 x 4 = 12        3 x 4 = 12          Adrielly (PO)
-RSK07  Equipe pequena e sobrecarga no semestre     4 x 4 = 16        4 x 4 = 16          Maria Eduarda (SM)
-RSK08  Saída ou afastamento de um integrante       2 x 5 = 10        2 x 5 = 10          Maria Eduarda (SM)
-RSK09  Estimativas otimistas                       4 x 3 = 12        3 x 3 = 9           Adrielly (PO)
-RSK10  Falha de testes de carga e tempo real       3 x 4 = 12        3 x 4 = 12          Mirelle (QA)
-RSK11  Perda de dados do ambiente                  2 x 4 = 8         2 x 4 = 8           Adrielly (PO)
-RSK12  Mudança de requisitos pela professora       3 x 2 = 6         3 x 2 = 6           Adrielly (PO)
-RSK13  (novo) Regressão entre histórias no merge   -                 3 x 4 = 12          Maria Eduarda (SM)
+ID     Risco                                       Inicial (P x I)   Fim da R1 (P x I)   12/11 (P x I)   Dono
+RSK01  Escopo inflado                              4 x 4 = 16        3 x 4 = 12          3 x 4 = 12      Adrielly (PO)
+RSK02  Vazamento de dados pessoais de saúde        3 x 5 = 15        2 x 5 = 10          2 x 5 = 10      Adrielly (PO)
+RSK03  Equipe sem experiência na stack             4 x 3 = 12        3 x 3 = 9           3 x 3 = 9       Maria Eduarda (SM)
+RSK04  Estimativa de espera imprecisa              4 x 3 = 12        4 x 3 = 12          4 x 3 = 12      Adrielly (PO)
+RSK05  Baixa familiaridade digital do público      4 x 3 = 12        3 x 3 = 9           3 x 3 = 9       Mirelle (QA)
+RSK06  Internet instável na UBS                    3 x 4 = 12        3 x 4 = 12          3 x 4 = 12      Adrielly (PO)
+RSK07  Equipe pequena e sobrecarga no semestre     4 x 4 = 16        4 x 4 = 16          4 x 4 = 16      Maria Eduarda (SM)
+RSK08  Saída ou afastamento de um integrante       2 x 5 = 10        2 x 5 = 10          2 x 5 = 10      Maria Eduarda (SM)
+RSK09  Estimativas otimistas                       4 x 3 = 12        3 x 3 = 9           3 x 3 = 9       Adrielly (PO)
+RSK10  Falha de testes de carga e tempo real       3 x 4 = 12        3 x 4 = 12          3 x 4 = 12      Mirelle (QA)
+RSK11  Perda de dados do ambiente                  2 x 4 = 8         2 x 4 = 8           2 x 4 = 8       Adrielly (PO)
+RSK12  Mudança de requisitos pela professora       3 x 2 = 6         3 x 2 = 6           3 x 2 = 6       Adrielly (PO)
+RSK13  (novo) Regressão entre histórias no merge   -                 3 x 4 = 12          3 x 4 = 12      Maria Eduarda (SM)
+RSK14  (novo) Dependência de hospedagem gratuita   -                 -                   3 x 3 = 9       Maria Eduarda (DevOps)
 
 ----------------------------------------------------------------
 2. HISTÓRICO DE REAVALIAÇÕES
@@ -56,3 +57,18 @@ RSK13  (novo) Regressão entre histórias no merge   -                 3 x 4 = 1
   Reavaliado em 03/11: nenhum valor mudou em relação ao fim da R1 (ata da Planning da
   Sprint 2, item 9). Atenção da sprint: RSK07 (sobrecarga) e RSK13 (regressão entre
   histórias no merge).
+
+12/11 · Retrospectiva da Sprint 2 · todos · acompanhamento: Mirelle (SM da R2)
+  RSK07: sem mudança (4 x 4 = 16). Gatilho aconteceu de novo: o deploy em homologação
+         (SCRUM-120) atrasou enquanto a mesma integrante era PO e desenvolvia a US08, e
+         o trabalho se concentrou no fim da sprint (14 dos 22 PRs em 10/11 e 11/11).
+         Ação: integrar a primeira subtarefa de cada US até a daily de segunda da
+         segunda semana (plano de ação da Retro da Sprint 2).
+  RSK13: sem mudança. Gatilho não aconteceu: CI verde na develop e nenhum arquivo
+         removido sem motivo.
+  RSK14: risco novo (3 x 3 = 9). O deploy em homologação depende de plataformas
+         gratuitas, que mudam limites e regras sem aviso: a primeira opção (Koyeb) não
+         deu certo e foi trocada pelo Render (IMP-06). Ação preventiva: manter a
+         homologação local definida pela professora em 12/11 como alternativa e
+         registrar o passo a passo do deploy em docs/devops/. Gatilho: deploy falhar ou
+         ambiente ficar fora do ar por limite ou mudança do plano gratuito.
