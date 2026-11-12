@@ -64,6 +64,7 @@ Usar sempre o modelo de PR                              Mirelle         SCRUM-11
 Subir atas e documentos no dia da cerimônia             Mirelle         SCRUM-118  Na Sprint 2
 
 As ações são acompanhadas durante a sprint e conferidas na Review de 12/11.
+O que foi ou não cumprido fica registrado na ata da Retrospectiva da Sprint 2 (item 4).
 
 ----------------------------------------------------------------
 6. TAREFAS DE PAPEL NA SPRINT
