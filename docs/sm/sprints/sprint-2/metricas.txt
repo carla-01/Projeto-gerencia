@@ -1,0 +1,71 @@
+MÉTRICAS - SPRINT 2
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+Responsável: Mirelle Casimiro Silvino (Scrum Master)
+
+----------------------------------------------------------------
+1. NÚMEROS
+----------------------------------------------------------------
+Pontos planejados: 15
+Pontos entregues: 15 (US06 5 + US07 3 + US08 2 + US09 5)
+Velocidade da Sprint 2: 15 pontos (média até aqui: 18; Sprint 1 = 21)
+Histórias planejadas x entregues: 4 x 4, com todas as subtarefas concluídas
+  (US06 4/4, US07 3/3, US08 3/3, US09 4/4)
+Itens em Concluído no quadro: 13 (4 histórias e 9 tarefas: SCRUM-114, 116, 119, 122,
+  123, 124, 125, 126 e 143)
+Tarefas que não concluíram na sprint: SCRUM-115, 117 e 118 (ações da retro da Sprint
+  1) e SCRUM-120 (deploy em homologação, IMP-06)
+Bugs encontrados x corrigidos: 0 x 0 (11 de 11 casos de teste aprovados)
+Testes automatizados no CI: 119 testes e 14 cenários Cucumber no back-end, 48 testes
+  no front-end e 3 cenários @smoke no Cypress (CI #167 verde na develop, commit b4c9c2d)
+Impedimentos: 1 registrado (IMP-06), em tratamento no fim da sprint
+Pull requests integrados na develop durante a sprint (03/11 a 11/11): 22 (PRs #20 a
+  #42, exceto o #21, que foi integrado direto na main), todos com 1 revisão (a regra
+  da develop exige aprovação para o merge)
+Commits na develop desde a v0.1.0 (sem contar merges): 52, sendo 1 sem a chave do
+  Jira (d48eb86, 06/11)
+Execuções da CI e taxa de sucesso: (preencher com a aba Actions)
+
+----------------------------------------------------------------
+2. ENTREGA DAS HISTÓRIAS
+----------------------------------------------------------------
+História        Dev             Pontos  PRs integrados          Último merge  Concluído
+SCRUM-41 US06   Adrielly        5       #28, #31, #32 e #33     10/11         10/11
+SCRUM-42 US07   Adrielly        3       #37, #39 e #40          10/11         11/11
+SCRUM-43 US08   Maria Eduarda   2       #35 e #41               11/11         11/11
+SCRUM-44 US09   Mirelle         5       #27, #30, #34 e #36     10/11         10/11
+
+----------------------------------------------------------------
+3. BURNDOWN
+----------------------------------------------------------------
+docs/sm/sprints/sprint-2/burndown-sprint-2.png
+Print da velocidade: anexar depois de concluir a sprint no Jira (12/11).
+
+----------------------------------------------------------------
+4. INTERPRETAÇÃO
+----------------------------------------------------------------
+- O trabalho restante ficou em 15 pontos de 03/11 até 10/11 e caiu em quatro degraus,
+  um por história concluída:
+    10/11: 15 -> 10 e 10 -> 5 (US06 e US09, 5 pontos cada)
+    11/11: 5 -> 2 (US07, 3 pontos) e 2 -> 0 (US08, 2 pontos)
+  A sprint chegou a 0 em 11/11, um dia antes do fim (12/11).
+- A linha ideal desce cerca de 1,7 ponto por dia (15 pontos em 9 dias). Em 10/11 a
+  ideal estava perto de 3 pontos e o trabalho restante ainda era 15: o burndown ficou
+  acima da linha ideal a sprint quase inteira e só cruzou com ela em 11/11. O motivo é
+  que cada história só vai para Concluído depois de todas as subtarefas integradas, e
+  14 dos 22 PRs da sprint entraram na develop em 10/11 e 11/11. O código das US06 e
+  US09 começou a entrar em 06/11 (PRs #27 e #28), mas sem subtarefa concluída o
+  burndown não mostra esse progresso.
+- Comparação com a Sprint 1: lá a linha ficou reta até 28/10 e caiu para 0 só entre 28
+  e 29/10, no último dia, quando as histórias foram movidas depois do aceite. Na Sprint
+  2 as histórias foram para Concluído no dia do último merge de cada uma (ação
+  SCRUM-114 da retro da Sprint 1, concluída), em degraus e um dia antes do fim. O
+  burndown melhorou, mas ainda mostra o trabalho concentrado nos dois últimos dias.
+- Entrou depois da Planning a SCRUM-143 (plano de qualidade da QA), sem pontos; o
+  escopo de 15 pontos não mudou.
+- A SCRUM-120 (deploy em homologação) não concluiu por causa do IMP-06. Sem pontos, ela
+  não aparece no burndown, mas deixa o aceite em homologação para a Sprint 3.
+- Ajuste para a próxima sprint: integrar a primeira subtarefa de cada história até a
+  daily de segunda da segunda semana, para o burndown cair ao longo da sprint.
+- A velocidade de 15 pontos ficou igual ao planejado. O plano da release prevê 19
+  pontos na Sprint 3, acima dessa capacidade; a PO confirma o escopo na Planning de
+  17/11 e, se não couber, a US14 (SCRUM-48) passa para a R3.
