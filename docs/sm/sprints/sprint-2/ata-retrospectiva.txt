@@ -1,0 +1,73 @@
+ATA DA RETROSPECTIVA - SPRINT 2
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+
+Ata preparada em 12/11 com os pontos levantados pela SM.
+
+Data: 12/11/2026
+Facilitação: Mirelle Casimiro Silvino (Scrum Master)
+Presentes: Adrielly, Maria Eduarda e Mirelle
+
+----------------------------------------------------------------
+1. O QUE FOI BEM
+----------------------------------------------------------------
+- Sprint Goal atingido: 4 histórias e 15 de 15 pontos, com todas as subtarefas.
+- Histórias movidas para Concluído no dia do último merge (ação SCRUM-114 cumprida).
+- Cenários Gherkin automatizados no Cucumber e smoke no Cypress no CI; 11 de 11 casos
+  aprovados e nenhum bug na sprint.
+- Pendências da R1 resolvidas: CT-US02-04 (SCRUM-124) e 403 nos 4 perfis (SCRUM-125).
+- Merge só com a CI verde, e o deploy só roda depois do CI passar (SCRUM-116).
+
+----------------------------------------------------------------
+2. O QUE MELHORAR
+----------------------------------------------------------------
+- Deploy em homologação não concluído na sprint (IMP-06).
+- Trabalho concentrado no fim: 14 dos 22 PRs da sprint integrados em 10/11 e 11/11; o
+  burndown ficou reto até 10/11.
+- 1 commit sem a chave do Jira (d48eb86) passou pela revisão.
+- Ata da Planning (03/11) subida só em 04/11.
+
+----------------------------------------------------------------
+3. PLANO DE AÇÃO (cada ação vira uma tarefa no Jira)
+----------------------------------------------------------------
+Ação                                                    Responsável     Prazo   Chave
+Concluir o deploy em homologação e registrar as URLs    Maria Eduarda   26/11   SCRUM-120
+Integrar a primeira subtarefa de cada US até a daily    Mirelle         26/11   a criar
+  de segunda da segunda semana
+Revisora confere a chave do Jira em cada commit do PR   Adrielly        26/11   a criar
+
+As tarefas são criadas na Sprint 3 em 17/11 e acompanhadas pela SM da R2.
+
+----------------------------------------------------------------
+4. AÇÕES DA RETROSPECTIVA ANTERIOR (SPRINT 1)
+----------------------------------------------------------------
+Ação                                         Chave      Situação   Evidência
+Mover a US para Concluído logo após o        SCRUM-114  Cumprida   As 4 US em Concluído no
+  merge e o aceite                                                   dia do último merge
+Revisora confere "Files changed" antes de    SCRUM-115  Parcial    Nenhum arquivo apagado e
+  aprovar                                                            CI verde, mas o commit
+                                                                     d48eb86 passou sem a chave
+Merge só com a CI verde                      SCRUM-116  Cumprida   Merge na develop exige o
+                                                                     check "build" verde
+Usar sempre o modelo de PR                   SCRUM-117  Parcial    Modelo na .github
+                                                                     (SCRUM-122); trocado pelo
+                                                                     modelo da equipe em 11/11
+Subir atas e documentos no dia da cerimônia  SCRUM-118  Parcial    Ata da Planning (03/11)
+                                                                     commitada em 04/11
+
+Ações cumpridas: 2 de 5. As ações parciais (SCRUM-115, 117 e 118) seguem para a
+Sprint 3, com o motivo comentado em cada tarefa.
+
+----------------------------------------------------------------
+5. RISCOS ACOMPANHADOS
+----------------------------------------------------------------
+Riscos que mudaram desde 03/11: nenhum valor mudou.
+- RSK07: gatilho acionado de novo. A tarefa de DevOps (SCRUM-120) atrasou enquanto a
+  PO também desenvolvia a US08, e o trabalho se concentrou no fim da sprint.
+- RSK13: gatilho não aconteceu. CI verde na develop e nenhum arquivo removido sem
+  motivo.
+Detalhes em docs/sm/registro-de-riscos.txt.
+
+----------------------------------------------------------------
+6. PASSAGEM DO PAPEL DE SM
+----------------------------------------------------------------
+Não se aplica nesta sprint: Mirelle continua como Scrum Master até o fim da R2 (26/11).
