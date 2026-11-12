@@ -1,122 +1,129 @@
-AMBIENTE DE HOMOLOGAÇÃO - FilaSUS
+AMBIENTE DE HOMOLOGAÇÃO LOCAL - FilaSUS
 SCRUM-120 · Responsável: Maria Eduarda (DevOps, R2)
 
-Onde a homologação roda, como o deploy funciona e como configurar tudo de novo.
-Sem custo e só com dados fictícios.
-Nenhum valor de senha, token ou chave entra neste arquivo.
+Como subir a homologação no computador, para o aceite das histórias na Review.
+Por decisão da professora (12/11/2026), a homologação da R2 roda local: não há
+deploy em nuvem. Só com dados fictícios. Nenhuma senha, token ou chave entra
+neste arquivo.
+
+A instalação das ferramentas e o fluxo de trabalho estão em
+docs/devops/ambiente-de-desenvolvimento.txt. Este arquivo cobre só o que a
+homologação precisa a mais.
 
 
 ----------------------------------------------------------------
-1. ENDEREÇOS
+1. ANTES DE COMEÇAR
 ----------------------------------------------------------------
-Sistema (front-end, Netlify): <preencher depois do primeiro deploy>
-API (back-end, Render):       <preencher depois do primeiro deploy>
-
-
-----------------------------------------------------------------
-2. COMO O DEPLOY FUNCIONA
-----------------------------------------------------------------
-Workflow: .github/workflows/deploy-homolog.yml, chamado pelo CI (ci.yml) num push na
-develop, só depois que back-end, front-end e smoke passam. Versão com teste quebrado
-não vai para a homologação.
-Também dá para rodar à mão em Actions → Deploy em homologação → Run workflow.
-
-1. Back-end: o workflow chama o deploy hook do Render com o commit que passou no CI.
-   O Render monta o back-end com o backend/Dockerfile e publica. O andamento do build
-   aparece no painel do Render (o workflow não espera o build terminar).
-2. Front-end: o workflow compila o front e publica a pasta dist/ no Netlify.
-   O arquivo _redirects, gerado no workflow, repassa /auth, /api e /pacientes
-   para o back-end. Assim o sistema usa um endereço só e não precisa de CORS.
-
-Docker: o backend/Dockerfile existe só para o Render, que não roda Java sem ele.
-Ninguém usa Docker na máquina; localmente o back-end continua com mvn spring-boot:run.
+1. Atualizar o código:
+     git switch develop
+     git pull
+2. Java 21 ou mais novo (java -version). Se o java padrão for mais antigo, apontar a
+   variável JAVA_HOME para o JDK 21 ou mais novo antes de subir o back-end.
+3. Ligar o PostgreSQL. O serviço postgresql-x64-18 só liga à mão. No PowerShell,
+   como administrador:
+     net start postgresql-x64-18
+4. Na primeira vez, criar o banco e os dados iniciais (seção 2 do
+   ambiente-de-desenvolvimento.txt, scripts em docs/devops/banco/).
 
 
 ----------------------------------------------------------------
-3. BANCO (Neon)
+2. SUBIR O SISTEMA
 ----------------------------------------------------------------
-1. Projeto "FilaSUS" no Neon (plano Free), região AWS US East 1 (N. Virginia).
-2. Em Connect (branch production, banco neondb, role neondb_owner, sem pooling),
-   copiar host, banco, usuário e senha.
-3. O Hibernate (ddl-auto=update) cria as tabelas na primeira subida da API.
+Em dois terminais, na raiz do repositório:
 
-A string do Neon vem no formato postgresql://usuario:senha@host/banco?sslmode=require.
-O Spring precisa do formato JDBC, sem usuário e senha na URL:
-  jdbc:postgresql://<host>/<banco>?sslmode=require
+  Back-end (http://localhost:8080)
+    cd backend
+    mvn spring-boot:run
 
+  Front-end (http://localhost:5173)
+    cd frontend
+    npm install        (só na primeira vez)
+    npm run dev
 
-----------------------------------------------------------------
-4. BACK-END (Render)
-----------------------------------------------------------------
-New → Web Service → Public Git Repository:
-  https://github.com/carla-01/Projeto-gerencia
+O front repassa /auth, /api e /pacientes para o back-end na porta 8080.
+O sistema está no ar quando http://localhost:8080/actuator/health responde
+{"status":"UP"} e http://localhost:5173 abre a tela de login.
 
-  Name:             filasus-backend
-  Branch:           develop
-  Region:           Virginia (US East), perto do Neon
-  Root Directory:   backend
-  Language:         Docker (usa o backend/Dockerfile)
-  Instance Type:    Free
-  Auto-Deploy:      desligado (quem dispara o deploy é o workflow)
-
-  Variáveis (nomes; os valores ficam só no Render):
-    DB_URL=jdbc:postgresql://<host do Neon>/neondb?sslmode=require
-    DB_USER=neondb_owner
-    DB_PASSWORD           senha do Neon
-    JWT_SECRET            segredo com pelo menos 32 caracteres
-    CPF_CHAVE_HASH        segredo próprio da homologação
-    CPF_CHAVE_CIFRA       segredo próprio da homologação
-    JAVA_TOOL_OPTIONS=-Xmx300m
-
-  O Render informa a porta pela variável PORT, que o back-end já lê.
-  Atenção: se CPF_CHAVE_CIFRA mudar, os CPFs já cadastrados não abrem mais.
-
-  Deploy hook: Settings → Deploy Hook → copiar o endereço (é secreto).
+Os valores de banco e de chaves vêm de variáveis de ambiente (DB_URL, DB_USER,
+DB_PASSWORD, JWT_SECRET, CPF_CHAVE_HASH, CPF_CHAVE_CIFRA); sem elas, valem os padrões
+de desenvolvimento do application.properties.
+Atenção: se CPF_CHAVE_CIFRA mudar, os CPFs já cadastrados deixam de abrir.
 
 
 ----------------------------------------------------------------
-5. FRONT-END (Netlify)
+3. USUÁRIOS DE TESTE
 ----------------------------------------------------------------
-Criar um site vazio no Netlify, sem ligar ao repositório: quem publica é o workflow.
-Em Site configuration, copiar o Project ID (NETLIFY_SITE_ID).
-Em User settings → Applications, criar um Personal access token (NETLIFY_AUTH_TOKEN).
+Só o paciente se cadastra sozinho (US04). Para os outros perfis (a US03, cadastro
+de funcionários pelo gestor, é da Sprint 3):
 
+1. Cadastrar um paciente fictício em http://localhost:5173/cadastro, com um e-mail
+   de teste (por exemplo gestor.demo@exemplo.test).
+2. Trocar o perfil dele no banco:
+     & "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U filasus -d filasus -c "UPDATE usuario SET perfil = 'GESTOR' WHERE email = 'gestor.demo@exemplo.test';"
+   Perfis possíveis: PACIENTE, RECEPCIONISTA, PROFISSIONAL e GESTOR.
+3. Entrar com esse e-mail e a senha do cadastro.
 
-----------------------------------------------------------------
-6. SEGREDOS E VARIÁVEIS NO GITHUB
-----------------------------------------------------------------
-Settings → Secrets and variables → Actions
-
-  Secrets:
-    RENDER_DEPLOY_HOOK_URL   deploy hook do serviço no Render
-    NETLIFY_AUTH_TOKEN       token pessoal do Netlify
-    NETLIFY_SITE_ID          Project ID do site no Netlify
-
-  Variables:
-    HOMOLOG_API_URL          endereço público do back-end no Render, sem barra no fim
-                             (ex.: https://filasus-backend.onrender.com)
-
-Criar tudo ANTES do merge do workflow; sem isso o primeiro deploy falha.
+O menu do gestor ainda não tem link para a configuração das filas. A tela abre em
+http://localhost:5173/gestor/configurar-filas.
 
 
 ----------------------------------------------------------------
-7. LIMITES DOS PLANOS GRATUITOS
+4. ROTEIRO DA DEMONSTRAÇÃO (REVIEW DA SPRINT 2)
 ----------------------------------------------------------------
-Render:  750 horas por mês; o serviço dorme depois de 15 minutos sem acesso e
-         pode levar até 1 minuto para acordar.
-Neon:    1 GB por projeto e 100 horas de processamento por mês; dorme depois de
-         5 minutos parado e acorda no próximo acesso.
-Netlify: site estático no plano Free. O repasse para a API espera até 26 segundos.
+Os serviços padrão (Clínico, Enfermagem e Odontologia) funcionam das 07:00 às 17:00.
+À noite todas as filas aparecem fechadas, então a demonstração começa pela US09.
 
-Como o Render pode demorar mais que isso para acordar, o primeiro acesso depois de um
-tempo parado pode falhar. Basta tentar de novo. Antes de uma apresentação, abrir o
-sistema alguns minutos antes.
+1. US09 - Configurar filas e horários (gestor)
+     Cenário "Configuração salva": criar um serviço novo, por exemplo "Clínico Noite",
+     das 18:00 às 23:59, com 40 senhas.
+     Cenário "Horário inválido": informar o fim antes do início e ver "Horário
+     inválido", sem salvar nada.
+2. US06 - Entrar na fila (paciente)
+     Cenário "Entrada com sucesso": entrar na fila do serviço novo e receber a senha.
+     Cenário "Já estou na fila": o botão mostra "Na fila" e não cria outra senha.
+     Cenário "Fila fechada": Odontologia, que fecha às 17:00, aparece com "Fila fechada".
+3. US07 - Ver minha posição (paciente)
+     Cenário "Posição exibida": senha, posição e quantas pessoas estão na frente
+     (com um segundo paciente na fila a posição muda).
+     Cenário "Não estou na fila": sem senha ativa, aparece "Entrar na fila".
+4. US08 - Cancelar minha senha (paciente)
+     Cenário "Cancelamento": "Cancelar senha", confirmar, a senha sai da fila e as
+     posições seguintes andam.
+     Cenário "Já fui chamado": ainda não há tela de chamada (US13, Sprint 3). Para
+     simular, mudar o status da senha e atualizar a tela:
+       & "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U filasus -d filasus -c "SELECT id, numero, status FROM senha;"
+       & "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U filasus -d filasus -c "UPDATE senha SET status = 'EM_ATENDIMENTO' WHERE id = 1;"
+     Troque o 1 pelo id da senha. Hoje, com a senha chamada, o cartão dela some da
+     área do paciente (ponto de atenção da QA para a US13). O teste automático
+     CT-US08-02 cobre o botão que não aparece.
 
 
 ----------------------------------------------------------------
-8. CONFERIR SE O DEPLOY DEU CERTO
+5. TESTES AUTOMATIZADOS
 ----------------------------------------------------------------
-1. Em Actions, o job "Deploy em homologação" do CI terminou verde.
-2. No Render, o último deploy do filasus-backend está "Live".
-3. O endereço do sistema abre a tela de login.
-4. O autocadastro de um paciente fictício funciona e o login entra na área do paciente.
+  Back-end (cenários Cucumber incluídos)   cd backend && mvn verify
+  Front-end                                cd frontend && npm test
+  Cenários @smoke no Cypress               cd frontend && npm run cy:smoke
+                                           (com o back-end e o npm run dev rodando)
+
+O cy:smoke cadastra pacientes fictícios no banco local. Os mesmos testes rodam no CI
+a cada push e em todo pull request.
+
+
+----------------------------------------------------------------
+6. CONFERIR ANTES DA REVIEW
+----------------------------------------------------------------
+1. O serviço do PostgreSQL está ligado.
+2. http://localhost:8080/actuator/health responde UP.
+3. A tela de login abre em http://localhost:5173.
+4. Existe um paciente e um gestor de teste (seção 3).
+5. Existe um serviço aberto no horário da Review (seção 4, passo 1).
+6. A demonstração foi ensaiada uma vez inteira.
+
+
+----------------------------------------------------------------
+7. HISTÓRICO
+----------------------------------------------------------------
+12/11/2026 - Homologação definida como ambiente local pela professora. O deploy em
+nuvem (Koyeb, Render, Neon e Netlify) foi descartado, e o Dockerfile e o workflow de
+deploy saíram do repositório.
