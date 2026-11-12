@@ -1,0 +1,39 @@
+REGISTRO DE IMPEDIMENTOS - SPRINT 2 (RELEASE 2)
+FilaSUS · Gerência de Projetos (UEPB, 2026.2) · Scrum Master
+Responsável: Mirelle Casimiro Silvino (Scrum Master da R2)
+
+Todo impedimento citado em daily, no grupo ou nos comentários do Jira entra aqui no
+mesmo dia e recebe o sinalizador (flag) no card do Jira enquanto estiver aberto.
+Status: Aberto, Em tratamento ou Resolvido.
+A numeração continua a da R1 (IMP-01 a IMP-05, em docs/sm/registro-de-impedimentos.txt).
+
+----------------------------------------------------------------
+REGISTRO
+----------------------------------------------------------------
+IMP-06
+  Surgiu em: 09/11/2026 (daily)
+  Impedimento: Maria Eduarda não conseguiu concluir o deploy em homologação (SCRUM-120)
+  na sprint. O deploy precisava de uma plataforma gratuita que rodasse o back-end sem
+  Docker na máquina (restrição do IMP-01). A primeira opção (Koyeb) não deu certo e foi
+  trocada pelo Render, que monta o back-end com um Dockerfile só no servidor. O roteiro
+  de DevOps previa commits em 05/11 e 10/11; o workflow só foi integrado no PR #42 em
+  11/11, e os endereços de homologação ainda não estão em docs/devops/homologacao.txt.
+  Afeta: SCRUM-120; aceite das histórias em homologação na Review de 12/11.
+  Flag no card do Jira: SCRUM-120, sinalizado em 09/11
+  Quem resolve: Maria Eduarda (DevOps)
+  Status: Em tratamento
+  Solução: workflow de deploy integrado (PR #42), esperando o CI verde antes de
+  publicar. Falta o primeiro deploy e registrar as URLs em docs/devops/homologacao.txt.
+  A SCRUM-120 passa para a Sprint 3, e o aceite da Review de 12/11 é feito no ambiente
+  local, como na R1.
+
+----------------------------------------------------------------
+RESUMO DA SPRINT 2
+----------------------------------------------------------------
+Impedimentos registrados: 1
+Resolvidos: 0 (IMP-06 em tratamento, segue para a Sprint 3)
+Cards sinalizados com flag no Jira: 1 (SCRUM-120)
+Tempo até a resolução: em aberto (3 dias até o fim da sprint)
+Impedimento recorrente: nenhum. Ponto de atenção levado para a Retro: a tarefa de
+DevOps atrasou enquanto a mesma integrante era PO e desenvolvia a US08 (RSK07,
+sobrecarga).

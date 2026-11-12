@@ -51,3 +51,8 @@ RSK13  (novo) Regressão entre histórias no merge   -                 3 x 4 = 1
          US05 apagou o arquivo da CI. Ação preventiva: revisora confere em "Files
          changed" se algum arquivo foi apagado e se a mudança afeta outra US; merge só
          com a CI verde. Gatilho: CI vermelha na develop ou arquivo removido sem motivo.
+
+03/11 · Planning da Sprint 2 · todos · acompanhamento: Mirelle (SM da R2)
+  Reavaliado em 03/11: nenhum valor mudou em relação ao fim da R1 (ata da Planning da
+  Sprint 2, item 9). Atenção da sprint: RSK07 (sobrecarga) e RSK13 (regressão entre
+  histórias no merge).
