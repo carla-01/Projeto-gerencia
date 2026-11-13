@@ -5,7 +5,7 @@ Disciplina: Gerência de Projetos
 Release vigente: R2 – Fila e Atendimento (03/11 a 26/11/2026).
 Responsável: Maria Eduarda da Nóbrega (Product Owner da R2).
 Versão inicial: 19/10/2026, por Adrielly Carla Ferreira de Melo (PO da R1).
-Última atualização: 03/11/2026, refinamento após a Review da R1.
+Última atualização: 12/11/2026, repriorização após a Review da Sprint 2.
 
 #  Critério                 Justificativa
 -  -----------------------  ------------------------------------------------------------
@@ -45,6 +45,40 @@ Responsável: Maria Eduarda da Nóbrega (PO da R2)
 - Entraram na Sprint 2 as ações da retrospectiva da Sprint 1
   (SCRUM-114 a 118) e as tarefas de DevOps da R2 (SCRUM-120, 122 e
   123). O relatório do pipeline (SCRUM-121) fica para a Sprint 3.
+- Pontos das histórias sem mudança.
+
+12/11/2026 - Repriorização após a Review da Sprint 2 (SCRUM-144)
+Responsável: Maria Eduarda da Nóbrega (PO da R2)
+
+- Sprint 2 concluída: SCRUM-41, 42, 43 e 44 aceitas na Review de 12/11
+  (15 de 15 pontos, velocidade de 15; a Sprint 1 teve 21 e a média é 18).
+  Nenhum bug aberto: 11 de 11 casos de teste aprovados.
+- A US06 foi aceita com ressalva: no cenário "Fila fechada" o sistema
+  mostra "Fila fechada", mas não informa o próximo horário de abertura.
+  O item voltou ao backlog como melhoria da US06.
+- O aceite foi feito na homologação local, definida pela professora em
+  12/11. O deploy em nuvem (SCRUM-120) foi descartado e a tarefa virou
+  "ambiente de homologação local documentado" (IMP-06 resolvido).
+- Os drivers SCRUM-62 (pico de entrada na fila, Q-10) e SCRUM-63 (falha do
+  servidor) saem da Sprint 2 e voltam ao Backlog. Entram na Sprint 3 se
+  couberem na capacidade, o que a PO decide na Planning de 17/11. O pico
+  roda com k6 local, a queda vira um teste de derrubar o back-end local
+  com a fila em uso, e o monitor de disponibilidade (Q-12) não se aplica.
+- A QA registrou um ponto de atenção que entra no refinamento da US13
+  (SCRUM-47) e da US14 (SCRUM-48): quando o paciente é chamado, o cartão
+  da senha some da área do paciente. Como só senhas AGUARDANDO e PRESENTE
+  contam como ativas (SenhaRepository.STATUS_ATIVOS), um paciente chamado
+  ou em atendimento conseguiria tirar outra senha no mesmo serviço.
+  Critérios novos a escrever: a área do paciente mostra "Você foi chamado"
+  ou "Em atendimento", e o paciente não entra na fila de novo enquanto a
+  senha estiver chamada ou em atendimento.
+- Sprint 3: 19 pontos planejados (US03 5, US10 3, US11 5, US13 3 e US14 3)
+  contra velocidade de 15. A ordem segue a dependência US10, US11, US13 e
+  US14; a US03 é independente. A PO confirma o escopo na Planning de
+  17/11, com planning poker, e, se o time não se comprometer com 19, a
+  US14 (SCRUM-48, 3 pontos) passa para a R3, Sprint 4.
+- Também ficam na Sprint 3 o relatório do pipeline da R2 (SCRUM-121) e as
+  release notes da v0.2.0.
 - Pontos das histórias sem mudança.
 
 Este histórico é atualizado depois de cada Review.
