@@ -54,7 +54,7 @@ folga de 20% pelo RSK07).
 Tarefas da sprint:
 - SCRUM-114 a 118: ações da retrospectiva da Sprint 1.
 - SCRUM-119 (T12): refinamento do backlog após a Review da R1.
-- SCRUM-120 (T13): deploy automatizado em homologação.
+- SCRUM-120 (T13): ambiente de homologação local documentado.
 - SCRUM-122 (T15): modelos de issue e PR na pasta .github.
 - SCRUM-123 (T16): Cucumber e Cypress no CI com @smoke.
 - SCRUM-124 e 125: pendências da R1 (log de acesso negado e controle
@@ -85,7 +85,7 @@ CALENDÁRIO
 Data         Evento
 -----------  -----------------------------------------------------
 03/11        Sprint Planning da Sprint 2 e refinamento pós-Review
-05 e 10/11   Desenvolvimento da Sprint 2 e deploy em homologação
+05 e 10/11   Desenvolvimento da Sprint 2 e homologação local
 12/11        Review e Retrospectiva da Sprint 2
 17/11        Sprint Planning da Sprint 3
 19 e 24/11   Desenvolvimento da Sprint 3 e relatório do pipeline
@@ -104,8 +104,9 @@ própria issue antes do aceite da PO.
 ----------------------------------------------------------------
 ENTREGAS DE DEVOPS DA R2
 ----------------------------------------------------------------
-- Deploy automatizado em homologação a cada merge na develop; a partir
-  daí o aceite das histórias é feito em homologação.
+- Homologação no ambiente local, documentada em docs/devops/homologacao.txt,
+  por decisão da professora em 12/11; o aceite das histórias é feito nela.
+  Não há deploy em nuvem.
 - Modelos de issue e PR em .github/ISSUE_TEMPLATE e
   .github/pull_request_template.md.
 - Cucumber e Cypress no CI, com os cenários @smoke.
@@ -116,3 +117,5 @@ ENTREGAS DE DEVOPS DA R2
 HISTÓRICO
 ----------------------------------------------------------------
 03/11/2026 - Plano criado na Planning da Sprint 2 (Maria Eduarda).
+12/11/2026 - Homologação passa a ser local (decisão da professora): deploy em nuvem
+descartado; SCRUM-120 vira "ambiente de homologação local documentado".
