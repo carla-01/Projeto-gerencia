@@ -10,20 +10,22 @@ Pontos entregues: 15 (US06 5 + US07 3 + US08 2 + US09 5)
 Velocidade da Sprint 2: 15 pontos (média até aqui: 18; Sprint 1 = 21)
 Histórias planejadas x entregues: 4 x 4, com todas as subtarefas concluídas
   (US06 4/4, US07 3/3, US08 3/3, US09 4/4)
-Itens em Concluído no quadro: 13 (4 histórias e 9 tarefas: SCRUM-114, 116, 119, 122,
-  123, 124, 125, 126 e 143)
-Tarefas que não concluíram na sprint: SCRUM-115, 117 e 118 (ações da retro da Sprint
-  1) e SCRUM-120 (deploy em homologação, IMP-06)
+Itens em Concluído no quadro: 18 (4 histórias e 14 tarefas: SCRUM-114, 115, 116, 117,
+  118, 119, 120, 122, 123, 124, 125, 126, 143 e 144)
+Tarefas que não concluíram na sprint: SCRUM-127 (atas, métricas e burndown da SM), em
+  revisão até o merge do PR. SCRUM-62 e 63 (Driver Arquitetural 2) estão na coluna
+  Backlog do quadro, sem início
 Bugs encontrados x corrigidos: 0 x 0 (11 de 11 casos de teste aprovados)
 Testes automatizados no CI: 119 testes e 14 cenários Cucumber no back-end, 48 testes
-  no front-end e 3 cenários @smoke no Cypress (CI #167 verde na develop, commit b4c9c2d)
-Impedimentos: 1 registrado (IMP-06), em tratamento no fim da sprint
+  no front-end e 3 cenários @smoke no Cypress (CI #164 verde na develop, commit b4c9c2d)
+Impedimentos: 1 registrado (IMP-06), resolvido em 12/11 (homologação local)
 Pull requests integrados na develop durante a sprint (03/11 a 11/11): 22 (PRs #20 a
   #42, exceto o #21, que foi integrado direto na main), todos com 1 revisão (a regra
   da develop exige aprovação para o merge)
 Commits na develop desde a v0.1.0 (sem contar merges): 52, sendo 1 sem a chave do
   Jira (d48eb86, 06/11)
-Execuções da CI e taxa de sucesso: (preencher com a aba Actions)
+Execuções da CI e taxa de sucesso: 127 execuções, 108 verdes (85%). Só na develop:
+  25 execuções, 21 verdes (84%)
 
 ----------------------------------------------------------------
 2. ENTREGA DAS HISTÓRIAS
@@ -38,7 +40,7 @@ SCRUM-44 US09   Mirelle         5       #27, #30, #34 e #36     10/11         10
 3. BURNDOWN
 ----------------------------------------------------------------
 docs/sm/sprints/sprint-2/burndown-sprint-2.png
-Print da velocidade: anexar depois de concluir a sprint no Jira (12/11).
+Print da velocidade: docs/sm/sprints/sprint-2/velocidade-sprint-2.png
 
 ----------------------------------------------------------------
 4. INTERPRETAÇÃO
@@ -60,10 +62,12 @@ Print da velocidade: anexar depois de concluir a sprint no Jira (12/11).
   2 as histórias foram para Concluído no dia do último merge de cada uma (ação
   SCRUM-114 da retro da Sprint 1, concluída), em degraus e um dia antes do fim. O
   burndown melhorou, mas ainda mostra o trabalho concentrado nos dois últimos dias.
-- Entrou depois da Planning a SCRUM-143 (plano de qualidade da QA), sem pontos; o
-  escopo de 15 pontos não mudou.
-- A SCRUM-120 (deploy em homologação) não concluiu por causa do IMP-06. Sem pontos, ela
-  não aparece no burndown, mas deixa o aceite em homologação para a Sprint 3.
+- Entraram depois da Planning a SCRUM-143 (plano de qualidade da QA) e a SCRUM-144
+  (repriorização do backlog após a Review da Sprint 2), sem pontos; o escopo de 15
+  pontos não mudou.
+- A SCRUM-120 mudou de escopo: com a homologação local definida pela professora em
+  12/11 (IMP-06), passou a ser "Ambiente de homologação local documentado" e foi
+  concluída. Sem pontos, ela não aparece no burndown.
 - Ajuste para a próxima sprint: integrar a primeira subtarefa de cada história até a
   daily de segunda da segunda semana, para o burndown cair ao longo da sprint.
 - A velocidade de 15 pontos ficou igual ao planejado. O plano da release prevê 19
