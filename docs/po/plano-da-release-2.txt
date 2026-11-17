@@ -68,11 +68,28 @@ SPRINT 3 - 17/11 a 26/11/2026 (planejada)
 1  SCRUM-15  US03 - Gestor cadastra funcionários      5   Mirelle        Adrielly
 2  SCRUM-45  US10 - Check-in na recepção              3   Maria Eduarda  Mirelle
 3  SCRUM-46  US11 - Aplicar prioridade legal          5   Adrielly       Maria Eduarda
-4  SCRUM-47  US13 - Chamar o próximo                  3   Adrielly       Maria Eduarda
-5  SCRUM-48  US14 - Iniciar e finalizar atendimento   3   Mirelle        Adrielly
+4  SCRUM-47  US13 - Chamar o próximo                  3   Maria Eduarda  Adrielly
+5  SCRUM-48  US14 - Iniciar e finalizar atendimento   3   Mirelle        Maria Eduarda
                                               Total: 19
 
-Tarefa da sprint: SCRUM-121 (T14), relatório do pipeline da R2.
+Meta da Sprint 3: A UBS opera o ciclo completo: check-in, prioridade
+legal, chamada e atendimento.
+
+Tarefas da sprint:
+- SCRUM-121 (T14): relatório do pipeline da R2 (Maria Eduarda).
+- SCRUM-147 (T15): release notes e fechamento da R2 (Maria Eduarda).
+- SCRUM-148 e 149: ações da retrospectiva da Sprint 2 (Mirelle e Adrielly).
+- Q05 e Q06 (Adrielly): testes da Sprint 3 e relatório de qualidade da R2.
+- S04 (Mirelle): cerimônias, atas e métricas da Sprint 3.
+- Repriorização do backlog após a Review (Maria Eduarda).
+- SCRUM-62 (pico de entrada na fila, k6 local, Adrielly) e SCRUM-63 (falha do
+  servidor, teste local, Maria Eduarda), ambos revisados pela Mirelle. São
+  tarefas sem pontos: o total da sprint continua em 19. Saem primeiro se a
+  sprint apertar: sem conclusão até a daily de 24/11, vão para a Sprint 4.
+
+A US13 passou da Adrielly para a Maria Eduarda na Planning de 17/11,
+porque a Adrielly concentra as tarefas de QA e a US13 depende das
+outras histórias.
 
 Atenção: a Sprint 3 soma 19 pontos, acima da capacidade de 15. Na
 Planning de 17/11 a PO confirma o escopo com a velocidade real da
@@ -119,3 +136,5 @@ HISTÓRICO
 03/11/2026 - Plano criado na Planning da Sprint 2 (Maria Eduarda).
 12/11/2026 - Homologação passa a ser local (decisão da professora): deploy em nuvem
 descartado; SCRUM-120 vira "ambiente de homologação local documentado".
+17/11/2026 - Planning da Sprint 3: US13 passa para a Maria Eduarda; meta da
+sprint e tarefas registradas.
