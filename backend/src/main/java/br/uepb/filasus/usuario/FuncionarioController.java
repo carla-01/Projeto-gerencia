@@ -1,5 +1,6 @@
 package br.uepb.filasus.usuario;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -9,6 +10,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +34,12 @@ public class FuncionarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(funcionarioService.cadastrar(request));
     }
 
+    /** Lista de usuários da UBS (Cenário 1): a equipe, com o setor de cada profissional. */
+    @GetMapping
+    public List<FuncionarioResponse> listar() {
+        return funcionarioService.listar();
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> dadosInvalidos(MethodArgumentNotValidException exception) {
         FieldError erro = exception.getBindingResult().getFieldErrors().get(0);
@@ -47,6 +55,11 @@ public class FuncionarioController {
     @ExceptionHandler(PerfilNaoPermitidoException.class)
     public ResponseEntity<Map<String, String>> perfilNaoPermitido(PerfilNaoPermitidoException exception) {
         return ResponseEntity.badRequest().body(Map.of("campo", "perfil", "mensagem", exception.getMessage()));
+    }
+
+    @ExceptionHandler(SetorInvalidoException.class)
+    public ResponseEntity<Map<String, String>> setorInvalido(SetorInvalidoException exception) {
+        return ResponseEntity.badRequest().body(Map.of("campo", "servicoId", "mensagem", exception.getMessage()));
     }
 
     @ExceptionHandler(CpfInvalidoException.class)
