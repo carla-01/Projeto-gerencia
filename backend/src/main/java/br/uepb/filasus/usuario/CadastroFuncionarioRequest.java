@@ -12,8 +12,8 @@ import jakarta.validation.constraints.Size;
  * O CPF é obrigatório porque a tabela usuario do DER exige cpf_hash e cpf_cifrado.
  *
  * Regras da PO (refinamento de 16/11): senha inicial com no mínimo 8 caracteres,
- * sem envio de e-mail; o perfil só pode ser RECEPCIONISTA ou PROFISSIONAL
- * (conferido no FuncionarioService).
+ * sem envio de e-mail; o perfil só pode ser RECEPCIONISTA ou PROFISSIONAL; o setor
+ * é um dos serviços da UBS, obrigatório só para o PROFISSIONAL (conferido no FuncionarioService).
  */
 public record CadastroFuncionarioRequest(
     @NotBlank(message = "Nome é obrigatório")
@@ -35,6 +35,9 @@ public record CadastroFuncionarioRequest(
     @NotNull(message = "Papel é obrigatório")
     Perfil perfil,
 
+    /** Id do serviço da UBS em que o profissional atende (setor). Vazio para recepcionista. */
+    Long servicoId,
+
     @NotBlank(message = "Senha inicial é obrigatória")
     @Size(min = 8, max = 72, message = "Senha inicial deve ter entre 8 e 72 caracteres")
     String senhaInicial
@@ -43,6 +46,6 @@ public record CadastroFuncionarioRequest(
     /** A senha, o CPF e o cartão SUS nunca aparecem em log nem em mensagem de erro. */
     @Override
     public String toString() {
-        return "CadastroFuncionarioRequest[nome=" + nome + ", email=" + email + ", perfil=" + perfil + "]";
+        return "CadastroFuncionarioRequest[nome=" + nome + ", email=" + email + ", perfil=" + perfil + ", servicoId=" + servicoId + "]";
     }
 }
