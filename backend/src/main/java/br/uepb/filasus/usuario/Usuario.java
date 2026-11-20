@@ -52,6 +52,14 @@ public class Usuario {
     @Column(name = "cpf_cifrado", nullable = false, length = 255)
     private String cpfCifrado;
 
+    /**
+     * Cartão SUS do funcionário, informado pelo gestor (US03 - SCRUM-15).
+     * Sem NOT NULL no banco para o ddl-auto criar a coluna com usuários já salvos;
+     * a API exige o campo no cadastro de funcionário.
+     */
+    @Column(name = "cartao_sus", length = 15)
+    private String cartaoSus;
+
     /** Hash bcrypt da senha. */
     @NotBlank
     @Column(name = "senha_hash", nullable = false, length = 100)
@@ -129,6 +137,14 @@ public class Usuario {
 
     public String getCpfCifrado() {
         return cpfCifrado;
+    }
+
+    public String getCartaoSus() {
+        return cartaoSus;
+    }
+
+    public void setCartaoSus(String cartaoSus) {
+        this.cartaoSus = cartaoSus;
     }
 
     public String getSenhaHash() {
