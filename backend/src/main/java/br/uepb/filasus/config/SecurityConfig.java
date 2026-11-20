@@ -40,6 +40,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/pacientes/autocadastro").permitAll()
                 .requestMatchers("/api/recepcao/**").hasRole("RECEPCIONISTA")
                 .requestMatchers("/api/gestor/servicos/**").hasRole("GESTOR")
+                // Cadastro de funcionários (US-03): só o gestor cria recepcionista e profissional.
+                .requestMatchers("/api/gestor/funcionarios/**").hasRole("GESTOR")
                 // Entrada na fila (US-06): só o próprio paciente tira a senha.
                 .requestMatchers("/api/paciente/**").hasRole("PACIENTE")
                 .anyRequest().authenticated())
