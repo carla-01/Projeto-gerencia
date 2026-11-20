@@ -74,7 +74,10 @@ class AcessoNegadoPorPerfilTest {
             Arguments.of(Endpoint.ENTRAR_NA_FILA, Perfil.GESTOR),
             Arguments.of(Endpoint.ENTRAR_NA_FILA, Perfil.PROFISSIONAL),
             Arguments.of(Endpoint.CANCELAR_SENHA, Perfil.GESTOR),
-            Arguments.of(Endpoint.CANCELAR_SENHA, Perfil.PROFISSIONAL)
+            Arguments.of(Endpoint.CANCELAR_SENHA, Perfil.PROFISSIONAL),
+            Arguments.of(Endpoint.CADASTRAR_FUNCIONARIO, Perfil.PACIENTE),
+            Arguments.of(Endpoint.CADASTRAR_FUNCIONARIO, Perfil.RECEPCIONISTA),
+            Arguments.of(Endpoint.CADASTRAR_FUNCIONARIO, Perfil.PROFISSIONAL)
         );
     }
 
@@ -132,7 +135,7 @@ class AcessoNegadoPorPerfilTest {
     private MockHttpServletRequestBuilder requisicao(Endpoint endpoint) {
         MockHttpServletRequestBuilder requisicao = switch (endpoint) {
             case FILA_RECEPCAO -> get(endpoint.caminho);
-            case CADASTRO_RECEPCAO, CONFIGURAR_SERVICO, ENTRAR_NA_FILA, CANCELAR_SENHA ->
+            case CADASTRO_RECEPCAO, CONFIGURAR_SERVICO, ENTRAR_NA_FILA, CANCELAR_SENHA, CADASTRAR_FUNCIONARIO ->
                 post(endpoint.caminho).contentType(MediaType.APPLICATION_JSON).content(endpoint.corpo);
             case LISTAR_SERVICOS -> get(endpoint.caminho);
         };
@@ -168,7 +171,12 @@ class AcessoNegadoPorPerfilTest {
                 """),
         LISTAR_SERVICOS("/api/paciente/servicos", ""),
         ENTRAR_NA_FILA("/api/paciente/senhas", "{\"servicoId\":1}"),
-        CANCELAR_SENHA("/api/paciente/senhas/1/cancelar", "");
+        CANCELAR_SENHA("/api/paciente/senhas/1/cancelar", ""),
+        CADASTRAR_FUNCIONARIO("/api/gestor/funcionarios",
+            """
+                {"nome":"Funcionária Fictícia","email":"funcionaria.seguranca@exemplo.test","cpf":"529.982.247-25","cartaoSus":"898001234567891",
+                 "perfil":"PROFISSIONAL","senhaInicial":"inicial123"}
+                """);
 
         private final String caminho;
         private final String corpo;
