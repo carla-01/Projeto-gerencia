@@ -5,6 +5,7 @@ import java.time.LocalDate;
 
 import br.uepb.filasus.paciente.Paciente;
 import br.uepb.filasus.paciente.Prioridade;
+import br.uepb.filasus.usuario.Usuario;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,7 +27,8 @@ import jakarta.persistence.UniqueConstraint;
  * garante que não saem duas senhas iguais mesmo com entradas ao mesmo tempo
  * (DA-DES-I2-01): a segunda gravação falha e a aplicação tenta com o próximo número.
  *
- * A coluna prioridade_por (recepcionista que marcou a prioridade) entra com a US-11.
+ * A recepção marca a prioridade legal (US-11 - SCRUM-158): a senha guarda quem marcou
+ * (prioridade_por), quando (prioridade_em) e o motivo (prioridade_motivo).
  */
 @Entity
 @Table(name = "senha",
@@ -66,6 +68,19 @@ public class Senha {
     @Enumerated(EnumType.STRING)
     @Column(name = "prioridade_aplicada", nullable = false, length = 20)
     private Prioridade prioridadeAplicada = Prioridade.NENHUMA;
+
+    /** Recepcionista que marcou a prioridade (US-11). Nulo enquanto ninguém marcou. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prioridade_por")
+    private Usuario prioridadePor;
+
+    /** Quando a prioridade foi marcada (US-11). */
+    @Column(name = "prioridade_em")
+    private Instant prioridadeEm;
+
+    /** Motivo informado pela recepção. Obrigatório na urgência (US-11, Cenário 2). */
+    @Column(name = "prioridade_motivo", length = 255)
+    private String prioridadeMotivo;
 
     @Column(name = "criada_em", nullable = false)
     private Instant criadaEm;
@@ -127,6 +142,26 @@ public class Senha {
 
     public void setPrioridadeAplicada(Prioridade prioridadeAplicada) {
         this.prioridadeAplicada = prioridadeAplicada;
+    }
+
+    /** Marca a prioridade e registra quem marcou, quando e o motivo (US-11). */
+    public void aplicarPrioridade(Prioridade prioridade, Usuario recepcionista, String motivo, Instant em) {
+        this.prioridadeAplicada = prioridade;
+        this.prioridadePor = recepcionista;
+        this.prioridadeMotivo = motivo;
+        this.prioridadeEm = em;
+    }
+
+    public Usuario getPrioridadePor() {
+        return prioridadePor;
+    }
+
+    public Instant getPrioridadeEm() {
+        return prioridadeEm;
+    }
+
+    public String getPrioridadeMotivo() {
+        return prioridadeMotivo;
     }
 
     public Instant getCriadaEm() {
