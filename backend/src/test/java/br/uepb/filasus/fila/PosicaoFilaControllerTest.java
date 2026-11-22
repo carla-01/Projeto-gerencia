@@ -131,6 +131,11 @@ class PosicaoFilaControllerTest {
         return senhaRepository.save(senha);
     }
 
+    /** Senha AGUARDANDO de hoje no Clínico com a prioridade informada (US-11). */
+    private Senha senhaComPrioridade(Paciente dono, int numero, Prioridade prioridade) {
+        return senhaRepository.save(new Senha(clinico, dono, numero, HOJE, prioridade, AGORA));
+    }
+
     private ResultActions minhasSenhas(Usuario quem) throws Exception {
         return mockMvc.perform(get("/api/paciente/senhas")
             .header("Authorization", "Bearer " + jwtService.gerarToken(quem)));
@@ -200,6 +205,75 @@ class PosicaoFilaControllerTest {
             .andExpect(jsonPath("$.length()").value(2))
             .andExpect(jsonPath("$[?(@.servico == 'Clínico')].pessoasAFrente").value(1))
             .andExpect(jsonPath("$[?(@.servico == 'Odontologia')].pessoasAFrente").value(0));
+    }
+
+    @Test
+    void urgenciaPassaNaFrenteDeTodos() throws Exception {
+        senhaComPrioridade(outroPaciente, 1, Prioridade.NENHUMA);
+        senhaComPrioridade(outroPaciente, 2, Prioridade.IDOSO);
+        senhaComPrioridade(paciente, 3, Prioridade.URGENCIA);
+
+        minhasSenhas(usuario)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].numero").value(3))
+            .andExpect(jsonPath("$[0].posicao").value(1))
+            .andExpect(jsonPath("$[0].pessoasAFrente").value(0));
+    }
+
+    @Test
+    void idosoPassaNaFrenteDeQuemNaoTemPrioridade() throws Exception {
+        senhaComPrioridade(outroPaciente, 1, Prioridade.NENHUMA);
+        senhaComPrioridade(outroPaciente, 2, Prioridade.NENHUMA);
+        senhaComPrioridade(paciente, 3, Prioridade.IDOSO);
+
+        minhasSenhas(usuario)
+            .andExpect(jsonPath("$[0].posicao").value(1))
+            .andExpect(jsonPath("$[0].pessoasAFrente").value(0));
+    }
+
+    @Test
+    void idosoGestanteEPcdTemOMesmoNivelEValeAOrdemDeChegada() throws Exception {
+        senhaComPrioridade(outroPaciente, 1, Prioridade.GESTANTE);
+        senhaComPrioridade(outroPaciente, 2, Prioridade.PCD);
+        senhaComPrioridade(paciente, 3, Prioridade.IDOSO);
+        senhaComPrioridade(outroPaciente, 4, Prioridade.GESTANTE);
+
+        minhasSenhas(usuario)
+            .andExpect(jsonPath("$[0].posicao").value(3))
+            .andExpect(jsonPath("$[0].pessoasAFrente").value(2));
+    }
+
+    @Test
+    void semPrioridadeFicaAtrasDeQuemTemPrioridadeMesmoChegandoAntes() throws Exception {
+        senhaComPrioridade(paciente, 1, Prioridade.NENHUMA);
+        senhaComPrioridade(outroPaciente, 2, Prioridade.PCD);
+        senhaComPrioridade(outroPaciente, 3, Prioridade.URGENCIA);
+
+        minhasSenhas(usuario)
+            .andExpect(jsonPath("$[0].posicao").value(3))
+            .andExpect(jsonPath("$[0].pessoasAFrente").value(2));
+    }
+
+    @Test
+    void urgenciaQueChegouAntesContinuaNaFrente() throws Exception {
+        senhaComPrioridade(outroPaciente, 1, Prioridade.URGENCIA);
+        senhaComPrioridade(paciente, 2, Prioridade.URGENCIA);
+
+        minhasSenhas(usuario)
+            .andExpect(jsonPath("$[0].posicao").value(2))
+            .andExpect(jsonPath("$[0].pessoasAFrente").value(1));
+    }
+
+    @Test
+    void prioritarioQueJaSaiuDaFilaNaoContaNaFrente() throws Exception {
+        Senha atendida = senhaComPrioridade(outroPaciente, 1, Prioridade.URGENCIA);
+        atendida.setStatus(StatusSenha.ATENDIDA);
+        senhaRepository.save(atendida);
+        senhaComPrioridade(paciente, 2, Prioridade.NENHUMA);
+
+        minhasSenhas(usuario)
+            .andExpect(jsonPath("$[0].posicao").value(1))
+            .andExpect(jsonPath("$[0].pessoasAFrente").value(0));
     }
 
     @Test
