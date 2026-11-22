@@ -1,6 +1,7 @@
 package br.uepb.filasus.fila;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,6 +57,23 @@ class ServicoControllerTest {
         assertEquals(1, servicoRepository.count());
         assertEquals(1, configuracaoServicoRepository.count());
         assertEquals(20, configuracaoServicoRepository.findAll().get(0).getLimiteSenhasDia());
+    }
+
+    @Test
+    void gestorListaOsServicosAtivosParaEscolherOSetor() throws Exception {
+        servicoRepository.save(new Servico("Odontologia"));
+        servicoRepository.save(new Servico("Clínico"));
+        Servico inativo = new Servico("Vacinação");
+        inativo.setAtivo(false);
+        servicoRepository.save(inativo);
+
+        mockMvc.perform(get("/api/gestor/servicos")
+                .header("Authorization", "Bearer " + token(Perfil.GESTOR)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()").value(2))
+            .andExpect(jsonPath("$[0].nome").value("Clínico"))
+            .andExpect(jsonPath("$[0].id").isNumber())
+            .andExpect(jsonPath("$[1].nome").value("Odontologia"));
     }
 
     @Test

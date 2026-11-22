@@ -80,7 +80,10 @@ class AcessoNegadoPorPerfilTest {
             Arguments.of(Endpoint.CADASTRAR_FUNCIONARIO, Perfil.PROFISSIONAL),
             Arguments.of(Endpoint.LISTAR_FUNCIONARIOS, Perfil.PACIENTE),
             Arguments.of(Endpoint.LISTAR_FUNCIONARIOS, Perfil.RECEPCIONISTA),
-            Arguments.of(Endpoint.LISTAR_FUNCIONARIOS, Perfil.PROFISSIONAL)
+            Arguments.of(Endpoint.LISTAR_FUNCIONARIOS, Perfil.PROFISSIONAL),
+            Arguments.of(Endpoint.LISTAR_SETORES, Perfil.PACIENTE),
+            Arguments.of(Endpoint.LISTAR_SETORES, Perfil.RECEPCIONISTA),
+            Arguments.of(Endpoint.LISTAR_SETORES, Perfil.PROFISSIONAL)
         );
     }
 
@@ -140,7 +143,7 @@ class AcessoNegadoPorPerfilTest {
             case FILA_RECEPCAO -> get(endpoint.caminho);
             case CADASTRO_RECEPCAO, CONFIGURAR_SERVICO, ENTRAR_NA_FILA, CANCELAR_SENHA, CADASTRAR_FUNCIONARIO ->
                 post(endpoint.caminho).contentType(MediaType.APPLICATION_JSON).content(endpoint.corpo);
-            case LISTAR_SERVICOS, LISTAR_FUNCIONARIOS -> get(endpoint.caminho);
+            case LISTAR_SERVICOS, LISTAR_FUNCIONARIOS, LISTAR_SETORES -> get(endpoint.caminho);
         };
         return requisicao;
     }
@@ -180,7 +183,8 @@ class AcessoNegadoPorPerfilTest {
                 {"nome":"Funcionária Fictícia","email":"funcionaria.seguranca@exemplo.test","cpf":"529.982.247-25","cartaoSus":"898001234567891",
                  "perfil":"PROFISSIONAL","servicoId":1,"senhaInicial":"inicial123"}
                 """),
-        LISTAR_FUNCIONARIOS("/api/gestor/funcionarios", "");
+        LISTAR_FUNCIONARIOS("/api/gestor/funcionarios", ""),
+        LISTAR_SETORES("/api/gestor/servicos", "");
 
         private final String caminho;
         private final String corpo;
