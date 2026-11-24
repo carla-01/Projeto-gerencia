@@ -44,6 +44,10 @@ public interface SenhaRepository extends JpaRepository<Senha, Long> {
 
     List<Senha> findByServicoAndDataRefAndStatusIn(Servico servico, LocalDate dataRef, Collection<StatusSenha> status);
 
+    /** Senhas com esse número no dia, uma por serviço: usada no check-in (US-10). */
+    List<Senha> findByNumeroAndDataRefAndStatusInOrderByIdAsc(
+        int numero, LocalDate dataRef, Collection<StatusSenha> status);
+
     /**
      * Senhas que ainda estão na fila do serviço no dia, na ordem de atendimento
      * com a prioridade legal (US-11 - SCRUM-159). A primeira é a próxima a ser chamada.
