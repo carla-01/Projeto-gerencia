@@ -1,3 +1,45 @@
+/* O main global tem 720px e centraliza; o painel usa a largura das telas da recepção. */
 .painel-recepcao {
-  max-width: 720px;
+  max-width: 880px;
+  margin: 0;
+  padding: 0;
+}
+
+.painel-recepcao-cabecalho {
+  margin-bottom: 22px;
+}
+
+.painel-recepcao-cabecalho p {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #13238f;
+}
+
+.painel-recepcao-cabecalho h1 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.painel-recepcao-fila {
+  margin-top: 20px;
+  padding: 20px 24px;
+  background: #ffffff;
+  border: 1px solid #eceef4;
+  border-radius: 14px;
+}
+
+.painel-recepcao-fila h2 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+
+.painel-recepcao-fila p {
+  margin: 0;
+  font-size: 14px;
+  color: #5b6478;
 }
