@@ -33,12 +33,18 @@ type BackEndSimulado = {
   buscas?: RespostaSimulada[]
   confirmacao?: RespostaSimulada
   geracao?: RespostaSimulada
+  prioridade?: RespostaSimulada
 }
 
 function simularBackEnd({
   buscas = [{ status: 200, corpo: COM_SENHA }],
   confirmacao = { status: 200, corpo: { ...SENHA, status: 'PRESENTE', checkinEm: '2026-11-24T12:00:00Z' } },
   geracao = { status: 201, corpo: { id: 31, numero: 7, servico: 'Clínico' } },
+  prioridade = {
+    status: 200,
+    corpo: { id: 31, numero: 7, servico: 'Clínico', status: 'AGUARDANDO', prioridade: 'GESTANTE',
+      prioridadePor: 3, prioridadeEm: '2026-11-24T12:00:00Z' },
+  },
 }: BackEndSimulado = {}) {
   let quantidadeDeBuscas = 0
   return vi.spyOn(globalThis, 'fetch').mockImplementation(async (url) => {
@@ -58,6 +64,8 @@ function simularBackEnd({
       }
     } else if (url === '/api/recepcao/senhas') {
       resposta = geracao
+    } else if (url === '/api/recepcao/senhas/31/prioridade') {
+      resposta = prioridade
     }
     return new Response(JSON.stringify(resposta.corpo), {
       status: resposta.status,
@@ -162,5 +170,109 @@ describe('Check-in na recepção', () => {
 
     expect(screen.getByRole('alert')).toHaveTextContent('Informe o CPF ou o número da senha')
     expect(fetch.mock.calls.find(([url]) => url === '/api/recepcao/check-in/busca')).toBeUndefined()
+  })
+})
+
+/** Prioridade legal marcada pela recepção (US11 - SCRUM-160). O back-end é simulado. */
+describe('Prioridade legal no check-in', () => {
+  const SEM_PRIORIDADE = { ...COM_SENHA, senhas: [{ ...SENHA, prioridade: 'NENHUMA' }] }
+
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  function corpoDaPrioridade(fetch: ReturnType<typeof simularBackEnd>) {
+    const chamada = fetch.mock.calls.find(([url]) => url === '/api/recepcao/senhas/31/prioridade')
+    return chamada === undefined ? undefined : JSON.parse(String(chamada[1]?.body))
+  }
+
+  it('CT-US11-01: marca a prioridade e o selo aparece na senha', async () => {
+    const fetch = simularBackEnd({ buscas: [{ status: 200, corpo: SEM_PRIORIDADE }] })
+
+    await buscar('52998224725')
+    fireEvent.click(await screen.findByRole('button', { name: 'Marcar prioridade' }))
+    fireEvent.click(screen.getByRole('radio', { name: 'Gestante' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Salvar prioridade' }))
+
+    expect(await screen.findByText('Prioridade Gestante marcada na senha 007.')).toBeInTheDocument()
+    expect(screen.getByText('Gestante', { selector: '.checkin-selo' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Salvar prioridade' })).not.toBeInTheDocument()
+    expect(corpoDaPrioridade(fetch)).toEqual({ prioridade: 'GESTANTE', motivo: '' })
+  })
+
+  it('CT-US11-02: urgência sem motivo pede o motivo e não salva', async () => {
+    const fetch = simularBackEnd({ buscas: [{ status: 200, corpo: SEM_PRIORIDADE }] })
+
+    await buscar('52998224725')
+    fireEvent.click(await screen.findByRole('button', { name: 'Marcar prioridade' }))
+    fireEvent.click(screen.getByRole('radio', { name: 'Urgência' }))
+    fireEvent.change(screen.getByLabelText('Motivo da urgência'), { target: { value: '   ' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Salvar prioridade' }))
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Informe o motivo da urgência')
+    expect(screen.getByLabelText('Motivo da urgência')).toHaveAttribute('aria-invalid', 'true')
+    expect(corpoDaPrioridade(fetch)).toBeUndefined()
+  })
+
+  it('urgência com motivo envia o motivo para o back-end', async () => {
+    const fetch = simularBackEnd({
+      buscas: [{ status: 200, corpo: SEM_PRIORIDADE }],
+      prioridade: {
+        status: 200,
+        corpo: { id: 31, numero: 7, servico: 'Clínico', status: 'AGUARDANDO', prioridade: 'URGENCIA',
+          prioridadePor: 3, prioridadeEm: '2026-11-24T12:00:00Z' },
+      },
+    })
+
+    await buscar('52998224725')
+    fireEvent.click(await screen.findByRole('button', { name: 'Marcar prioridade' }))
+    fireEvent.click(screen.getByRole('radio', { name: 'Urgência' }))
+    fireEvent.change(screen.getByLabelText('Motivo da urgência'), { target: { value: ' Falta de ar ' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Salvar prioridade' }))
+
+    expect(await screen.findByText('Prioridade Urgência marcada na senha 007.')).toBeInTheDocument()
+    expect(corpoDaPrioridade(fetch)).toEqual({ prioridade: 'URGENCIA', motivo: 'Falta de ar' })
+  })
+
+  it('pede para escolher a prioridade antes de salvar', async () => {
+    const fetch = simularBackEnd({ buscas: [{ status: 200, corpo: SEM_PRIORIDADE }] })
+
+    await buscar('52998224725')
+    fireEvent.click(await screen.findByRole('button', { name: 'Marcar prioridade' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Salvar prioridade' }))
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Escolha a prioridade')
+    expect(corpoDaPrioridade(fetch)).toBeUndefined()
+  })
+
+  it('mostra a mensagem do back-end quando a senha já saiu da fila', async () => {
+    simularBackEnd({
+      buscas: [{ status: 200, corpo: SEM_PRIORIDADE }],
+      prioridade: { status: 409, corpo: { mensagem: 'Esta senha não está mais na fila' } },
+    })
+
+    await buscar('52998224725')
+    fireEvent.click(await screen.findByRole('button', { name: 'Marcar prioridade' }))
+    fireEvent.click(screen.getByRole('radio', { name: 'Idoso 60+' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Salvar prioridade' }))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Esta senha não está mais na fila')
+  })
+
+  it('cancelar fecha as opções sem salvar', async () => {
+    const fetch = simularBackEnd({ buscas: [{ status: 200, corpo: SEM_PRIORIDADE }] })
+
+    await buscar('52998224725')
+    fireEvent.click(await screen.findByRole('button', { name: 'Marcar prioridade' }))
+    fireEvent.click(screen.getByRole('radio', { name: 'Gestante' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Cancelar' }))
+
+    expect(screen.queryByRole('radio', { name: 'Gestante' })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Marcar prioridade' })).toBeInTheDocument()
+    expect(corpoDaPrioridade(fetch)).toBeUndefined()
   })
 })

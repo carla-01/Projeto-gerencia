@@ -332,6 +332,98 @@
   cursor: default;
 }
 
+.checkin-botao-secundario {
+  display: inline-flex;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 8px;
+  padding: 0 18px;
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--azul);
+  background: #ffffff;
+  border: 1px solid var(--azul-borda);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.checkin-botao-secundario:hover {
+  background: var(--azul-claro);
+}
+
+.checkin-botao-secundario:focus-visible {
+  outline: 3px solid var(--azul-borda);
+  outline-offset: 2px;
+}
+
+.checkin-botao-secundario:disabled {
+  color: var(--texto-fraco);
+  cursor: default;
+}
+
+/* ---------- Prioridade legal (US11) ---------- */
+
+.checkin-prioridade {
+  width: 100%;
+  margin: 0;
+  padding: 14px 0 0;
+  border: none;
+  border-top: 1px solid var(--borda-suave);
+}
+
+.checkin-prioridade legend {
+  padding: 14px 0 10px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.checkin-motivo-rotulo {
+  display: block;
+  margin: 14px 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.checkin-motivo {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--texto);
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  resize: vertical;
+}
+
+.checkin-motivo:focus {
+  outline: 3px solid var(--azul-borda);
+  border-color: var(--azul);
+}
+
+.checkin-motivo[aria-invalid='true'] {
+  border-color: var(--vermelho);
+}
+
+.checkin-motivo-erro {
+  margin: 6px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vermelho);
+}
+
+.checkin-prioridade-botoes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+}
+
 .checkin-hora {
   display: flex;
   align-items: center;
@@ -503,6 +595,15 @@
   }
 
   .checkin-acao {
+    width: auto;
+  }
+
+  .checkin-prioridade-botoes {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .checkin-prioridade-botoes .checkin-botao {
     width: auto;
   }
 
