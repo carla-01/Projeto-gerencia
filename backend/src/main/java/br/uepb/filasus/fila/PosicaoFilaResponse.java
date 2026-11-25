@@ -10,4 +10,10 @@ public record PosicaoFilaResponse(Long id, int numero, String servico, LocalDate
         this(senha.getId(), senha.getNumero(), senha.getServico().getNome(), senha.getDataRef(),
             senha.getStatus(), pessoasAFrente + 1, pessoasAFrente);
     }
+
+    /** Senha chamada ou em atendimento: não está mais esperando, então não tem posição (US-13). */
+    public static PosicaoFilaResponse foraDaFila(Senha senha) {
+        return new PosicaoFilaResponse(senha.getId(), senha.getNumero(), senha.getServico().getNome(),
+            senha.getDataRef(), senha.getStatus(), 0, 0);
+    }
 }
