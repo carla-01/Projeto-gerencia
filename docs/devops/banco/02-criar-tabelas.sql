@@ -147,6 +147,8 @@ CREATE TABLE senha (
     status              VARCHAR(20) NOT NULL DEFAULT 'AGUARDANDO',
     prioridade_aplicada VARCHAR(20) NOT NULL DEFAULT 'NENHUMA',
     prioridade_por      BIGINT,                 -- recepcionista que marcou a prioridade (US-11)
+    prioridade_em       TIMESTAMPTZ,            -- quando a prioridade foi marcada (US-11)
+    prioridade_motivo   VARCHAR(255),           -- obrigatório na urgência (US-11, Cenário 2)
     criada_em           TIMESTAMPTZ NOT NULL DEFAULT now(),
     checkin_em          TIMESTAMPTZ,
     chamada_em          TIMESTAMPTZ,

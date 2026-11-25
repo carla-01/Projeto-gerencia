@@ -42,11 +42,19 @@ public interface SenhaRepository extends JpaRepository<Senha, Long> {
         return findByPacienteAndDataRefAndStatusInOrderByNumeroAsc(paciente, dataRef, STATUS_ATIVOS);
     }
 
-    long countByServicoAndDataRefAndStatusInAndNumeroLessThan(
-        Servico servico, LocalDate dataRef, Collection<StatusSenha> status, int numero);
+    List<Senha> findByServicoAndDataRefAndStatusIn(Servico servico, LocalDate dataRef, Collection<StatusSenha> status);
 
-    /** Quantas senhas ainda na fila do serviço vêm antes do número informado, no dia (US-07). */
-    default long contarAFrente(Servico servico, LocalDate dataRef, int numero) {
-        return countByServicoAndDataRefAndStatusInAndNumeroLessThan(servico, dataRef, STATUS_ATIVOS, numero);
+    /** Senhas com esse número no dia, uma por serviço: usada no check-in (US-10). */
+    List<Senha> findByNumeroAndDataRefAndStatusInOrderByIdAsc(
+        int numero, LocalDate dataRef, Collection<StatusSenha> status);
+
+    /**
+     * Senhas que ainda estão na fila do serviço no dia, na ordem de atendimento
+     * com a prioridade legal (US-11 - SCRUM-159). A primeira é a próxima a ser chamada.
+     */
+    default List<Senha> filaDoDia(Servico servico, LocalDate dataRef) {
+        return findByServicoAndDataRefAndStatusIn(servico, dataRef, STATUS_ATIVOS).stream()
+            .sorted(OrdemFila.ORDEM)
+            .toList();
     }
 }
