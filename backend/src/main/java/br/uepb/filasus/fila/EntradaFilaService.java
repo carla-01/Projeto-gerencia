@@ -15,7 +15,8 @@ import br.uepb.filasus.paciente.PacienteRepository;
 import br.uepb.filasus.paciente.Prioridade;
 
 /**
- * Entrada do paciente na fila de um serviço (US-06 - SCRUM-136).
+ * Entrada do paciente na fila de um serviço (US-06 - SCRUM-136), feita pelo próprio paciente
+ * ou pela recepção (US-10 - SCRUM-155).
  *
  * O número da senha é o maior do dia + 1. Se dois pacientes entrarem ao mesmo tempo e
  * gerarem o mesmo número, a UNIQUE (servico_id, data_ref, numero) recusa o segundo e
@@ -54,9 +55,21 @@ public class EntradaFilaService {
 
     /** Gera a senha do paciente logado (usuarioId vem do token) na fila do serviço escolhido. */
     public SenhaResponse entrar(Long usuarioId, Long servicoId) {
+        return tentarGerarSenha(usuarioId, null, servicoId);
+    }
+
+    /**
+     * A recepção coloca o paciente na fila (US-10, Cenário 2). Usa o id do paciente porque
+     * quem foi cadastrado no balcão (US-05) não tem login.
+     */
+    public SenhaResponse entrarPelaRecepcao(Long pacienteId, Long servicoId) {
+        return tentarGerarSenha(null, pacienteId, servicoId);
+    }
+
+    private SenhaResponse tentarGerarSenha(Long usuarioId, Long pacienteId, Long servicoId) {
         for (int tentativa = 1; ; tentativa++) {
             try {
-                return transacao.execute(status -> gerarSenha(usuarioId, servicoId));
+                return transacao.execute(status -> gerarSenha(usuarioId, pacienteId, servicoId));
             } catch (DataIntegrityViolationException numeroRepetido) {
                 if (tentativa == TENTATIVAS) {
                     throw numeroRepetido;
@@ -65,9 +78,9 @@ public class EntradaFilaService {
         }
     }
 
-    private SenhaResponse gerarSenha(Long usuarioId, Long servicoId) {
-        Paciente paciente = pacienteRepository.findByUsuario_Id(usuarioId)
-            .orElseThrow(PacienteNaoEncontradoException::new);
+    /** Quando o próprio paciente entra, vem o usuarioId; quando é a recepção, o pacienteId. */
+    private SenhaResponse gerarSenha(Long usuarioId, Long pacienteId, Long servicoId) {
+        Paciente paciente = buscarPaciente(usuarioId, pacienteId);
         Servico servico = servicoRepository.findById(servicoId)
             .filter(Servico::isAtivo)
             .orElseThrow(ServicoNaoEncontradoException::new);
@@ -87,6 +100,15 @@ public class EntradaFilaService {
         Senha senha = senhaRepository.saveAndFlush(
             new Senha(servico, paciente, numero, hoje, Prioridade.NENHUMA, Instant.now(clock)));
         return new SenhaResponse(senha);
+    }
+
+    private Paciente buscarPaciente(Long usuarioId, Long pacienteId) {
+        if (usuarioId != null) {
+            return pacienteRepository.findByUsuario_Id(usuarioId)
+                .orElseThrow(PacienteNaoEncontradoException::new);
+        }
+        return pacienteRepository.findById(pacienteId)
+            .orElseThrow(PacienteNaoEncontradoException::new);
     }
 
     /** Serviço sem horário e limite configurados (US-09) não recebe senha. */
