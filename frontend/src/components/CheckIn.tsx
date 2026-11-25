@@ -8,6 +8,7 @@ import {
   colocarNaFila,
   confirmarPresenca,
   listarServicosDaRecepcao,
+  marcarPrioridade,
 } from '../services/checkIn'
 import type { PrioridadeSenha, ResultadoBusca, SenhaCheckIn } from '../services/checkIn'
 import { mascararCpf, somenteNumeros } from '../services/cpf'
@@ -15,6 +16,11 @@ import type { ServicoDisponivel } from '../services/fila'
 import './CheckIn.css'
 
 const TAMANHO_MAXIMO_NUMERO = 4
+
+/** Prioridades que a recepção marca (US11). Sem prioridade é o padrão da senha. */
+const PRIORIDADES: PrioridadeSenha[] = ['IDOSO', 'GESTANTE', 'PCD', 'URGENCIA']
+
+const MOTIVO_OBRIGATORIO = 'Informe o motivo da urgência'
 
 /** Até 4 números é o número da senha; com mais, é um CPF e ganha a máscara. */
 function mascararBusca(texto: string): string {
@@ -83,6 +89,8 @@ function IconeAlerta() {
  *
  * A recepcionista busca pelo CPF ou pelo número e confirma a presença (CT-US10-01).
  * Sem senha hoje, aparece "Paciente sem senha hoje" com a opção de colocá-lo na fila (CT-US10-02).
+ * Em cada senha, a recepção também marca a prioridade legal (US11 - SCRUM-160); na urgência,
+ * o motivo é obrigatório.
  */
 export default function CheckIn() {
   const navigate = useNavigate()
@@ -94,6 +102,11 @@ export default function CheckIn() {
   const [erro, setErro] = useState('')
   const [aviso, setAviso] = useState('')
   const [ocupado, setOcupado] = useState(false)
+  // Senha com o formulário de prioridade aberto (só uma por vez).
+  const [senhaDaPrioridade, setSenhaDaPrioridade] = useState<number | null>(null)
+  const [prioridadeEscolhida, setPrioridadeEscolhida] = useState<PrioridadeSenha | null>(null)
+  const [motivo, setMotivo] = useState('')
+  const [erroMotivo, setErroMotivo] = useState('')
 
   function tratarErro(e: unknown) {
     if (!(e instanceof ErroCheckIn)) {
@@ -119,6 +132,65 @@ export default function CheckIn() {
     setServicoEscolhido(null)
     setErro('')
     setAviso('')
+    fecharPrioridade()
+  }
+
+  /** Troca no resultado só a senha que mudou; as outras continuam como estavam. */
+  function trocarSenha(nova: SenhaCheckIn) {
+    if (resultado === null) {
+      return
+    }
+    const senhas: SenhaCheckIn[] = []
+    for (const item of resultado.senhas) {
+      if (item.id === nova.id) {
+        senhas.push(nova)
+      } else {
+        senhas.push(item)
+      }
+    }
+    setResultado({ ...resultado, senhas: senhas })
+  }
+
+  function abrirPrioridade(senha: SenhaCheckIn) {
+    setErro('')
+    setAviso('')
+    setSenhaDaPrioridade(senha.id)
+    setPrioridadeEscolhida(senha.prioridade === 'NENHUMA' ? null : senha.prioridade)
+    setMotivo('')
+    setErroMotivo('')
+  }
+
+  function fecharPrioridade() {
+    setSenhaDaPrioridade(null)
+    setPrioridadeEscolhida(null)
+    setMotivo('')
+    setErroMotivo('')
+  }
+
+  async function salvarPrioridade(senha: SenhaCheckIn) {
+    setErro('')
+    setAviso('')
+    if (prioridadeEscolhida === null) {
+      setErro('Escolha a prioridade')
+      return
+    }
+    // Cenário 2: urgência sem motivo não vai para o back-end.
+    if (prioridadeEscolhida === 'URGENCIA' && motivo.trim() === '') {
+      setErroMotivo(MOTIVO_OBRIGATORIO)
+      return
+    }
+    setErroMotivo('')
+    setOcupado(true)
+    try {
+      const marcada = await marcarPrioridade(senha.id, prioridadeEscolhida, motivo.trim())
+      trocarSenha({ ...senha, prioridade: marcada.prioridade })
+      fecharPrioridade()
+      setAviso('Prioridade ' + textoPrioridade(marcada.prioridade) + ' marcada na senha '
+        + formatarNumero(marcada.numero) + '.')
+    } catch (e) {
+      tratarErro(e)
+    }
+    setOcupado(false)
   }
 
   async function buscar(evento: FormEvent) {
@@ -144,18 +216,7 @@ export default function CheckIn() {
     setOcupado(true)
     try {
       const confirmada = await confirmarPresenca(senha.id)
-      if (resultado !== null) {
-        // Troca só a senha confirmada; as outras continuam como estavam.
-        const senhas: SenhaCheckIn[] = []
-        for (const item of resultado.senhas) {
-          if (item.id === confirmada.id) {
-            senhas.push(confirmada)
-          } else {
-            senhas.push(item)
-          }
-        }
-        setResultado({ ...resultado, senhas: senhas })
-      }
+      trocarSenha(confirmada)
       setAviso('Presença confirmada para ' + confirmada.nomePaciente + '.')
     } catch (e) {
       tratarErro(e)
@@ -242,8 +303,82 @@ export default function CheckIn() {
               Check-in às {formatarHora(senha.checkinEm)}
             </p>
           )}
+          {senhaDaPrioridade !== senha.id && (
+            <button type="button" className="checkin-botao-secundario" disabled={ocupado}
+              onClick={() => abrirPrioridade(senha)}>
+              Marcar prioridade
+            </button>
+          )}
         </div>
+
+        {senhaDaPrioridade === senha.id && formularioDePrioridade(senha)}
       </li>
+    )
+  }
+
+  /** Prioridade legal da senha (US11 - SCRUM-160). */
+  function formularioDePrioridade(senha: SenhaCheckIn) {
+    const idMotivo = 'motivo-' + senha.id
+    const idErroMotivo = 'erro-motivo-' + senha.id
+    const urgencia = prioridadeEscolhida === 'URGENCIA'
+
+    return (
+      <fieldset className="checkin-prioridade">
+        <legend>Prioridade da senha {formatarNumero(senha.numero)}</legend>
+        <div className="checkin-grade">
+          {PRIORIDADES.map((prioridade) => {
+            let classe = 'checkin-opcao'
+            if (prioridadeEscolhida === prioridade) {
+              classe = 'checkin-opcao checkin-opcao-marcada'
+            }
+            return (
+              <label key={prioridade} className={classe}>
+                <input
+                  type="radio"
+                  name={'prioridade-' + senha.id}
+                  checked={prioridadeEscolhida === prioridade}
+                  onChange={() => {
+                    setPrioridadeEscolhida(prioridade)
+                    setErroMotivo('')
+                  }}
+                />
+                <strong>{textoPrioridade(prioridade)}</strong>
+              </label>
+            )
+          })}
+        </div>
+
+        <label htmlFor={idMotivo} className="checkin-motivo-rotulo">
+          {urgencia ? 'Motivo da urgência' : 'Motivo (opcional)'}
+        </label>
+        <textarea
+          id={idMotivo}
+          className="checkin-motivo"
+          rows={2}
+          maxLength={255}
+          value={motivo}
+          aria-invalid={erroMotivo !== ''}
+          aria-describedby={erroMotivo !== '' ? idErroMotivo : undefined}
+          onChange={(e) => {
+            setMotivo(e.target.value)
+            setErroMotivo('')
+          }}
+        />
+        {erroMotivo !== '' && (
+          <p id={idErroMotivo} className="checkin-motivo-erro" role="alert">
+            {erroMotivo}
+          </p>
+        )}
+
+        <div className="checkin-prioridade-botoes">
+          <button type="button" className="checkin-botao" disabled={ocupado} onClick={() => salvarPrioridade(senha)}>
+            Salvar prioridade
+          </button>
+          <button type="button" className="checkin-link" onClick={fecharPrioridade}>
+            Cancelar
+          </button>
+        </div>
+      </fieldset>
     )
   }
 

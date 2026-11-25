@@ -3,7 +3,7 @@
  *
  * Chama o POST /api/recepcao/check-in/busca e o PUT /api/recepcao/senhas/{id}/check-in
  * (SCRUM-154), o GET /api/recepcao/servicos e o POST /api/recepcao/senhas (SCRUM-155)
- * com o token da recepcionista.
+ * e o PUT /api/recepcao/senhas/{id}/prioridade (US11 - SCRUM-158) com o token da recepcionista.
  */
 import { obterToken } from './auth'
 import type { SenhaGerada, ServicoDisponivel } from './fila'
@@ -20,6 +20,17 @@ export type SenhaCheckIn = {
   status: string
   prioridade: PrioridadeSenha
   checkinEm: string | null
+}
+
+/** Senha depois de a recepção marcar a prioridade (US11). */
+export type PrioridadeMarcada = {
+  id: number
+  numero: number
+  servico: string
+  status: string
+  prioridade: PrioridadeSenha
+  prioridadePor: number
+  prioridadeEm: string
 }
 
 /** Resultado da busca. pacienteId só vem quando o CPF é de um paciente cadastrado. */
@@ -98,4 +109,10 @@ export function listarServicosDaRecepcao(): Promise<ServicoDisponivel[]> {
 export function colocarNaFila(pacienteId: number, servicoId: number): Promise<SenhaGerada> {
   return chamar('/api/recepcao/senhas', 'POST', 'Não foi possível gerar a senha agora. Tente de novo.',
     { pacienteId: pacienteId, servicoId: servicoId })
+}
+
+/** Marca a prioridade legal na senha. O motivo é obrigatório na urgência (US11, Cenário 2). */
+export function marcarPrioridade(senhaId: number, prioridade: PrioridadeSenha, motivo: string): Promise<PrioridadeMarcada> {
+  return chamar('/api/recepcao/senhas/' + senhaId + '/prioridade', 'PUT',
+    'Não foi possível marcar a prioridade agora. Tente de novo.', { prioridade: prioridade, motivo: motivo })
 }
