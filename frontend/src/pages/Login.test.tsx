@@ -56,12 +56,14 @@ describe('US01 - Login por perfil', () => {
 
       entrarCom('123.456.789-01', 'senha123')
 
-      expect(await screen.findByRole('heading', { name: 'Gestor' })).toBeInTheDocument()
+      // A tela inicial do gestor é a de funcionários (US03 - SCRUM-152).
+      expect(await screen.findByRole('heading', { name: 'Funcionários da UBS' })).toBeInTheDocument()
       expect(localStorage.getItem('filasus.token')).toBe('token-de-teste')
       expect(localStorage.getItem('filasus.perfil')).toBe('GESTOR')
 
-      // Confere o que foi enviado para o back-end.
-      expect(fetch).toHaveBeenCalledTimes(1)
+      // Confere o que foi enviado para o back-end. Depois do login, a tela do gestor busca a lista
+      // de funcionários e os setores; aqui só importa que o login foi chamado uma vez.
+      expect(fetch.mock.calls.filter(([url]) => url === '/auth/login')).toHaveLength(1)
       const [url, opcoes] = fetch.mock.calls[0]
       expect(url).toBe('/auth/login')
       expect(opcoes?.method).toBe('POST')
@@ -73,7 +75,7 @@ describe('US01 - Login por perfil', () => {
       { perfil: 'PACIENTE', titulo: 'Área do paciente' },
       { perfil: 'RECEPCIONISTA', titulo: 'Painel da recepção' },
       { perfil: 'PROFISSIONAL', titulo: 'Profissional de saúde' },
-      { perfil: 'GESTOR', titulo: 'Gestor' },
+      { perfil: 'GESTOR', titulo: 'Funcionários da UBS' },
     ]
 
     it.each(perfis)('perfil $perfil abre a tela "$titulo"', async ({ perfil, titulo }) => {
@@ -89,6 +91,10 @@ describe('US01 - Login por perfil', () => {
         }
         // E as senhas ativas com a posição na fila (US07).
         if (url === '/api/paciente/senhas') {
+          corpo = []
+        }
+        // A área do gestor (US03) busca os funcionários e os setores.
+        if (url === '/api/gestor/funcionarios' || url === '/api/gestor/servicos') {
           corpo = []
         }
         return new Response(JSON.stringify(corpo), {

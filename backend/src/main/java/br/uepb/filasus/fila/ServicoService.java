@@ -1,5 +1,7 @@
 package br.uepb.filasus.fila;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +15,14 @@ public class ServicoService {
                           ConfiguracaoServicoRepository configuracaoServicoRepository) {
         this.servicoRepository = servicoRepository;
         this.configuracaoServicoRepository = configuracaoServicoRepository;
+    }
+
+    /** Serviços ativos em ordem de nome: são os setores do cadastro de funcionários (US03). */
+    @Transactional(readOnly = true)
+    public List<ServicoResumoResponse> listarAtivos() {
+        return servicoRepository.findByAtivoTrueOrderByNomeAsc().stream()
+            .map(servico -> new ServicoResumoResponse(servico.getId(), servico.getNome()))
+            .toList();
     }
 
     @Transactional

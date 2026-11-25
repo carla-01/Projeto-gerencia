@@ -8,6 +8,8 @@ import CadastroRecepcao from './pages/CadastroRecepcao'
 import LayoutRecepcao from './components/LayoutRecepcao'
 import PainelRecepcao from './pages/PainelRecepcao'
 import ConfigurarFilas from './pages/ConfigurarFilas'
+import Funcionarios from './pages/Funcionarios'
+import LayoutGestor from './components/LayoutGestor'
 import EscolhaServico from './pages/EscolhaServico'
 import { obterPerfil } from './services/auth'
 
@@ -18,18 +20,19 @@ import { obterPerfil } from './services/auth'
  * - US04 (SCRUM-39): tela de autocadastro do paciente.
  * - US05 (SCRUM-40): cadastro de paciente pela recepção.
  * - US06 (SCRUM-137): o paciente escolhe o serviço e entra na fila.
+ * - US03 (SCRUM-152): área do gestor com o cadastro e a lista de funcionários.
  */
 export default function App() {
   const location = useLocation()
   const perfil = obterPerfil()
 
   // As telas de login e de cadastro ocupam a página inteira, sem o menu provisório do esqueleto.
-  // As telas da recepção têm o próprio menu (barra lateral).
+  // As telas da recepção e do gestor têm o próprio menu (barra lateral).
   let mostrarMenu = true
   if (location.pathname === '/login' || location.pathname === '/cadastro') {
     mostrarMenu = false
   }
-  if (location.pathname.startsWith('/recepcao')) {
+  if (location.pathname.startsWith('/recepcao') || location.pathname.startsWith('/gestor')) {
     mostrarMenu = false
   }
 
@@ -68,10 +71,14 @@ export default function App() {
         } />
         <Route path="/acesso-negado" element={<AcessoNegado />} />
         <Route path="/profissional" element={<Pagina titulo="Profissional de saúde" descricao="Chamada e atendimento (R2)." />} />
-        <Route path="/gestor" element={<Pagina titulo="Gestor" descricao="Configuração e relatórios (R2 a R4)." />} />
+        <Route path="/gestor" element={
+          <ProtectedRoute perfis={['GESTOR']}>
+            <LayoutGestor><Funcionarios /></LayoutGestor>
+          </ProtectedRoute>
+        } />
         <Route path="/gestor/configurar-filas" element={
           <ProtectedRoute perfis={['GESTOR']}>
-            <ConfigurarFilas />
+            <LayoutGestor><ConfigurarFilas /></LayoutGestor>
           </ProtectedRoute>
         } />
         <Route path="*" element={<Pagina titulo="Página não encontrada" descricao="Confira o endereço." />} />
