@@ -7,6 +7,7 @@ Funcionalidade: Registro das tentativas de acesso negado
   Quero que toda tentativa de acesso negado fique registrada no log
   Para poder auditar quem tentou acessar uma tela fora do seu perfil
 
+  @smoke
   Cenário: CT-US02-04 - Tentativa negada registrada no log
     Dado que estou logado como paciente
     Quando tento acessar a rota do painel da recepção "/api/recepcao/fila"
