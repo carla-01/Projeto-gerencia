@@ -7,6 +7,8 @@ import AcessoNegado from './pages/AcessoNegado'
 import CadastroRecepcao from './pages/CadastroRecepcao'
 import LayoutRecepcao from './components/LayoutRecepcao'
 import PainelRecepcao from './pages/PainelRecepcao'
+import LayoutProfissional from './components/LayoutProfissional'
+import PainelProfissional from './pages/PainelProfissional'
 import ConfigurarFilas from './pages/ConfigurarFilas'
 import Funcionarios from './pages/Funcionarios'
 import LayoutGestor from './components/LayoutGestor'
@@ -21,18 +23,22 @@ import { obterPerfil } from './services/auth'
  * - US05 (SCRUM-40): cadastro de paciente pela recepção.
  * - US06 (SCRUM-137): o paciente escolhe o serviço e entra na fila.
  * - US03 (SCRUM-152): área do gestor com o cadastro e a lista de funcionários.
+ * - US13 (SCRUM-164): o profissional chama o próximo paciente.
  */
 export default function App() {
   const location = useLocation()
   const perfil = obterPerfil()
 
   // As telas de login e de cadastro ocupam a página inteira, sem o menu provisório do esqueleto.
-  // As telas da recepção e do gestor têm o próprio menu (barra lateral).
+  // As telas da recepção, do gestor e do profissional têm o próprio menu (barra lateral).
   let mostrarMenu = true
   if (location.pathname === '/login' || location.pathname === '/cadastro') {
     mostrarMenu = false
   }
   if (location.pathname.startsWith('/recepcao') || location.pathname.startsWith('/gestor')) {
+    mostrarMenu = false
+  }
+  if (location.pathname === '/profissional') {
     mostrarMenu = false
   }
 
@@ -70,7 +76,11 @@ export default function App() {
           </ProtectedRoute>
         } />
         <Route path="/acesso-negado" element={<AcessoNegado />} />
-        <Route path="/profissional" element={<Pagina titulo="Profissional de saúde" descricao="Chamada e atendimento (R2)." />} />
+        <Route path="/profissional" element={
+          <ProtectedRoute perfis={['PROFISSIONAL']}>
+            <LayoutProfissional><PainelProfissional /></LayoutProfissional>
+          </ProtectedRoute>
+        } />
         <Route path="/gestor" element={
           <ProtectedRoute perfis={['GESTOR']}>
             <LayoutGestor><Funcionarios /></LayoutGestor>

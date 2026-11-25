@@ -1,0 +1,223 @@
+/* Tela do profissional (US13) - mesmas cores das telas da recepção */
+
+/* O main global tem 720px e centraliza; aqui vale a largura das telas com menu lateral. */
+.profissional {
+  --azul: #13238f;
+  --azul-claro: #eef0fc;
+  --azul-borda: #c7cdf5;
+  --texto-suave: #5b6478;
+  --borda: #d9dde7;
+
+  max-width: 880px;
+  margin: 0;
+  padding: 0;
+}
+
+.profissional-cabecalho {
+  margin-bottom: 22px;
+}
+
+.profissional-cabecalho p {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--azul);
+}
+
+.profissional-cabecalho h1 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.profissional-cartao {
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #eceef4;
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 12px 32px rgba(16, 24, 40, 0.08);
+}
+
+/* ---------- Faixa azul com o botão ---------- */
+
+.profissional-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 26px 24px;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 92% -20%, rgba(255, 255, 255, 0.22), transparent 45%),
+    linear-gradient(135deg, #1b2fb0 0%, #0d1866 100%);
+}
+
+.profissional-topo h2 {
+  margin: 0 0 4px;
+  font-size: 22px;
+}
+
+.profissional-topo p {
+  margin: 0;
+  font-size: 14px;
+  color: #c9cff0;
+}
+
+.profissional-chamar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 60px;
+  padding: 0 32px;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--azul);
+  background: #ffffff;
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.1s, background 0.15s;
+}
+
+.profissional-chamar svg {
+  width: 24px;
+  height: 24px;
+}
+
+.profissional-chamar:hover {
+  background: var(--azul-claro);
+}
+
+.profissional-chamar:active {
+  transform: scale(0.98);
+}
+
+.profissional-chamar:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 3px;
+}
+
+.profissional-chamar:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+/* ---------- Paciente chamado ---------- */
+
+.profissional-corpo {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px;
+}
+
+.profissional-erro,
+.profissional-aviso {
+  margin: 0;
+  padding: 12px 14px;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  border: 1px solid;
+  border-radius: 10px;
+}
+
+.profissional-erro {
+  color: #b42318;
+  background: #fef3f2;
+  border-color: #fecdca;
+}
+
+.profissional-aviso {
+  color: #93370d;
+  background: #fffaeb;
+  border-color: #fedf89;
+}
+
+.profissional-vazio {
+  margin: 0;
+  padding: 36px 16px;
+  font-size: 15px;
+  text-align: center;
+  color: var(--texto-suave);
+  border: 1px dashed var(--borda);
+  border-radius: 14px;
+}
+
+.profissional-chamado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 28px 16px;
+  text-align: center;
+  background: var(--azul-claro);
+  border: 2px solid var(--azul-borda);
+  border-radius: 16px;
+  animation: profissional-surgir 0.35s ease-out;
+}
+
+.profissional-rotulo {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--azul);
+}
+
+.profissional-numero {
+  font-size: 84px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--azul);
+}
+
+.profissional-chamado h3 {
+  margin: 6px 0 0;
+  font-size: 22px;
+}
+
+.profissional-detalhe {
+  margin: 0;
+  font-size: 15px;
+  color: var(--texto-suave);
+}
+
+.profissional-selo {
+  margin-top: 6px;
+  padding: 4px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--azul);
+  border-radius: 999px;
+}
+
+@keyframes profissional-surgir {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .profissional * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .profissional-chamar {
+    width: auto;
+  }
+}
