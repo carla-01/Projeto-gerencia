@@ -1,11 +1,13 @@
 package br.uepb.filasus.fila;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -43,6 +45,15 @@ public interface SenhaRepository extends JpaRepository<Senha, Long> {
     }
 
     List<Senha> findByServicoAndDataRefAndStatusIn(Servico servico, LocalDate dataRef, Collection<StatusSenha> status);
+
+    /**
+     * Chama a senha (US-13) só se ela ainda estiver PRESENTE. Devolve 1 quando chamou e 0 quando
+     * outro profissional chegou antes, para duas pessoas não chamarem o mesmo paciente.
+     */
+    @Modifying(clearAutomatically = true)
+    @Query("update Senha s set s.status = br.uepb.filasus.fila.StatusSenha.CHAMADA, s.chamadaEm = :em "
+        + "where s.id = :id and s.status = br.uepb.filasus.fila.StatusSenha.PRESENTE")
+    int chamarSePresente(@Param("id") Long id, @Param("em") Instant em);
 
     /** Senhas com esse número no dia, uma por serviço: usada no check-in (US-10). */
     List<Senha> findByNumeroAndDataRefAndStatusInOrderByIdAsc(
