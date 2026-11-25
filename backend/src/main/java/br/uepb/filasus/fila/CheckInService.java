@@ -105,7 +105,7 @@ public class CheckInService {
         }
 
         Paciente paciente = encontrado.get();
-        List<Senha> senhas = senhaRepository.buscarSenhasAtivas(paciente, LocalDate.now(clock));
+        List<Senha> senhas = senhaRepository.buscarSenhasNaFila(paciente, LocalDate.now(clock));
 
         String mensagem = null;
         if (senhas.isEmpty()) {
@@ -117,7 +117,7 @@ public class CheckInService {
     /** O número recomeça em cada serviço, então a busca pode achar mais de uma senha. */
     private BuscaCheckInResponse buscarPorNumero(int numero) {
         List<Senha> senhas = senhaRepository.findByNumeroAndDataRefAndStatusInOrderByIdAsc(
-            numero, LocalDate.now(clock), SenhaRepository.STATUS_ATIVOS);
+            numero, LocalDate.now(clock), SenhaRepository.STATUS_NA_FILA);
 
         String mensagem = null;
         if (senhas.isEmpty()) {

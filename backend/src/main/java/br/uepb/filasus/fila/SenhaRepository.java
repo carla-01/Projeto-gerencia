@@ -16,8 +16,15 @@ import br.uepb.filasus.paciente.Paciente;
 /** Acesso à tabela "senha". */
 public interface SenhaRepository extends JpaRepository<Senha, Long> {
 
-    /** Status em que a senha ainda está valendo na fila (o paciente não pode tirar outra). */
-    List<StatusSenha> STATUS_ATIVOS = List.of(StatusSenha.AGUARDANDO, StatusSenha.PRESENTE);
+    /** Status de quem ainda espera ser chamado: conta na posição e pode fazer check-in ou mudar de prioridade. */
+    List<StatusSenha> STATUS_NA_FILA = List.of(StatusSenha.AGUARDANDO, StatusSenha.PRESENTE);
+
+    /**
+     * Status em que a senha do paciente ainda está valendo: ele não pode tirar outra no mesmo
+     * serviço. Inclui quem já foi chamado ou está em atendimento (US-13 - SCRUM-163).
+     */
+    List<StatusSenha> STATUS_ATIVOS = List.of(StatusSenha.AGUARDANDO, StatusSenha.PRESENTE,
+        StatusSenha.CHAMADA, StatusSenha.EM_ATENDIMENTO);
 
     /**
      * Maior número de senha já gerado no serviço naquele dia, ou 0 se ainda não há nenhuma.
@@ -31,7 +38,7 @@ public interface SenhaRepository extends JpaRepository<Senha, Long> {
     Optional<Senha> findFirstByPacienteAndServicoAndDataRefAndStatusIn(
         Paciente paciente, Servico servico, LocalDate dataRef, Collection<StatusSenha> status);
 
-    /** Senha do paciente que ainda está valendo (AGUARDANDO ou PRESENTE) no serviço, no dia. */
+    /** Senha do paciente que ainda está valendo (STATUS_ATIVOS) no serviço, no dia. */
     default Optional<Senha> buscarSenhaAtiva(Paciente paciente, Servico servico, LocalDate dataRef) {
         return findFirstByPacienteAndServicoAndDataRefAndStatusIn(paciente, servico, dataRef, STATUS_ATIVOS);
     }
@@ -42,6 +49,11 @@ public interface SenhaRepository extends JpaRepository<Senha, Long> {
     /** Senhas do paciente que ainda estão valendo no dia, uma por serviço (US-07). */
     default List<Senha> buscarSenhasAtivas(Paciente paciente, LocalDate dataRef) {
         return findByPacienteAndDataRefAndStatusInOrderByNumeroAsc(paciente, dataRef, STATUS_ATIVOS);
+    }
+
+    /** Senhas do paciente que ainda esperam ser chamadas no dia: usadas no check-in (US-10). */
+    default List<Senha> buscarSenhasNaFila(Paciente paciente, LocalDate dataRef) {
+        return findByPacienteAndDataRefAndStatusInOrderByNumeroAsc(paciente, dataRef, STATUS_NA_FILA);
     }
 
     List<Senha> findByServicoAndDataRefAndStatusIn(Servico servico, LocalDate dataRef, Collection<StatusSenha> status);
@@ -64,7 +76,7 @@ public interface SenhaRepository extends JpaRepository<Senha, Long> {
      * com a prioridade legal (US-11 - SCRUM-159). A primeira é a próxima a ser chamada.
      */
     default List<Senha> filaDoDia(Servico servico, LocalDate dataRef) {
-        return findByServicoAndDataRefAndStatusIn(servico, dataRef, STATUS_ATIVOS).stream()
+        return findByServicoAndDataRefAndStatusIn(servico, dataRef, STATUS_NA_FILA).stream()
             .sorted(OrdemFila.ORDEM)
             .toList();
     }

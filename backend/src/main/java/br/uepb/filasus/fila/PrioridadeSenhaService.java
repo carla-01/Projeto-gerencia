@@ -60,7 +60,7 @@ public class PrioridadeSenhaService {
         }
 
         Senha senha = senhaRepository.findById(senhaId).orElseThrow(SenhaNaoEncontradaException::new);
-        if (!SenhaRepository.STATUS_ATIVOS.contains(senha.getStatus())) {
+        if (!SenhaRepository.STATUS_NA_FILA.contains(senha.getStatus())) {
             throw new SenhaForaDaFilaException();
         }
 

@@ -17,6 +17,8 @@ import br.uepb.filasus.paciente.PacienteRepository;
  * (AGUARDANDO ou PRESENTE) e vêm antes na ordem de atendimento (OrdemFila): a prioridade
  * legal passa na frente e, no mesmo nível, vale o número da senha (US-11 - SCRUM-159).
  * Senha chamada, em atendimento, atendida, cancelada ou faltosa não conta.
+ * A senha chamada ou em atendimento continua aparecendo para o dono, sem posição
+ * (posição 0), para ele ver que foi chamado (US-13 - SCRUM-163).
  */
 @Service
 public class PosicaoFilaService {
@@ -44,8 +46,15 @@ public class PosicaoFilaService {
         // Dia local da UBS: o Clock do projeto está no fuso da unidade (RelogioConfig).
         LocalDate hoje = LocalDate.now(clock);
         return senhaRepository.buscarSenhasAtivas(paciente, hoje).stream()
-            .map(senha -> new PosicaoFilaResponse(senha, pessoasAFrente(senha, hoje)))
+            .map(senha -> montarResposta(senha, hoje))
             .toList();
+    }
+
+    private PosicaoFilaResponse montarResposta(Senha senha, LocalDate hoje) {
+        if (!SenhaRepository.STATUS_NA_FILA.contains(senha.getStatus())) {
+            return PosicaoFilaResponse.foraDaFila(senha);
+        }
+        return new PosicaoFilaResponse(senha, pessoasAFrente(senha, hoje));
     }
 
     /** Quantas senhas vêm antes desta na fila do serviço, já com a prioridade legal. */
