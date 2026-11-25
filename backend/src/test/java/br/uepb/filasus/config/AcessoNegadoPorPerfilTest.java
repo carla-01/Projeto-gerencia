@@ -79,6 +79,9 @@ class AcessoNegadoPorPerfilTest {
             Arguments.of(Endpoint.CADASTRAR_FUNCIONARIO, Perfil.PACIENTE),
             Arguments.of(Endpoint.CADASTRAR_FUNCIONARIO, Perfil.RECEPCIONISTA),
             Arguments.of(Endpoint.CADASTRAR_FUNCIONARIO, Perfil.PROFISSIONAL),
+            Arguments.of(Endpoint.LISTAR_FUNCIONARIOS, Perfil.PACIENTE),
+            Arguments.of(Endpoint.LISTAR_FUNCIONARIOS, Perfil.RECEPCIONISTA),
+            Arguments.of(Endpoint.LISTAR_FUNCIONARIOS, Perfil.PROFISSIONAL),
             Arguments.of(Endpoint.MARCAR_PRIORIDADE, Perfil.PACIENTE),
             Arguments.of(Endpoint.MARCAR_PRIORIDADE, Perfil.PROFISSIONAL),
             Arguments.of(Endpoint.MARCAR_PRIORIDADE, Perfil.GESTOR)
@@ -141,7 +144,7 @@ class AcessoNegadoPorPerfilTest {
             case FILA_RECEPCAO -> get(endpoint.caminho);
             case CADASTRO_RECEPCAO, CONFIGURAR_SERVICO, ENTRAR_NA_FILA, CANCELAR_SENHA, CADASTRAR_FUNCIONARIO ->
                 post(endpoint.caminho).contentType(MediaType.APPLICATION_JSON).content(endpoint.corpo);
-            case LISTAR_SERVICOS -> get(endpoint.caminho);
+            case LISTAR_SERVICOS, LISTAR_FUNCIONARIOS -> get(endpoint.caminho);
             case MARCAR_PRIORIDADE ->
                 put(endpoint.caminho).contentType(MediaType.APPLICATION_JSON).content(endpoint.corpo);
         };
@@ -181,8 +184,9 @@ class AcessoNegadoPorPerfilTest {
         CADASTRAR_FUNCIONARIO("/api/gestor/funcionarios",
             """
                 {"nome":"Funcionária Fictícia","email":"funcionaria.seguranca@exemplo.test","cpf":"529.982.247-25","cartaoSus":"898001234567891",
-                 "perfil":"PROFISSIONAL","senhaInicial":"inicial123"}
+                 "perfil":"PROFISSIONAL","servicoId":1,"senhaInicial":"inicial123"}
                 """),
+        LISTAR_FUNCIONARIOS("/api/gestor/funcionarios", ""),
         MARCAR_PRIORIDADE("/api/recepcao/senhas/1/prioridade",
             "{\"prioridade\":\"URGENCIA\",\"motivo\":\"Motivo fictício\"}");
 

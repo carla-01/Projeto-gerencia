@@ -1,6 +1,8 @@
 package br.uepb.filasus.usuario;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,12 +11,17 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import br.uepb.filasus.fila.Servico;
 
 /**
  * Usuário do sistema (US01 - SCRUM-37). Tabela "usuario" do DER.
@@ -88,6 +95,17 @@ public class Usuario {
 
     @Column(name = "criado_em", nullable = false)
     private Instant criadoEm;
+
+    /**
+     * Setor do profissional (US03 - SCRUM-15): serviço(s) da UBS em que ele atende.
+     * Tabela "profissional_servico" do DER. A US13 usa para chamar só a fila do setor.
+     * Fica vazio para quem não é PROFISSIONAL.
+     */
+    @ManyToMany
+    @JoinTable(name = "profissional_servico",
+        joinColumns = @JoinColumn(name = "usuario_id"),
+        inverseJoinColumns = @JoinColumn(name = "servico_id"))
+    private Set<Servico> setores = new HashSet<>();
 
     /** Construtor vazio exigido pelo JPA. */
     protected Usuario() {
@@ -189,5 +207,9 @@ public class Usuario {
 
     public Instant getCriadoEm() {
         return criadoEm;
+    }
+
+    public Set<Servico> getSetores() {
+        return setores;
     }
 }

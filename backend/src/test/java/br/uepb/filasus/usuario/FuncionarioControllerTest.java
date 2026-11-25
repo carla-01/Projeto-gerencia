@@ -3,6 +3,7 @@ package br.uepb.filasus.usuario;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -18,11 +19,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import br.uepb.filasus.auth.JwtService;
+import br.uepb.filasus.fila.Servico;
+import br.uepb.filasus.fila.ServicoRepository;
 import br.uepb.filasus.lgpd.ProtecaoCpf;
 
-/** Back-end da US03 - SCRUM-15: o gestor cadastra recepcionistas e profissionais. Dados fictícios. */
+/**
+ * Back-end da US03 - SCRUM-15: o gestor cadastra recepcionistas e profissionais (SCRUM-150),
+ * com o setor do profissional e a lista de usuários da UBS (SCRUM-151). Dados fictícios.
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -50,10 +57,26 @@ class FuncionarioControllerTest {
     @Autowired
     private ProtecaoCpf protecaoCpf;
 
+    @Autowired
+    private ServicoRepository servicoRepository;
+
+    @Autowired
+    private TransactionTemplate transactionTemplate;
+
+    /** Setor (serviço da UBS) usado pelos profissionais dos testes. */
+    private Servico setor;
+
     @BeforeEach
+    void prepararDados() {
+        limparDados();
+        setor = servicoRepository.save(new Servico("Setor Teste US03"));
+    }
+
     @AfterEach
-    void limparUsuarios() {
+    void limparDados() {
         usuarioRepository.deleteAll();
+        servicoRepository.findByNome("Setor Teste US03").ifPresent(servicoRepository::delete);
+        servicoRepository.findByNome("Setor Inativo US03").ifPresent(servicoRepository::delete);
     }
 
     // Cenário 1: Cadastro de funcionário
@@ -219,6 +242,113 @@ class FuncionarioControllerTest {
         assertEquals(0, usuarioRepository.count());
     }
 
+    // Setor do profissional (SCRUM-151): fica em profissional_servico
+
+    @Test
+    void profissionalFicaLigadoAoSetor() throws Exception {
+        cadastrar(Perfil.GESTOR, corpo("Profissional Fictícia", "setor@exemplo.test", "PROFISSIONAL", SENHA_INICIAL))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.setorId").value(setor.getId()))
+            .andExpect(jsonPath("$.setor").value("Setor Teste US03"));
+
+        Long idSalvo = usuarioRepository.findByEmail("setor@exemplo.test").orElseThrow().getId();
+        transactionTemplate.executeWithoutResult(status -> {
+            Usuario salvo = usuarioRepository.findById(idSalvo).orElseThrow();
+            assertEquals(1, salvo.getSetores().size());
+            assertEquals(setor.getId(), salvo.getSetores().iterator().next().getId());
+        });
+    }
+
+    @Test
+    void recepcionistaNaoTemSetor() throws Exception {
+        cadastrar(Perfil.GESTOR, corpo("Recepcionista Fictícia", "recepcao@exemplo.test", "RECEPCIONISTA", SENHA_INICIAL))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.setorId").doesNotExist())
+            .andExpect(jsonPath("$.setor").doesNotExist());
+
+        cadastrar(Perfil.GESTOR, corpoComSetor("recepcao2@exemplo.test", "RECEPCIONISTA", setor.getId()))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.campo").value("servicoId"))
+            .andExpect(jsonPath("$.mensagem").value("Só o profissional de saúde tem setor"));
+
+        assertEquals(1, usuarioRepository.count());
+    }
+
+    @Test
+    void profissionalSemSetorRecebe400() throws Exception {
+        cadastrar(Perfil.GESTOR, corpoComSetor("semsetor@exemplo.test", "PROFISSIONAL", null))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.campo").value("servicoId"))
+            .andExpect(jsonPath("$.mensagem").value("Setor é obrigatório para o profissional"));
+
+        assertEquals(0, usuarioRepository.count());
+    }
+
+    @Test
+    void setorInexistenteOuInativoRecebe400() throws Exception {
+        Servico inativo = new Servico("Setor Inativo US03");
+        inativo.setAtivo(false);
+        inativo = servicoRepository.save(inativo);
+
+        for (Long servicoId : new Long[] {999_999L, inativo.getId()}) {
+            cadastrar(Perfil.GESTOR, corpoComSetor("setorinvalido@exemplo.test", "PROFISSIONAL", servicoId))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.campo").value("servicoId"))
+                .andExpect(jsonPath("$.mensagem").value("Setor não encontrado"));
+        }
+
+        assertEquals(0, usuarioRepository.count());
+    }
+
+    // Lista de usuários da UBS (SCRUM-151, Cenário 1: "aparece na lista de usuários")
+
+    @Test
+    void funcionarioCadastradoApareceNaListaComOSetor() throws Exception {
+        cadastrar(Perfil.GESTOR, corpo("Bruna Profissional", "bruna@exemplo.test", "PROFISSIONAL", SENHA_INICIAL))
+            .andExpect(status().isCreated());
+        cadastrar(Perfil.GESTOR, corpo("Ana Recepcionista", "ana@exemplo.test", OUTRO_CPF, "RECEPCIONISTA", SENHA_INICIAL))
+            .andExpect(status().isCreated());
+
+        mockMvc.perform(get(ROTA).header("Authorization", "Bearer " + token(Perfil.GESTOR)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()").value(2))
+            .andExpect(jsonPath("$[0].nome").value("Ana Recepcionista"))
+            .andExpect(jsonPath("$[0].perfil").value("RECEPCIONISTA"))
+            .andExpect(jsonPath("$[0].setor").doesNotExist())
+            .andExpect(jsonPath("$[1].nome").value("Bruna Profissional"))
+            .andExpect(jsonPath("$[1].email").value("bruna@exemplo.test"))
+            .andExpect(jsonPath("$[1].perfil").value("PROFISSIONAL"))
+            .andExpect(jsonPath("$[1].ativo").value(true))
+            .andExpect(jsonPath("$[1].setor").value("Setor Teste US03"))
+            .andExpect(jsonPath("$[1].cpfHash").doesNotExist())
+            .andExpect(jsonPath("$[1].cartaoSus").doesNotExist());
+    }
+
+    @Test
+    void listaNaoMostraPacientes() throws Exception {
+        usuarioRepository.save(new Usuario("Paciente Fictício", "paciente@exemplo.test", protecaoCpf.hash("52998224725"),
+            protecaoCpf.cifrar("52998224725"), "hash", Perfil.PACIENTE));
+        usuarioRepository.save(new Usuario("Gestora Fictícia", "gestora@exemplo.test", protecaoCpf.hash("11144477735"),
+            protecaoCpf.cifrar("11144477735"), "hash", Perfil.GESTOR));
+
+        mockMvc.perform(get(ROTA).header("Authorization", "Bearer " + token(Perfil.GESTOR)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()").value(1))
+            .andExpect(jsonPath("$[0].perfil").value("GESTOR"));
+    }
+
+    @Test
+    void listaSoParaOGestor() throws Exception {
+        for (Perfil perfil : new Perfil[] {Perfil.PACIENTE, Perfil.RECEPCIONISTA, Perfil.PROFISSIONAL}) {
+            mockMvc.perform(get(ROTA).header("Authorization", "Bearer " + token(perfil)))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.mensagem").value("Acesso não permitido"));
+        }
+
+        mockMvc.perform(get(ROTA))
+            .andExpect(status().isUnauthorized());
+    }
+
     // Controle de acesso: rota só do GESTOR
 
     @Test
@@ -258,10 +388,21 @@ class FuncionarioControllerTest {
         return corpo(nome, email, cpf, CARTAO_SUS, perfil, senhaInicial);
     }
 
+    /** O profissional vai sempre com o setor dos testes; os outros papéis vão sem setor. */
     private String corpo(String nome, String email, String cpf, String cartaoSus, String perfil, String senhaInicial) {
+        Long servicoId = "PROFISSIONAL".equals(perfil) ? setor.getId() : null;
+        return corpo(nome, email, cpf, cartaoSus, perfil, servicoId, senhaInicial);
+    }
+
+    private String corpoComSetor(String email, String perfil, Long servicoId) {
+        return corpo("Pessoa Fictícia", email, CPF, CARTAO_SUS, perfil, servicoId, SENHA_INICIAL);
+    }
+
+    private String corpo(String nome, String email, String cpf, String cartaoSus, String perfil, Long servicoId,
+                         String senhaInicial) {
         return """
-            {"nome":"%s","email":"%s","cpf":"%s","cartaoSus":"%s","perfil":"%s","senhaInicial":"%s"}
-            """.formatted(nome, email, cpf, cartaoSus, perfil, senhaInicial);
+            {"nome":"%s","email":"%s","cpf":"%s","cartaoSus":"%s","perfil":"%s","servicoId":%s,"senhaInicial":"%s"}
+            """.formatted(nome, email, cpf, cartaoSus, perfil, servicoId, senhaInicial);
     }
 
     private void salvarExistente(String email, String cpf) {
