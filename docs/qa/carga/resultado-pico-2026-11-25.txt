@@ -1,0 +1,47 @@
+RESULTADO DO TESTE DE CARGA - PICO DE ENTRADA NA FILA
+SCRUM-62 · Driver DA-DES-I2-01 · Q-10 do Plano de Qualidade · US06 (Entrar na fila)
+Responsável: Adrielly Carla Ferreira de Melo (QA da R2)
+
+----------------------------------------------------------------
+1. COMO FOI RODADO
+----------------------------------------------------------------
+Data: 25/11/2026, das 10:54 às 10:59
+Ambiente: homologação local (docs/devops/homologacao.txt), back-end da develop
+  (commit c0134c2) com PostgreSQL 16 e o k6 v2.4.0 no mesmo computador.
+Script: docs/qa/carga/pico-entrada-fila.js
+Carga: 300 pacientes fictícios diferentes, 1 entrada por segundo durante 5 minutos,
+  em POST /api/paciente/senhas, cada um com o próprio login.
+Serviço: "Teste de Carga" (00:00 às 23:59, limite de 300 senhas), criado pela rota
+  do gestor só para o teste e apagado no fim.
+Dados: só fictícios (e-mails carga.*@exemplo.test), apagados com
+  docs/qa/carga/limpar-dados-de-carga.sql depois da conferência.
+
+----------------------------------------------------------------
+2. RESULTADO
+----------------------------------------------------------------
+Meta                                 Obtido                    Atendeu?
+-----------------------------------  ------------------------  --------
+p95 abaixo de 500 ms                 p95 = 13,82 ms            Sim
+Nenhum erro                          0 de 300 (0,00%)          Sim
+Nenhuma senha repetida               0 repetidas; 300 senhas   Sim
+                                     distintas, de 1 a 300
+
+Outros números das 300 entradas: média 10,16 ms, mediana 10,12 ms, p90 12,70 ms,
+máximo 23,91 ms. Todas responderam 201 com o número da senha.
+
+Resultado do driver DA-DES-I2-01: ATENDEU.
+Valor do Q-10 para o Plano de Qualidade da R2: p95 = 13,82 ms (meta < 500 ms).
+
+----------------------------------------------------------------
+3. OBSERVAÇÕES
+----------------------------------------------------------------
+- Uma primeira rodada no serviço Clínico teve 40 entradas aceitas e 260 recusadas:
+  o Clínico tem limite de 40 senhas por dia (US09), e as recusas foram a regra do
+  limite funcionando, respondendo em poucos milissegundos. Não é defeito. O teste
+  passou a usar um serviço próprio com limite de 300, e o script avisa disso.
+- O teste roda no mesmo computador do back-end e do banco, sem rede entre eles;
+  o tempo medido não inclui a internet da UBS (RSK06).
+- A carga é a do driver (1 entrada por segundo). Picos mais concentrados, como
+  muitas entradas no mesmo segundo, não fizeram parte desta medição.
+- Evidências anexadas na SCRUM-62: resumo do k6 e a consulta de senhas repetidas
+  (docs/qa/carga/verificar-senhas-repetidas.sql).
