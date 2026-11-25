@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import CheckIn from '../components/CheckIn'
 import { fazerLogout, obterToken } from '../services/auth'
 import './PainelRecepcao.css'
 
@@ -53,13 +54,21 @@ export default function PainelRecepcao() {
 
   return (
     <main className="painel-recepcao">
-      <h1>Painel da recepção</h1>
-      <h2>Fila do dia</h2>
-      {fila.length === 0 ? (
-        <p>Nenhuma pessoa na fila.</p>
-      ) : (
-        <ul>{fila.map((item, indice) => <li key={indice}>{String(item)}</li>)}</ul>
-      )}
+      <header className="painel-recepcao-cabecalho">
+        <p>Recepção</p>
+        <h1>Painel da recepção</h1>
+      </header>
+
+      <CheckIn />
+
+      <section className="painel-recepcao-fila">
+        <h2>Fila do dia</h2>
+        {fila.length === 0 ? (
+          <p>Nenhuma pessoa na fila.</p>
+        ) : (
+          <ul>{fila.map((item, indice) => <li key={indice}>{String(item)}</li>)}</ul>
+        )}
+      </section>
     </main>
   )
 }

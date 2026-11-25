@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
@@ -141,6 +142,26 @@ class SenhaRepositoryTest {
         Optional<Senha> ativa = senhaRepository.buscarSenhaAtiva(paciente, clinico, HOJE);
         assertTrue(ativa.isPresent());
         assertEquals(2, ativa.get().getNumero());
+    }
+
+    @Test
+    void filaDoDiaSegueAPrioridadeLegalEDepoisONumero() {
+        senhaRepository.save(new Senha(clinico, paciente, 1, HOJE, Prioridade.NENHUMA, Instant.now()));
+        senhaRepository.save(new Senha(clinico, paciente, 2, HOJE, Prioridade.GESTANTE, Instant.now()));
+        senhaRepository.save(new Senha(clinico, paciente, 3, HOJE, Prioridade.URGENCIA, Instant.now()));
+        senhaRepository.save(new Senha(clinico, paciente, 4, HOJE, Prioridade.IDOSO, Instant.now()));
+        senhaRepository.save(new Senha(clinico, paciente, 5, HOJE, Prioridade.NENHUMA, Instant.now()));
+        Senha cancelada = new Senha(clinico, paciente, 6, HOJE, Prioridade.URGENCIA, Instant.now());
+        cancelada.setStatus(StatusSenha.CANCELADA);
+        senhaRepository.save(cancelada);
+        senhaRepository.save(new Senha(clinico, paciente, 1, HOJE.plusDays(1), Prioridade.URGENCIA, Instant.now()));
+
+        List<Integer> ordem = senhaRepository.filaDoDia(clinico, HOJE).stream()
+            .map(Senha::getNumero)
+            .toList();
+
+        // Urgência (3); depois idoso, gestante e PCD por chegada (2 e 4); depois sem prioridade (1 e 5).
+        assertEquals(List.of(3, 2, 4, 1, 5), ordem);
     }
 
     @Test

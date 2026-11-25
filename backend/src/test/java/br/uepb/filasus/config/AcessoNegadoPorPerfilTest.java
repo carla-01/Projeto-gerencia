@@ -3,6 +3,7 @@ package br.uepb.filasus.config;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
@@ -80,7 +81,10 @@ class AcessoNegadoPorPerfilTest {
             Arguments.of(Endpoint.CADASTRAR_FUNCIONARIO, Perfil.PROFISSIONAL),
             Arguments.of(Endpoint.LISTAR_FUNCIONARIOS, Perfil.PACIENTE),
             Arguments.of(Endpoint.LISTAR_FUNCIONARIOS, Perfil.RECEPCIONISTA),
-            Arguments.of(Endpoint.LISTAR_FUNCIONARIOS, Perfil.PROFISSIONAL)
+            Arguments.of(Endpoint.LISTAR_FUNCIONARIOS, Perfil.PROFISSIONAL),
+            Arguments.of(Endpoint.MARCAR_PRIORIDADE, Perfil.PACIENTE),
+            Arguments.of(Endpoint.MARCAR_PRIORIDADE, Perfil.PROFISSIONAL),
+            Arguments.of(Endpoint.MARCAR_PRIORIDADE, Perfil.GESTOR)
         );
     }
 
@@ -141,6 +145,8 @@ class AcessoNegadoPorPerfilTest {
             case CADASTRO_RECEPCAO, CONFIGURAR_SERVICO, ENTRAR_NA_FILA, CANCELAR_SENHA, CADASTRAR_FUNCIONARIO ->
                 post(endpoint.caminho).contentType(MediaType.APPLICATION_JSON).content(endpoint.corpo);
             case LISTAR_SERVICOS, LISTAR_FUNCIONARIOS -> get(endpoint.caminho);
+            case MARCAR_PRIORIDADE ->
+                put(endpoint.caminho).contentType(MediaType.APPLICATION_JSON).content(endpoint.corpo);
         };
         return requisicao;
     }
@@ -180,7 +186,9 @@ class AcessoNegadoPorPerfilTest {
                 {"nome":"Funcionária Fictícia","email":"funcionaria.seguranca@exemplo.test","cpf":"529.982.247-25","cartaoSus":"898001234567891",
                  "perfil":"PROFISSIONAL","servicoId":1,"senhaInicial":"inicial123"}
                 """),
-        LISTAR_FUNCIONARIOS("/api/gestor/funcionarios", "");
+        LISTAR_FUNCIONARIOS("/api/gestor/funcionarios", ""),
+        MARCAR_PRIORIDADE("/api/recepcao/senhas/1/prioridade",
+            "{\"prioridade\":\"URGENCIA\",\"motivo\":\"Motivo fictício\"}");
 
         private final String caminho;
         private final String corpo;
