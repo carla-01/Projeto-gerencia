@@ -13,8 +13,8 @@ Presentes: Adrielly, Maria Eduarda e Mirelle [CONFIRMAR]
 ----------------------------------------------------------------
 - 5 histórias e 19 pontos entregues, com todas as subtarefas integradas, acima da
   velocidade da Sprint 2 (15); a US14 não precisou sair para a R3.
-- Nenhum bug Crítico ou Alto (Q-02 = 0); os 4 bugs da sprint são de severidade baixa
-  ou média e nenhum impediu entrega.
+- Nenhum bug Crítico ou Alto (Q-02 = 0); os 3 bugs da sprint (SCRUM-176, 177 e 178)
+  são de severidade baixa ou média e nenhum impediu entrega.
 - Cenários Gherkin de todas as histórias automatizados no Cucumber e rodando no CI (23
   cenários em 10 features).
 - Os 44 commits da sprint têm a chave do Jira (ação SCRUM-149).

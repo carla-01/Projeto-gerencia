@@ -22,35 +22,33 @@ Histórias planejadas x integradas: 5 x 5, com todas as subtarefas integradas na
 Itens da sprint no Jira: 15. Em Concluído: as 5 histórias e as SCRUM-62, 63 e 121
 Itens ainda em Em andamento na manhã de 26/11: SCRUM-147 (release notes), 148 e 149
   (ações da retro), 170 e 171 (QA), 172 (esta tarefa) e 173 (repriorização do
-  backlog), que fecham na Review e na Retro. A SCRUM-121 está em Concluído no Jira,
-  mas o PR #72 dela segue aberto no GitHub.
-Bugs encontrados x corrigidos: 4 x 0, levantados pela QA (nenhum Crítico ou Alto, e
-  nenhum impediu entrega) [CONFIRMAR as chaves depois de registrar no Jira]:
-  1. /actuator/health responde 401 sem login, mas docs/devops/homologacao.txt diz que
-     responde {"status":"UP"}. Baixa. Aberto.
-  2. A "Fila do dia" do painel da recepção sempre mostra "Nenhuma pessoa na fila": o
-     GET /api/recepcao/fila devolve uma lista vazia fixa. Média. Aberto; não entrou em
-     nenhuma subtarefa da R2.
-  3. Senha presa em CHAMADA ou EM_ATENDIMENTO se o profissional chamar o próximo sem
-     iniciar o atendimento ou trocar de computador; o paciente não tira outra senha no
-     serviço até o fim do dia. Média. Parcialmente corrigido no PR #73 (recarregar no
-     mesmo navegador já funciona).
-  4. docs/devops/homologacao.txt cita o PostgreSQL 18, mas o projeto usa o 16. Baixa.
-     Aberto.
-  Q-02 (bugs Críticos ou Altos em aberto): 0. Densidade de defeitos: 4 bugs / 19
-  pontos = 0,21 bug por ponto.
+  backlog), que fecham na Review e na Retro. A SCRUM-121 está em Concluído no Jira, e
+  o PR #72 dela entrou na develop em 26/11 às 10h15.
+Bugs encontrados x corrigidos: 3 x 0, levantados pela QA e registrados no Jira em
+  26/11, no Backlog com Release R3 (nenhum Crítico ou Alto, e nenhum impediu entrega):
+  SCRUM-176  /actuator/health responde 401 sem login, mas docs/devops/homologacao.txt
+             diz que responde {"status":"UP"}. Baixa. Aberto.
+  SCRUM-177  A "Fila do dia" do painel da recepção sempre mostra "Nenhuma pessoa na
+             fila": o GET /api/recepcao/fila devolve uma lista vazia fixa. Média.
+             Aberto; não entrou em nenhuma subtarefa da R2.
+  SCRUM-178  Senha presa em CHAMADA ou EM_ATENDIMENTO se o profissional chamar o
+             próximo sem iniciar o atendimento ou trocar de computador; o paciente não
+             tira outra senha no serviço até o fim do dia. Média. Parcialmente
+             corrigido no PR #73 (recarregar no mesmo navegador já funciona).
+  Q-02 (bugs Críticos ou Altos em aberto): 0. Densidade de defeitos: 3 bugs / 19
+  pontos = 0,16 bug por ponto.
   A QA não contou como bug: o limite de 40 senhas no primeiro teste de carga (regra
   funcionando) e as falhas da CI #235 e #259 (ambiente e Maven Central) e #242 e #243
   (corrigidas no próprio PR da SCRUM-162).
 Testes automatizados no CI: 229 testes JUnit e 23 cenários Cucumber em 10 features no
   back-end (1 @smoke por feature), 89 testes no front-end e 3 cenários @smoke no
-  Cypress (CI #284 verde na develop, commit 8a4747a)
+  Cypress (CI #285 verde na develop, commit a46603a)
 Drivers Arquiteturais 2: DA-DES-I2-01 (pico de entrada na fila, SCRUM-62) atendido,
   p95 = 13,82 ms com 0 erros em 300 entradas; DA-DIS-I2-01 (queda do servidor,
   SCRUM-63) atendido
 Impedimentos: 0 registrados, nenhum card com flag no Jira
-Pull requests integrados na develop durante a sprint (17/11 a 26/11): 24 (PRs #49 a
-  #71 e #73), todos com 1 aprovação. O PR #72 (SCRUM-121) segue aberto.
+Pull requests integrados na develop durante a sprint (17/11 a 26/11): 25 (PRs #49 a
+  #73), todos com 1 aprovação.
 Commits na develop na sprint (sem contar merges): 44, todos com a chave do Jira; 1 fora
   do padrão "SCRUM-XX tipo(escopo): descrição" ("[SCRUM-158] Back-end da prioridade
   legal...", 22/11)
@@ -80,7 +78,7 @@ Os PRs da US14 foram revisados pela Adrielly; a Planning previa a Maria Eduarda
 [CONFIRMAR motivo].
 
 PRs integrados por dia:
-  17/11: 1   21/11: 1   23/11: 2   25/11: 16   26/11: 4
+  17/11: 1   21/11: 1   23/11: 2   25/11: 16   26/11: 5
   (18, 19, 20, 22 e 24/11: nenhum)
 
 ----------------------------------------------------------------
@@ -109,7 +107,7 @@ Print da velocidade: docs/sm/sprints/sprint-3/velocidade-sprint-3.png (ainda sem
   US11). O critério "o burndown mostra queda antes dos dois últimos dias" também não
   foi atingido. Detalhe em registro-dailies.txt (daily 2).
 - Comparação com a Sprint 2: lá 14 dos 22 PRs entraram nos dois últimos dias e a sprint
-  chegou a 0 um dia antes do fim. Na Sprint 3, 20 dos 24 PRs entraram em 25/11 e 26/11,
+  chegou a 0 um dia antes do fim. Na Sprint 3, 21 dos 25 PRs entraram em 25/11 e 26/11,
   e a sprint só chegou a 0 no dia da Review. A concentração no fim piorou.
 - Causas vistas nos dados: os PRs da US03 #52 e #54 esperaram três dias pela revisão
   (22/11 a 25/11); a US10 e a US13, da mesma integrante que também era PO e DevOps,
@@ -117,9 +115,8 @@ Print da velocidade: docs/sm/sprints/sprint-3/velocidade-sprint-3.png (ainda sem
 - A velocidade de 19 pontos ficou igual ao planejado e acima da Sprint 2 (15): o time
   entregou acima da capacidade calculada na Planning, e a US14 não precisou sair para
   a R3, mas o trabalho ficou comprimido nos dois últimos dias.
-- Qualidade: 4 bugs na sprint (0,21 por ponto), nenhum Crítico ou Alto (Q-02 = 0). Os
-  bugs 2 e 3 viram itens de backlog para a Planning da R3; os bugs 1 e 4 são de
-  documentação da homologação (docs/devops).
+- Qualidade: 3 bugs na sprint (0,16 por ponto), nenhum Crítico ou Alto (Q-02 = 0). Os
+  três (SCRUM-176, 177 e 178) ficaram no Backlog para a Planning da R3.
 - Ação SCRUM-149 (revisora confere a chave do Jira em cada commit): os 44 commits da
   sprint têm a chave; 1 ficou fora do padrão de mensagem.
 - Ajuste proposto para a R3: limitar o tempo de espera de um PR na revisão (ver plano

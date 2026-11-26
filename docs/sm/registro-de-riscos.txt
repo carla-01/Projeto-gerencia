@@ -84,8 +84,8 @@ RSK14  (novo) Dependência de hospedagem gratuita   -                 -         
 
 26/11 · Retrospectiva da Sprint 3 e fim da R2 · todos · acompanhamento: Mirelle (SM da R2)
   Reavaliado em 26/11 (proposta da SM; o time confirma os valores) [CONFIRMAR]:
-  RSK07: sem mudança (4 x 4 = 16). Gatilho aconteceu pela terceira sprint seguida: 20
-         dos 24 PRs da sprint entraram em 25/11 e 26/11, e as duas histórias da
+  RSK07: sem mudança (4 x 4 = 16). Gatilho aconteceu pela terceira sprint seguida: 21
+         dos 25 PRs da sprint entraram em 25/11 e 26/11, e as duas histórias da
          integrante que acumulava PO e DevOps começaram em 24/11. Ação proposta para a
          R3: quem acumula PO e DevOps pega no máximo uma história, e PR aberto recebe
          revisão em até 24 horas (ata da Retro da Sprint 3, item 4).

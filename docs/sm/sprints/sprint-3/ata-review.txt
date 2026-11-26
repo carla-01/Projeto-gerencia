@@ -59,23 +59,23 @@ Não concluídas: [CONFIRMAR: nenhuma história].
 ----------------------------------------------------------------
 4. BUGS E DESVIOS
 ----------------------------------------------------------------
-- Bugs levantados pela QA: 4, nenhum Crítico ou Alto, nenhum impediu entrega
-  (Q-02 = 0; densidade 0,21 bug por ponto) [CONFIRMAR as chaves no Jira]:
-  1. /actuator/health responde 401 sem login, ao contrário do homologacao.txt. Baixa.
-  2. "Fila do dia" da recepção sempre vazia: GET /api/recepcao/fila devolve lista vazia
-     fixa. Média.
-  3. Senha presa em CHAMADA ou EM_ATENDIMENTO se o profissional chamar o próximo sem
-     iniciar ou trocar de computador. Média. Parcialmente corrigido no PR #73
-     (recarregar no mesmo navegador já funciona); a observação veio da revisão do
-     PR #70.
-  4. homologacao.txt cita o PostgreSQL 18, mas o projeto usa o 16. Baixa.
-- Trabalho concentrado no fim: 20 dos 24 PRs da sprint entraram em 25/11 e 26/11. A
+- Bugs levantados pela QA: 3, nenhum Crítico ou Alto, nenhum impediu entrega
+  (Q-02 = 0; densidade 0,16 bug por ponto), registrados no Jira em 26/11:
+  SCRUM-176  /actuator/health responde 401 sem login, ao contrário do homologacao.txt.
+             Baixa.
+  SCRUM-177  "Fila do dia" da recepção sempre vazia: GET /api/recepcao/fila devolve
+             lista vazia fixa. Média.
+  SCRUM-178  Senha presa em CHAMADA ou EM_ATENDIMENTO se o profissional chamar o
+             próximo sem iniciar ou trocar de computador. Média. Parcialmente corrigido
+             no PR #73 (recarregar no mesmo navegador já funciona); a observação veio
+             da revisão do PR #70.
+- Trabalho concentrado no fim: 21 dos 25 PRs da sprint entraram em 25/11 e 26/11. A
   ação SCRUM-148 não foi cumprida (2 de 5 histórias com a primeira subtarefa até
   23/11).
 - Drivers SCRUM-62 e SCRUM-63 concluídos em 25/11, depois do prazo de 24/11 combinado
   na Planning.
-- SCRUM-121 (relatório do pipeline da R2): em Concluído no Jira, mas com o PR #72
-  ainda aberto no GitHub [CONFIRMAR se entra antes do fechamento].
+- SCRUM-121 (relatório do pipeline da R2): PR #72 integrado na develop em 26/11 às
+  10h15, no dia da Review.
 
 ----------------------------------------------------------------
 5. FEEDBACK RECEBIDO
@@ -89,8 +89,8 @@ Não concluídas: [CONFIRMAR: nenhuma história].
   [CONFIRMAR].
 - Repriorização do backlog para a R3 pela PO da R3 (Mirelle), na Planning da Sprint 4
   em 01/12.
-- Bugs 2 (fila do dia da recepção) e 3 (senha presa em CHAMADA ou EM_ATENDIMENTO)
-  entram como itens de backlog para a Planning da R3, como sugeriu a QA. Bugs 1 e 4
-  (homologacao.txt) ficam com o DevOps da R3.
+- Os 3 bugs (SCRUM-176, 177 e 178) estão no Backlog com Release R3; responsável e
+  sprint são definidos na Planning da Sprint 4. A QA destacou o SCRUM-177 (fila do dia
+  da recepção) e o SCRUM-178 (senha presa) como itens importantes para a R3.
 - Passagem de papéis para a R3 registrada na ata da Retrospectiva: PO + DevOps Mirelle,
   SM Adrielly, QA Maria Eduarda.

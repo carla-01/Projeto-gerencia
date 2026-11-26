@@ -38,6 +38,6 @@ RESUMO DA SPRINT 3
 Impedimentos registrados: 0
 Cards sinalizados com flag no Jira: 0
 Impedimentos abertos da R2: nenhum (o IMP-06 foi resolvido em 12/11)
-Ponto levado para a Retro: o trabalho de novo ficou para os dois últimos dias (20 dos
-24 PRs da sprint entraram em 25/11 e 26/11), e a sobrecarga de quem acumula papéis
+Ponto levado para a Retro: o trabalho de novo ficou para os dois últimos dias (21 dos
+25 PRs da sprint entraram em 25/11 e 26/11), e a sobrecarga de quem acumula papéis
 (RSK07) apareceu pela terceira sprint seguida.
