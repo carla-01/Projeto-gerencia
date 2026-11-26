@@ -10,7 +10,8 @@ Presentes: Maria Eduarda (PO + DevOps), Mirelle (SM) e Adrielly (QA) [CONFIRMAR]
 1. OBJETIVO DA SPRINT
 ----------------------------------------------------------------
 A UBS opera o ciclo completo: check-in, prioridade legal, chamada e atendimento.
-Resultado: [CONFIRMAR: ATINGIDO]. 19 de 19 pontos entregues [CONFIRMAR].
+Resultado: [CONFIRMAR: ATINGIDO]. 19 de 19 pontos em Concluído no Jira (burndown em 0
+em 26/11).
 
 ----------------------------------------------------------------
 2. HISTÓRIAS E DECISÃO DA PO
@@ -30,8 +31,10 @@ Cenários conferidos pela PO no aceite (automatizados no Cucumber):
   foi chamado", CT-US13-04 "Paciente chamado não tira outra senha"
 - US14: CT-US14-01 "Ciclo completo" e CT-US14-02 "Finalizar sem iniciar"
 
-DoD de cada história verificada pela QA e comentada na issue antes do aceite
-[CONFIRMAR].
+DoD de cada história: até a manhã de 26/11 não havia comentário da QA com a
+conferência da DoD em nenhuma das 5 histórias no Jira [CONFIRMAR: registrar antes do
+aceite]. A US03, a US10 e a US13 foram movidas para Concluído pela Maria Eduarda e a
+US11 pela Adrielly; a US14 foi para Concluído em 26/11.
 Aceite feito no ambiente de homologação local (docs/devops/homologacao.txt).
 Não concluídas: [CONFIRMAR: nenhuma história].
 
@@ -56,19 +59,23 @@ Não concluídas: [CONFIRMAR: nenhuma história].
 ----------------------------------------------------------------
 4. BUGS E DESVIOS
 ----------------------------------------------------------------
-- Observação da QA na revisão do PR #70: ao recarregar a tela do profissional, o
-  paciente chamado sumia e a senha ficava presa em CHAMADA ou EM_ATENDIMENTO, sem o
-  paciente poder tirar outra senha no serviço. Corrigido no PR #73 em 26/11. A
-  recuperação vale no mesmo navegador; recuperar em outro computador exigiria gravar
-  na senha quem chamou (mudança no banco), e fica para avaliação da PO na R3.
+- Bugs levantados pela QA: 4, nenhum Crítico ou Alto, nenhum impediu entrega
+  (Q-02 = 0; densidade 0,21 bug por ponto) [CONFIRMAR as chaves no Jira]:
+  1. /actuator/health responde 401 sem login, ao contrário do homologacao.txt. Baixa.
+  2. "Fila do dia" da recepção sempre vazia: GET /api/recepcao/fila devolve lista vazia
+     fixa. Média.
+  3. Senha presa em CHAMADA ou EM_ATENDIMENTO se o profissional chamar o próximo sem
+     iniciar ou trocar de computador. Média. Parcialmente corrigido no PR #73
+     (recarregar no mesmo navegador já funciona); a observação veio da revisão do
+     PR #70.
+  4. homologacao.txt cita o PostgreSQL 18, mas o projeto usa o 16. Baixa.
 - Trabalho concentrado no fim: 20 dos 24 PRs da sprint entraram em 25/11 e 26/11. A
   ação SCRUM-148 não foi cumprida (2 de 5 histórias com a primeira subtarefa até
   23/11).
 - Drivers SCRUM-62 e SCRUM-63 concluídos em 25/11, depois do prazo de 24/11 combinado
   na Planning.
-- SCRUM-121 (relatório do pipeline da R2) com o PR #72 aberto em 26/11 [CONFIRMAR se
-  entra antes do fechamento].
-- [CONFIRMAR: outros bugs registrados pela QA na sprint]
+- SCRUM-121 (relatório do pipeline da R2): em Concluído no Jira, mas com o PR #72
+  ainda aberto no GitHub [CONFIRMAR se entra antes do fechamento].
 
 ----------------------------------------------------------------
 5. FEEDBACK RECEBIDO
@@ -82,7 +89,8 @@ Não concluídas: [CONFIRMAR: nenhuma história].
   [CONFIRMAR].
 - Repriorização do backlog para a R3 pela PO da R3 (Mirelle), na Planning da Sprint 4
   em 01/12.
-- Card no backlog para avaliar a recuperação do atendimento em outro computador,
-  sugerido pela QA [CONFIRMAR se a PO vai criar].
+- Bugs 2 (fila do dia da recepção) e 3 (senha presa em CHAMADA ou EM_ATENDIMENTO)
+  entram como itens de backlog para a Planning da R3, como sugeriu a QA. Bugs 1 e 4
+  (homologacao.txt) ficam com o DevOps da R3.
 - Passagem de papéis para a R3 registrada na ata da Retrospectiva: PO + DevOps Mirelle,
   SM Adrielly, QA Maria Eduarda.

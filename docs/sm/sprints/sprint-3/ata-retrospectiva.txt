@@ -13,6 +13,8 @@ Presentes: Adrielly, Maria Eduarda e Mirelle [CONFIRMAR]
 ----------------------------------------------------------------
 - 5 histórias e 19 pontos entregues, com todas as subtarefas integradas, acima da
   velocidade da Sprint 2 (15); a US14 não precisou sair para a R3.
+- Nenhum bug Crítico ou Alto (Q-02 = 0); os 4 bugs da sprint são de severidade baixa
+  ou média e nenhum impediu entrega.
 - Cenários Gherkin de todas as histórias automatizados no Cucumber e rodando no CI (23
   cenários em 10 features).
 - Os 44 commits da sprint têm a chave do Jira (ação SCRUM-149).
@@ -34,6 +36,10 @@ Presentes: Adrielly, Maria Eduarda e Mirelle [CONFIRMAR]
 - Títulos de PR fora do padrão (ex.: "feature/scrum 150 backend cadastro
   funcionario") e 1 commit fora do padrão de mensagem.
 - Atas da SM da Sprint 3 subidas só no fim da sprint [CONFIRMAR].
+- Conferência da DoD da QA sem comentário nas issues e histórias movidas para Concluído
+  antes do último merge (US03 e US13).
+- Dois bugs de funcionalidade passaram para a R3: a "Fila do dia" da recepção nunca foi
+  ligada à fila real, e a senha pode ficar presa em CHAMADA ou EM_ATENDIMENTO.
 
 ----------------------------------------------------------------
 3. RETROSPECTIVA DA RELEASE 2 (SPRINTS 2 E 3)
@@ -91,7 +97,8 @@ Ações parciais da Sprint 1 acompanhadas na Sprint 3 [CONFIRMAR]:
   plano da release no mesmo dia (SCRUM-173, PR #49), mas as atas da SM subiram no fim
   da sprint.
 
-Resultado da SCRUM-148 comentado na issue em 26/11 [CONFIRMAR].
+Resultado da SCRUM-148 e da SCRUM-149: ainda sem comentário nas issues [CONFIRMAR:
+comentar em 26/11, como pede a SCRUM-148].
 
 ----------------------------------------------------------------
 6. RISCOS ACOMPANHADOS

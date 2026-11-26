@@ -2,8 +2,8 @@ ATA DA SPRINT PLANNING - SPRINT 3
 FilaSUS · Gerência de Projetos (UEPB, 2026.2)
 
 Data: 17/11/2026
-Horário: [CONFIRMAR]
-Local: [CONFIRMAR: sala de aula ou Google Meet]
+Horário: 20:00h
+Local: Google Meet
 Facilitação: Mirelle Casimiro Silvino (Scrum Master)
 Product Owner + DevOps: Maria Eduarda da Nóbrega
 QA: Adrielly Carla Ferreira de Melo
@@ -75,17 +75,17 @@ As ações são acompanhadas nas dailies e conferidas na Retrospectiva de 26/11.
 ----------------------------------------------------------------
 6. TAREFAS DE PAPEL NA SPRINT
 ----------------------------------------------------------------
-PO + DevOps (Maria Eduarda): SCRUM-173 Planning registrada no plano da release,
-  SCRUM-121 relatório do pipeline da R2, SCRUM-147 release notes e fechamento da R2,
-  repriorização do backlog após a Review
+PO + DevOps (Maria Eduarda): SCRUM-121 relatório do pipeline da R2, SCRUM-147 release
+  notes e fechamento da R2, SCRUM-173 repriorização do backlog após a Review da R2. A
+  Planning foi registrada no plano da release no PR #49, que usou a chave SCRUM-173.
 SM (Mirelle): SCRUM-172 cerimônias, atas e métricas da Sprint 3; SCRUM-148 (ação da
   retro)
-QA (Adrielly): Q05 testes da Sprint 3 e Q06 relatório de qualidade da R2
-  [CONFIRMAR: chaves no Jira]; SCRUM-149 (ação da retro)
+QA (Adrielly): SCRUM-170 (Q06) plano de testes e casos de teste da Sprint 3 e
+  SCRUM-171 (Q07) regressão e relatório de qualidade da R2; SCRUM-149 (ação da retro)
 Drivers Arquiteturais 2, sem pontos: SCRUM-62 (pico de entrada na fila, k6 local,
   Adrielly) e SCRUM-63 (queda do servidor, teste local, Maria Eduarda), revisados pela
   Mirelle. Saem primeiro se a sprint apertar: sem conclusão até a daily de 24/11, vão
-  para a Sprint 4.
+  para a Sprint 4. As duas vieram da Sprint 2 e entraram na Sprint 3 em 17/11.
 
 ----------------------------------------------------------------
 7. PAPÉIS DA RELEASE 2

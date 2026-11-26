@@ -10,8 +10,8 @@ A numeração continua a da Sprint 2 (IMP-06, em sprints/sprint-2/registro-de-im
 ----------------------------------------------------------------
 REGISTRO
 ----------------------------------------------------------------
-Nenhum impedimento registrado na Sprint 3 [CONFIRMAR: se alguém citou um impedimento
-em daily ou no grupo, ele entra aqui como IMP-07].
+Nenhum impedimento registrado na Sprint 3. Nenhum card da sprint recebeu flag no Jira
+entre 17/11 e 26/11.
 
 ----------------------------------------------------------------
 PONTOS DE ATENÇÃO (não bloquearam o trabalho)
@@ -35,8 +35,8 @@ fim da sprint. Ficam registrados para a Retrospectiva.
 ----------------------------------------------------------------
 RESUMO DA SPRINT 3
 ----------------------------------------------------------------
-Impedimentos registrados: 0 [CONFIRMAR]
-Cards sinalizados com flag no Jira: 0 [CONFIRMAR]
+Impedimentos registrados: 0
+Cards sinalizados com flag no Jira: 0
 Impedimentos abertos da R2: nenhum (o IMP-06 foi resolvido em 12/11)
 Ponto levado para a Retro: o trabalho de novo ficou para os dois últimos dias (20 dos
 24 PRs da sprint entraram em 25/11 e 26/11), e a sobrecarga de quem acumula papéis
