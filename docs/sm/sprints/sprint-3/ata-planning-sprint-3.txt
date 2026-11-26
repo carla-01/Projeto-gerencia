@@ -110,7 +110,7 @@ Dev Team: as três integrantes. A passagem de papéis para a R3 acontece em 26/1
 Riscos revisados (docs/sm/registro-de-riscos.txt).
 Reavaliado em 17/11: RSK14 (dependência de hospedagem gratuita) encerrado, porque a
 homologação passou a ser local em 12/11 e não há mais deploy em nuvem. Os outros
-valores não mudaram [CONFIRMAR].
+valores não mudaram.
 Atenção da sprint: RSK07 (sobrecarga, 19 pontos acima da velocidade de 15) e RSK13
 (regressão entre histórias no merge, porque as US10, US11, US13 e US14 mexem na mesma
 fila).
