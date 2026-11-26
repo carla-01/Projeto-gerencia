@@ -2,26 +2,26 @@ ATA DA SPRINT REVIEW - SPRINT 3 (FIM DA RELEASE 2)
 FilaSUS · Gerência de Projetos (UEPB, 2026.2)
 
 Data: 26/11/2026
-Local: sala de aula (aula de 26/11) [CONFIRMAR]
+Local: reunião online (não houve aula em 26/11)
 Facilitação: Mirelle Casimiro Silvino (Scrum Master)
-Presentes: Maria Eduarda (PO + DevOps), Mirelle (SM) e Adrielly (QA) [CONFIRMAR]
+Presentes: Maria Eduarda (PO + DevOps), Mirelle (SM) e Adrielly (QA)
 
 ----------------------------------------------------------------
 1. OBJETIVO DA SPRINT
 ----------------------------------------------------------------
 A UBS opera o ciclo completo: check-in, prioridade legal, chamada e atendimento.
-Resultado: [CONFIRMAR: ATINGIDO]. 19 de 19 pontos em Concluído no Jira (burndown em 0
+Resultado: ATINGIDO. 19 de 19 pontos em Concluído no Jira (burndown em 0
 em 26/11).
 
 ----------------------------------------------------------------
 2. HISTÓRIAS E DECISÃO DA PO
 ----------------------------------------------------------------
 História        Dev             Pontos  Entregue em                 Decisão da PO
-SCRUM-15 US03   Mirelle         5       PRs #50, #52, #54 e #63     [CONFIRMAR]
-SCRUM-45 US10   Maria Eduarda   3       PRs #55, #56, #57 e #58     [CONFIRMAR]
-SCRUM-46 US11   Adrielly        5       PRs #51, #53, #59 e #60     [CONFIRMAR]
-SCRUM-47 US13   Maria Eduarda   3       PRs #61, #62, #65, #66, #67 [CONFIRMAR]
-SCRUM-48 US14   Mirelle         3       PRs #69, #70, #71 e #73     [CONFIRMAR]
+SCRUM-15 US03   Mirelle         5       PRs #50, #52, #54 e #63     Aceita
+SCRUM-45 US10   Maria Eduarda   3       PRs #55, #56, #57 e #58     Aceita
+SCRUM-46 US11   Adrielly        5       PRs #51, #53, #59 e #60     Aceita
+SCRUM-47 US13   Maria Eduarda   3       PRs #61, #62, #65, #66, #67 Aceita
+SCRUM-48 US14   Mirelle         3       PRs #69, #70, #71 e #73     Aceita
 
 Cenários conferidos pela PO no aceite (automatizados no Cucumber):
 - US03: CT-US03-01 "Cadastro de funcionário", CT-US03-02 "E-mail duplicado"
@@ -32,11 +32,11 @@ Cenários conferidos pela PO no aceite (automatizados no Cucumber):
 - US14: CT-US14-01 "Ciclo completo" e CT-US14-02 "Finalizar sem iniciar"
 
 DoD de cada história: até a manhã de 26/11 não havia comentário da QA com a
-conferência da DoD em nenhuma das 5 histórias no Jira [CONFIRMAR: registrar antes do
-aceite]. A US03, a US10 e a US13 foram movidas para Concluído pela Maria Eduarda e a
+conferência da DoD em nenhuma das 5 histórias no Jira; a QA registra o checklist em cada issue e a PO
+comenta o aceite dado na Review. A US03, a US10 e a US13 foram movidas para Concluído pela Maria Eduarda e a
 US11 pela Adrielly; a US14 foi para Concluído em 26/11.
 Aceite feito no ambiente de homologação local (docs/devops/homologacao.txt).
-Não concluídas: [CONFIRMAR: nenhuma história].
+Não concluídas: nenhuma história.
 
 ----------------------------------------------------------------
 3. INCREMENTO DEMONSTRADO
@@ -86,8 +86,8 @@ Não concluídas: [CONFIRMAR: nenhuma história].
 ----------------------------------------------------------------
 6. ENCAMINHAMENTOS
 ----------------------------------------------------------------
-- Release 2 encerrada com a v0.2.0 (release notes na SCRUM-147, Maria Eduarda)
-  [CONFIRMAR].
+- Fechamento da R2 com a v0.2.0: release notes na SCRUM-147 e tag v0.2.0 na main
+  depois do merge da release (Maria Eduarda).
 - Repriorização do backlog para a R3 pela PO da R3 (Mirelle), na Planning da Sprint 4
   em 01/12.
 - Os 3 bugs (SCRUM-176, 177 e 178) estão no Backlog com Release R3; responsável e

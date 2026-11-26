@@ -78,12 +78,12 @@ RSK14  (novo) Dependência de hospedagem gratuita   -                 -         
   Reavaliado em 17/11: RSK14 encerrado. A professora definiu a homologação local em
          12/11 e o deploy em nuvem foi descartado (plano da release, histórico de
          12/11); não há mais dependência de hospedagem gratuita. Os outros valores
-         não mudaram [CONFIRMAR].
+         não mudaram.
   Atenção da sprint: RSK07 (19 pontos planejados, acima da velocidade de 15) e RSK13
          (as US10, US11, US13 e US14 mexem na mesma fila).
 
 26/11 · Retrospectiva da Sprint 3 e fim da R2 · todos · acompanhamento: Mirelle (SM da R2)
-  Reavaliado em 26/11 (proposta da SM; o time confirma os valores) [CONFIRMAR]:
+  Reavaliado em 26/11 (proposta da SM; o time confirma os valores):
   RSK07: sem mudança (4 x 4 = 16). Gatilho aconteceu pela terceira sprint seguida: 21
          dos 25 PRs da sprint entraram em 25/11 e 26/11, e as duas histórias da
          integrante que acumulava PO e DevOps começaram em 24/11. Ação proposta para a

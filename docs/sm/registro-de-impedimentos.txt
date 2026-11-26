@@ -14,7 +14,7 @@ IMP-01
   banco em container.
   Afeta: todas as US (ambiente) e a CI
   Quem resolveu: Adrielly (DevOps)
-  Status: Resolvido em 21/10/2026 (confirmar) · 1 dia
+  Status: Resolvido em 21/10/2026 · 1 dia
   Solução: PostgreSQL 16 instalado na máquina para desenvolvimento e banco H2 em memória
   nos testes e na CI; passo a passo em docs/devops/ambiente-de-desenvolvimento.txt.
 
@@ -60,6 +60,6 @@ RESUMO DA RELEASE 1
 ----------------------------------------------------------------
 Impedimentos registrados: 5
 Resolvidos: 5
-Tempo médio até a resolução: 0,6 dia (conferir depois de confirmar as datas)
+Tempo médio até a resolução: 0,4 dia (1 + 0 + 0 + 1 + 0 = 2 dias em 5 impedimentos)
 Impedimento recorrente: mudanças de uma história quebrando outra no merge (IMP-04 e
 IMP-05). Virou ação da Retrospectiva da Sprint 1.

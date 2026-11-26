@@ -15,8 +15,8 @@ Velocidade da Sprint 3: 19 pontos. Relatório de velocidade do Jira: Sprint 1 = 
   21 e Sprint 2 = 15 de 15. Média das Sprints 1 a 3: 18,3. O Jira mostra "Média: 12"
   porque conta também a Sprint 0, com 0 pontos.
   O print da velocidade foi tirado antes de a Sprint 3 ser concluída no Jira, por isso
-  ela ainda não aparece no gráfico [CONFIRMAR: trocar o print depois de concluir a
-  sprint].
+  ela ainda não aparece no gráfico; o print é trocado quando a sprint for concluída
+  no Jira.
 Histórias planejadas x integradas: 5 x 5, com todas as subtarefas integradas na
   develop (US03 4/4, US10 4/4, US11 4/4, US13 5/5, US14 3/3)
 Itens da sprint no Jira: 15. Em Concluído: as 5 histórias e as SCRUM-62, 63 e 121

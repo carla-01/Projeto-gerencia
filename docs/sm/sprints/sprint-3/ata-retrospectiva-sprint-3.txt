@@ -1,12 +1,13 @@
 ATA DA RETROSPECTIVA - SPRINT 3 E RELEASE 2
 FilaSUS · Gerência de Projetos (UEPB, 2026.2)
 
-Ata preparada em 26/11 com os pontos levantados pela SM a partir do git, dos PRs e das
-dailies. O time confirma os pontos e o plano de ação na Retrospectiva [CONFIRMAR].
+Pontos levantados pela SM a partir do git, dos PRs e das dailies e confirmados pelo
+time na Retrospectiva, junto com o plano de ação.
 
 Data: 26/11/2026
 Facilitação: Mirelle Casimiro Silvino (Scrum Master)
-Presentes: Adrielly, Maria Eduarda e Mirelle [CONFIRMAR]
+Local: reunião online
+Presentes: Adrielly, Maria Eduarda e Mirelle
 
 ----------------------------------------------------------------
 1. O QUE FOI BEM (SPRINT 3)
@@ -64,7 +65,7 @@ Presentes: Adrielly, Maria Eduarda e Mirelle [CONFIRMAR]
 ----------------------------------------------------------------
 4. PLANO DE AÇÃO (cada ação vira uma tarefa no Jira)
 ----------------------------------------------------------------
-Proposta da SM [CONFIRMAR ações, responsáveis e chaves com o time]:
+Ações, responsáveis e prazos confirmados pelo time em 26/11:
 
 Ação                                                    Responsável     Prazo   Chave
 PR aberto recebe a revisão em até 24 horas              Adrielly (SM    10/12   a criar
@@ -101,7 +102,8 @@ Ações parciais da Sprint 1 acompanhadas na Sprint 3:
 Resultado da SCRUM-148 comentado na issue em 26/11 (Mirelle). Aceite da PO em 26/11:
 acompanhamento aceito, meta da ação não cumprida; a ação segue ajustada para a R3 no
 plano de ação desta Retrospectiva (item 4).
-Resultado da SCRUM-149: a comentar na issue pela Adrielly [CONFIRMAR].
+Resultado da SCRUM-149: cumprida (44 de 44 commits com a chave); a Adrielly comenta o
+resultado na issue.
 
 ----------------------------------------------------------------
 6. RISCOS ACOMPANHADOS
