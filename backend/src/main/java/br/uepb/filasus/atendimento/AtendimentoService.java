@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import br.uepb.filasus.fila.ProfissionalSemSetorException;
 import br.uepb.filasus.fila.Senha;
+import br.uepb.filasus.fila.SenhaChamadaResponse;
 import br.uepb.filasus.fila.SenhaNaoEncontradaException;
 import br.uepb.filasus.fila.SenhaRepository;
 import br.uepb.filasus.fila.StatusSenha;
@@ -102,6 +103,20 @@ public class AtendimentoService {
         log.info("Atendimento id={} da senha id={} finalizado pelo profissional id={}",
             atendimento.getId(), senhaId, profissionalId);
         return new AtendimentoResponse(atendimento);
+    }
+
+    /**
+     * Situação da senha e do atendimento dela, para a tela do profissional recuperar o paciente
+     * chamado depois de recarregar a página (SCRUM-168). Só vale para senhas dos setores dele.
+     */
+    @Transactional(readOnly = true)
+    public SenhaEmAndamentoResponse consultar(Long profissionalId, Long senhaId) {
+        Usuario profissional = buscarProfissional(profissionalId);
+        Senha senha = buscarSenhaDoSetor(profissional, senhaId);
+        AtendimentoResponse atendimento = atendimentoRepository.findBySenha_Id(senhaId)
+            .map(AtendimentoResponse::new)
+            .orElse(null);
+        return new SenhaEmAndamentoResponse(new SenhaChamadaResponse(senha), atendimento);
     }
 
     private Usuario buscarProfissional(Long profissionalId) {

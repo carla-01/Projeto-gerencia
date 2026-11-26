@@ -3,6 +3,7 @@ package br.uepb.filasus.atendimento;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -41,7 +42,10 @@ import br.uepb.filasus.usuario.Perfil;
 import br.uepb.filasus.usuario.Usuario;
 import br.uepb.filasus.usuario.UsuarioRepository;
 
-/** Iniciar e finalizar o atendimento (US-14 - SCRUM-167). Dados fictícios. */
+/**
+ * Iniciar e finalizar o atendimento (US-14 - SCRUM-167) e consultar a senha em andamento
+ * (SCRUM-168). Dados fictícios.
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -264,6 +268,47 @@ class AtendimentoControllerTest {
             .andExpect(jsonPath("$.mensagem").value("Senha não encontrada"));
 
         assertEquals(StatusSenha.CHAMADA, noBanco(outroSetor).getStatus());
+    }
+
+    private ResultActions consultar(Usuario quem, Senha senha) throws Exception {
+        return mockMvc.perform(get("/api/profissional/atendimentos/" + senha.getId())
+            .header("Authorization", "Bearer " + jwtService.gerarToken(quem)));
+    }
+
+    @Test
+    void consultaASenhaChamadaAntesDeIniciar() throws Exception {
+        Senha senha = chamada(5);
+
+        consultar(profissional, senha)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.senha.id").value(senha.getId()))
+            .andExpect(jsonPath("$.senha.numero").value(5))
+            .andExpect(jsonPath("$.senha.nomePaciente").value("Paciente 5"))
+            .andExpect(jsonPath("$.senha.status").value("CHAMADA"))
+            .andExpect(jsonPath("$.senha.chamadaEm").value("2026-11-25T12:00:00Z"))
+            .andExpect(jsonPath("$.atendimento").isEmpty());
+    }
+
+    @Test
+    void consultaOAtendimentoEmAndamento() throws Exception {
+        Senha senha = chamada(5);
+        iniciar(profissional, senha).andExpect(status().isOk());
+
+        consultar(profissional, senha)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.senha.status").value("EM_ATENDIMENTO"))
+            .andExpect(jsonPath("$.atendimento.status").value("EM_ATENDIMENTO"))
+            .andExpect(jsonPath("$.atendimento.iniciadoEm").value("2026-11-25T12:00:00Z"))
+            .andExpect(jsonPath("$.atendimento.finalizadoEm").isEmpty());
+    }
+
+    @Test
+    void naoConsultaSenhaDeOutroSetor() throws Exception {
+        Senha outroSetor = criarSenha(odontologia, 1, StatusSenha.CHAMADA);
+
+        consultar(profissional, outroSetor)
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.mensagem").value("Senha não encontrada"));
     }
 
     @Test

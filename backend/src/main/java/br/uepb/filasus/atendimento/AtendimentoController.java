@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,9 @@ import br.uepb.filasus.fila.SenhaNaoEncontradaException;
 /**
  * Iniciar e finalizar o atendimento (US-14 - SCRUM-167).
  * Só o perfil PROFISSIONAL acessa (/api/profissional/** no SecurityConfig).
+ *
+ * GET /{senhaId} devolve a senha e o atendimento, para a tela recuperar o paciente
+ * depois de recarregar (SCRUM-168).
  *
  * Respostas:
  * - 200 com o atendimento e os horários gravados
@@ -32,6 +36,12 @@ public class AtendimentoController {
 
     public AtendimentoController(AtendimentoService atendimentoService) {
         this.atendimentoService = atendimentoService;
+    }
+
+    /** Situação da senha chamada e do atendimento, para a tela recuperar depois de recarregar (SCRUM-168). */
+    @GetMapping("/{senhaId}")
+    public SenhaEmAndamentoResponse consultar(Authentication autenticacao, @PathVariable Long senhaId) {
+        return atendimentoService.consultar(Long.valueOf(autenticacao.getName()), senhaId);
     }
 
     @PostMapping("/{senhaId}/inicio")

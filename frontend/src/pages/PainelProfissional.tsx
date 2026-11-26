@@ -1,6 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { finalizarAtendimento, iniciarAtendimento } from '../services/atendimento'
+import {
+  consultarSenhaEmAndamento,
+  esquecerSenhaEmAndamento,
+  finalizarAtendimento,
+  guardarSenhaEmAndamento,
+  iniciarAtendimento,
+  obterSenhaEmAndamento,
+} from '../services/atendimento'
 import type { Atendimento } from '../services/atendimento'
 import { fazerLogout } from '../services/auth'
 import { ErroChamada, chamarProximo } from '../services/chamada'
@@ -62,6 +69,9 @@ function IconeChamada() {
  * (US14 - SCRUM-168). Finalizar sem iniciar mostra "Inicie o atendimento antes de finalizar",
  * que vem do back-end (CT-US14-02). Enquanto o atendimento está em andamento, o próximo não é
  * chamado, para o atendimento aberto não sumir da tela.
+ *
+ * Ao recarregar a página, a tela recupera o paciente chamado ou em atendimento pelo id da senha
+ * guardado no navegador, e o "Chamar próximo" continua desativado se o atendimento estiver aberto.
  */
 export default function PainelProfissional() {
   const navigate = useNavigate()
@@ -71,6 +81,56 @@ export default function PainelProfissional() {
   const [chamando, setChamando] = useState(false)
   const [atendimento, setAtendimento] = useState<Atendimento | null>(null)
   const [processando, setProcessando] = useState(false)
+  // Enquanto busca o paciente que estava na tela antes de recarregar.
+  const [recuperando, setRecuperando] = useState(() => obterSenhaEmAndamento() !== null)
+
+  useEffect(() => {
+    const senhaId = obterSenhaEmAndamento()
+    if (senhaId === null) {
+      return
+    }
+    // Evita mexer na tela se ela já foi fechada quando a resposta chegar.
+    let ativa = true
+    consultarSenhaEmAndamento(senhaId)
+      .then((resultado) => {
+        if (!ativa) {
+          return
+        }
+        const status = resultado.senha.status
+        if (status === 'CHAMADA' || status === 'EM_ATENDIMENTO') {
+          setSenha(resultado.senha)
+          setAtendimento(resultado.atendimento)
+        } else {
+          // Já foi atendida, deu falta ou outra mudança: não há mais nada em andamento.
+          esquecerSenhaEmAndamento()
+        }
+      })
+      .catch((e: unknown) => {
+        if (!ativa) {
+          return
+        }
+        if (!(e instanceof ErroChamada)) {
+          setErro('Algo deu errado. Tente de novo.')
+        } else if (e.tipo === 'sem-login') {
+          fazerLogout()
+          navigate('/login', { replace: true })
+        } else if (e.tipo === 'sem-permissao') {
+          navigate('/acesso-negado', { replace: true })
+        } else if (e.tipo === 'nao-encontrada') {
+          esquecerSenhaEmAndamento()
+        } else {
+          setErro(e.message)
+        }
+      })
+      .finally(() => {
+        if (ativa) {
+          setRecuperando(false)
+        }
+      })
+    return () => {
+      ativa = false
+    }
+  }, [navigate])
 
   function tratarErro(e: unknown) {
     if (!(e instanceof ErroChamada)) {
@@ -98,6 +158,7 @@ export default function PainelProfissional() {
       if (resultado.senha !== null) {
         setSenha(resultado.senha)
         setAtendimento(null)
+        guardarSenhaEmAndamento(resultado.senha.id)
       }
       // Com a fila vazia, o último chamado continua na tela.
       if (resultado.mensagem !== null) {
@@ -117,7 +178,11 @@ export default function PainelProfissional() {
     setAviso('')
     setProcessando(true)
     try {
-      setAtendimento(await acao(senha.id))
+      const resultado = await acao(senha.id)
+      setAtendimento(resultado)
+      if (resultado.status === 'ATENDIDA') {
+        esquecerSenhaEmAndamento()
+      }
     } catch (e) {
       tratarErro(e)
     }
@@ -155,7 +220,7 @@ export default function PainelProfissional() {
           <button
             type="button"
             className="profissional-chamar"
-            disabled={chamando || emAtendimento}
+            disabled={chamando || recuperando || emAtendimento}
             onClick={chamar}
           >
             <IconeChamada />
@@ -175,7 +240,10 @@ export default function PainelProfissional() {
             </p>
           )}
 
-          {senha === null && (
+          {senha === null && recuperando && (
+            <p className="profissional-vazio">Recuperando o paciente chamado...</p>
+          )}
+          {senha === null && !recuperando && (
             <p className="profissional-vazio">Nenhum paciente chamado ainda.</p>
           )}
 

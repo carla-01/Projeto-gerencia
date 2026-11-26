@@ -140,6 +140,8 @@ describe('Tela do profissional', () => {
     expect(screen.queryByRole('button', { name: 'Finalizar atendimento' })).not.toBeInTheDocument()
     expect(fetch.mock.calls[1][0]).toBe('/api/profissional/atendimentos/41/inicio')
     expect(fetch.mock.calls[2][0]).toBe('/api/profissional/atendimentos/41/fim')
+    // Finalizado, não há mais o que recuperar ao recarregar.
+    expect(localStorage.getItem('filasus.senhaEmAndamento')).toBeNull()
   })
 
   it('CT-US14-02: finalizar sem iniciar pede para iniciar antes', async () => {
@@ -167,6 +169,63 @@ describe('Tela do profissional', () => {
     await screen.findByText(/Em atendimento desde/)
 
     expect(screen.getByRole('button', { name: 'Chamar próximo' })).toBeDisabled()
+  })
+
+  it('guarda só o id da senha chamada para recuperar depois', async () => {
+    simularBackEnd({ status: 200, corpo: CHAMOU })
+    abrirComo('PROFISSIONAL')
+
+    chamarProximo()
+    await screen.findByText('007')
+
+    expect(localStorage.getItem('filasus.senhaEmAndamento')).toBe('41')
+  })
+
+  it('ao recarregar, recupera o atendimento aberto e mantém o "Chamar próximo" desativado', async () => {
+    localStorage.setItem('filasus.senhaEmAndamento', '41')
+    const fetch = simularBackEnd({
+      status: 200,
+      corpo: { senha: { ...SENHA, status: 'EM_ATENDIMENTO' }, atendimento: ATENDIMENTO },
+    })
+    abrirComo('PROFISSIONAL')
+
+    expect(await screen.findByText('007')).toBeInTheDocument()
+    expect(screen.getByText(/Em atendimento desde/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Chamar próximo' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Finalizar atendimento' })).toBeEnabled()
+    const [url, opcoes] = fetch.mock.calls[0]
+    expect(url).toBe('/api/profissional/atendimentos/41')
+    expect(opcoes?.method).toBe('GET')
+  })
+
+  it('ao recarregar, recupera o paciente chamado que ainda não começou o atendimento', async () => {
+    localStorage.setItem('filasus.senhaEmAndamento', '41')
+    simularBackEnd({ status: 200, corpo: { senha: SENHA, atendimento: null } })
+    abrirComo('PROFISSIONAL')
+
+    expect(await screen.findByText('007')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Iniciar atendimento' })).toBeEnabled()
+    expect(screen.getByRole('button', { name: 'Chamar próximo' })).toBeEnabled()
+  })
+
+  it('ao recarregar, esquece a senha que já saiu de andamento', async () => {
+    localStorage.setItem('filasus.senhaEmAndamento', '41')
+    simularBackEnd({ status: 200, corpo: { senha: { ...SENHA, status: 'ATENDIDA' }, atendimento: FINALIZADO } })
+    abrirComo('PROFISSIONAL')
+
+    expect(await screen.findByText('Nenhum paciente chamado ainda.')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Chamar próximo' })).toBeEnabled()
+    expect(localStorage.getItem('filasus.senhaEmAndamento')).toBeNull()
+  })
+
+  it('ao recarregar, esquece a senha que não é mais encontrada', async () => {
+    localStorage.setItem('filasus.senhaEmAndamento', '41')
+    simularBackEnd({ status: 404, corpo: { mensagem: 'Senha não encontrada' } })
+    abrirComo('PROFISSIONAL')
+
+    expect(await screen.findByText('Nenhum paciente chamado ainda.')).toBeInTheDocument()
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(localStorage.getItem('filasus.senhaEmAndamento')).toBeNull()
   })
 
   it('outro perfil não abre a tela do profissional', () => {

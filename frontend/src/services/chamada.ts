@@ -23,8 +23,8 @@ export type ResultadoChamada = {
   senha: SenhaChamada | null
 }
 
-/** O que a tela deve fazer com o erro. */
-export type TipoErroChamada = 'aviso' | 'sem-login' | 'sem-permissao'
+/** O que a tela deve fazer com o erro. 'nao-encontrada': a senha não existe ou é de outro setor (US14). */
+export type TipoErroChamada = 'aviso' | 'sem-login' | 'sem-permissao' | 'nao-encontrada'
 
 /** Erro com a mensagem que deve aparecer na tela. */
 export class ErroChamada extends Error {
