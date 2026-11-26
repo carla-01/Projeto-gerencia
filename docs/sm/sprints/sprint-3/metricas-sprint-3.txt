@@ -1,0 +1,122 @@
+MÉTRICAS - SPRINT 3
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+Responsável: Mirelle Casimiro Silvino (Scrum Master)
+
+Fontes: quadro e relatórios do Jira (burndown e velocidade), git e GitHub (PRs, commits
+e execuções da CI de 17/11 a 26/11).
+
+----------------------------------------------------------------
+1. NÚMEROS
+----------------------------------------------------------------
+Pontos planejados: 19
+Pontos entregues: 19 (US03 5 + US10 3 + US11 5 + US13 3 + US14 3), conforme o
+  burndown do Jira, que chega a 0 em 26/11
+Velocidade da Sprint 3: 19 pontos. Relatório de velocidade do Jira: Sprint 1 = 21 de
+  21 e Sprint 2 = 15 de 15. Média das Sprints 1 a 3: 18,3. O Jira mostra "Média: 12"
+  porque conta também a Sprint 0, com 0 pontos.
+  O print da velocidade foi tirado antes de a Sprint 3 ser concluída no Jira, por isso
+  ela ainda não aparece no gráfico; o print é trocado quando a sprint for concluída
+  no Jira.
+Histórias planejadas x integradas: 5 x 5, com todas as subtarefas integradas na
+  develop (US03 4/4, US10 4/4, US11 4/4, US13 5/5, US14 3/3)
+Itens da sprint no Jira: 15. Em Concluído: as 5 histórias e as SCRUM-62, 63 e 121
+Itens ainda em Em andamento na manhã de 26/11: SCRUM-147 (release notes), 148 e 149
+  (ações da retro), 170 e 171 (QA), 172 (esta tarefa) e 173 (repriorização do
+  backlog), que fecham na Review e na Retro. A SCRUM-121 está em Concluído no Jira, e
+  o PR #72 dela entrou na develop em 26/11 às 10h15.
+Bugs encontrados x corrigidos: 3 x 0, levantados pela QA e registrados no Jira em
+  26/11, no Backlog com Release R3 (nenhum Crítico ou Alto, e nenhum impediu entrega):
+  SCRUM-176  /actuator/health responde 401 sem login, mas docs/devops/homologacao.txt
+             diz que responde {"status":"UP"}. Baixa. Aberto.
+  SCRUM-177  A "Fila do dia" do painel da recepção sempre mostra "Nenhuma pessoa na
+             fila": o GET /api/recepcao/fila devolve uma lista vazia fixa. Média.
+             Aberto; não entrou em nenhuma subtarefa da R2.
+  SCRUM-178  Senha presa em CHAMADA ou EM_ATENDIMENTO se o profissional chamar o
+             próximo sem iniciar o atendimento ou trocar de computador; o paciente não
+             tira outra senha no serviço até o fim do dia. Média. Parcialmente
+             corrigido no PR #73 (recarregar no mesmo navegador já funciona).
+  Q-02 (bugs Críticos ou Altos em aberto): 0. Densidade de defeitos: 3 bugs / 19
+  pontos = 0,16 bug por ponto.
+  A QA não contou como bug: o limite de 40 senhas no primeiro teste de carga (regra
+  funcionando) e as falhas da CI #235 e #259 (ambiente e Maven Central) e #242 e #243
+  (corrigidas no próprio PR da SCRUM-162).
+Testes automatizados no CI: 229 testes JUnit e 23 cenários Cucumber em 10 features no
+  back-end (1 @smoke por feature), 89 testes no front-end e 3 cenários @smoke no
+  Cypress (CI #285 verde na develop, commit a46603a)
+Drivers Arquiteturais 2: DA-DES-I2-01 (pico de entrada na fila, SCRUM-62) atendido,
+  p95 = 13,82 ms com 0 erros em 300 entradas; DA-DIS-I2-01 (queda do servidor,
+  SCRUM-63) atendido
+Impedimentos: 0 registrados, nenhum card com flag no Jira
+Pull requests integrados na develop durante a sprint (17/11 a 26/11): 25 (PRs #49 a
+  #73), todos com 1 aprovação.
+Commits na develop na sprint (sem contar merges): 44, todos com a chave do Jira; 1 fora
+  do padrão "SCRUM-XX tipo(escopo): descrição" ("[SCRUM-158] Back-end da prioridade
+  legal...", 22/11)
+Execuções da CI e taxa de sucesso (resultado final de cada execução): 93 execuções,
+  75 verdes (81%), 2 com falha e 16 canceladas. Só na develop: 24 execuções, 17 verdes
+  (71%), 0 falhas e 7 canceladas. As canceladas são da regra "cancel-in-progress" do
+  CI: quando dois merges entram em seguida, a execução anterior é cancelada e só a
+  última roda. As 2 falhas (#242 e #243) foram na branch da SCRUM-162 (limite de
+  conexões do PostgreSQL do CI), corrigidas no mesmo dia. As execuções #235 e #259
+  falharam na primeira tentativa por ambiente (Maven Central) e passaram ao rodar de
+  novo.
+
+----------------------------------------------------------------
+2. ENTREGA DAS HISTÓRIAS
+----------------------------------------------------------------
+História        Dev             Pontos  PRs integrados            Revisão     Último merge  Concluído no Jira
+SCRUM-15 US03   Mirelle         5       #50, #52, #54 e #63       Adrielly    25/11 16h46   25/11 10h34
+SCRUM-45 US10   Maria Eduarda   3       #55, #56, #57 e #58       Mirelle     25/11 08h53   25/11 09h42
+SCRUM-46 US11   Adrielly        5       #51, #53, #59 e #60       M. Eduarda  25/11 10h34   26/11 07h53
+SCRUM-47 US13   Maria Eduarda   3       #61, #62, #65, #66, #67   Adrielly    25/11 22h32   25/11 21h55
+SCRUM-48 US14   Mirelle         3       #69, #70, #71 e #73       Adrielly    26/11 10h10   26/11 10h27
+
+Diferenças entre o Jira e o git: a US03 foi para Concluído às 10h34 de 25/11, antes do
+merge da SCRUM-153 (PR #63, 16h46), e a US13 às 21h55, antes do merge das SCRUM-164 a
+166 (22h30). A regra é mover para Concluído depois do último merge (ação SCRUM-114).
+Os PRs da US14 foram revisados pela Adrielly; a Planning previa a Maria Eduarda.
+
+PRs integrados por dia:
+  17/11: 1   21/11: 1   23/11: 2   25/11: 16   26/11: 5
+  (18, 19, 20, 22 e 24/11: nenhum)
+
+----------------------------------------------------------------
+3. BURNDOWN E VELOCIDADE
+----------------------------------------------------------------
+Print do burndown: docs/sm/sprints/sprint-3/burndown-sprint-3.png
+Print da velocidade: docs/sm/sprints/sprint-3/velocidade-sprint-3.png (ainda sem a
+  Sprint 3; ver item 1)
+
+----------------------------------------------------------------
+4. INTERPRETAÇÃO
+----------------------------------------------------------------
+- Pelo relatório do Jira, o trabalho restante ficou em 19 pontos de 17/11 até 25/11 às
+  9h42 e caiu nos dois últimos dias:
+    25/11: 19 -> 16 (US10, 09h42), 16 -> 11 (US03, 10h34) e 11 -> 8 (US13, 21h55)
+    26/11: 8 -> 3 (US11, 07h53) e 3 -> 0 (US14, 10h27)
+  A sprint chegou a 0 no último dia, 26/11.
+- A linha ideal desce cerca de 2,1 pontos por dia (19 pontos em 9 dias). Em 24/11 a
+  ideal estava perto de 4 pontos e o trabalho restante ainda era 19: o burndown ficou
+  acima da linha ideal a sprint inteira.
+- O código começou a entrar antes: a US03 tinha a SCRUM-150 integrada em 21/11 e a US11
+  as SCRUM-158 e 159 em 23/11. Como a história só vai para Concluído com todas as
+  subtarefas integradas, esse progresso não aparece no burndown.
+- Ação SCRUM-148 (primeira subtarefa de cada US até a daily de 23/11): não cumprida.
+  Na daily de 23/11 só 2 das 5 histórias tinham a primeira subtarefa integrada (US03 e
+  US11). O critério "o burndown mostra queda antes dos dois últimos dias" também não
+  foi atingido. Detalhe em registro-dailies-sprint-3.txt (daily 2).
+- Comparação com a Sprint 2: lá 14 dos 22 PRs entraram nos dois últimos dias e a sprint
+  chegou a 0 um dia antes do fim. Na Sprint 3, 21 dos 25 PRs entraram em 25/11 e 26/11,
+  e a sprint só chegou a 0 no dia da Review. A concentração no fim piorou.
+- Causas vistas nos dados: os PRs da US03 #52 e #54 esperaram três dias pela revisão
+  (22/11 a 25/11); a US10 e a US13, da mesma integrante que também era PO e DevOps,
+  começaram em 24/11 (RSK07); a US14 dependia da US13, que entrou às 22h30 de 25/11.
+- A velocidade de 19 pontos ficou igual ao planejado e acima da Sprint 2 (15): o time
+  entregou acima da capacidade calculada na Planning, e a US14 não precisou sair para
+  a R3, mas o trabalho ficou comprimido nos dois últimos dias.
+- Qualidade: 3 bugs na sprint (0,16 por ponto), nenhum Crítico ou Alto (Q-02 = 0). Os
+  três (SCRUM-176, 177 e 178) ficaram no Backlog para a Planning da R3.
+- Ação SCRUM-149 (revisora confere a chave do Jira em cada commit): os 44 commits da
+  sprint têm a chave; 1 ficou fora do padrão de mensagem.
+- Ajuste proposto para a R3: limitar o tempo de espera de um PR na revisão (ver plano
+  de ação da Retrospectiva).
