@@ -1,0 +1,77 @@
+REGISTRO DE DAILIES - SPRINT 3
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+Facilitação e registro: Mirelle Casimiro Silvino (Scrum Master)
+
+Dailies às segundas e quartas-feiras, às 20h, online, de 10 a 15 minutos.
+Cada integrante responde: o que fez, o que vai fazer e o que está travando.
+O que cada uma fez foi conferido nos commits, nos PRs e nos merges da develop do
+período.
+
+17/11 não teve daily: dia da Sprint Planning.
+
+---
+
+## DAILY 1 - quarta-feira, 18/11/2026, 20h
+
+Presentes: Adrielly, Maria Eduarda e Mirelle    Duração: 10 a 15 min
+Adrielly: plano de testes da Sprint 3 apresentado na Planning; próximo: back-end da
+  prioridade legal da US11 (SCRUM-158) e ordem da fila com prioridade (SCRUM-159)
+Maria Eduarda: Planning registrada no plano da release (SCRUM-173, PR #49, integrado
+  em 17/11); próximo: check-in na recepção da US10 (SCRUM-154 a 157) e chamar o próximo
+  da US13 (SCRUM-162 a 166)
+Mirelle: Planning da Sprint 3 facilitada; próximo: cadastro de funcionários pelo gestor
+  da US03 (SCRUM-150 a 153)
+Impedimentos: nenhum (nenhum card com flag no Jira)
+
+---
+
+## DAILY 2 - segunda-feira, 23/11/2026, 20h
+
+Presentes: Adrielly, Maria Eduarda e Mirelle    Duração: 10 a 15 min
+Adrielly: back-end da prioridade legal e ordem da fila integrados (SCRUM-158, PR #51, e
+  SCRUM-159, PR #53, em 23/11 às 13h45); próximo: tela da recepção com a prioridade
+  (SCRUM-160) e cenários Gherkin da US11 (SCRUM-161); teste de carga (SCRUM-62)
+Maria Eduarda: sem entrega integrada desde a daily de 18/11; próximo: US10 (SCRUM-154
+  a 157) e US13 (SCRUM-162 a 166)
+Mirelle: US03, US10 e US11 movidas para Em andamento no Jira em 22/11; cadastro de
+  funcionários integrado (SCRUM-150, PR #50, em 21/11); setor do
+  profissional e lista de usuários (SCRUM-151, PR #52) e tela de funcionários
+  (SCRUM-152, PR #54) abertos em 22/11, aguardando revisão; próximo: cenários Gherkin
+  da US03 (SCRUM-153) e US14 (SCRUM-167 a 169)
+Impedimentos: nenhum (nenhum card com flag no Jira)
+
+Conferência da ação SCRUM-148 (primeira subtarefa de cada US integrada até esta daily):
+  US03 (SCRUM-15)   sim  SCRUM-150, PR #50, 21/11
+  US11 (SCRUM-46)   sim  SCRUM-158 e 159, PRs #51 e #53, 23/11 às 13h45
+  US10 (SCRUM-45)   não  primeira subtarefa integrada em 25/11 (PR #55)
+  US13 (SCRUM-47)   não  primeira subtarefa integrada em 25/11 (PR #61)
+  US14 (SCRUM-48)   não  primeira subtarefa integrada em 26/11 (PR #69)
+  Resultado: 2 de 5 histórias. A ação não foi cumprida nesta sprint.
+
+---
+
+## DAILY 3 - quarta-feira, 25/11/2026, 20h
+
+Presentes: Adrielly, Maria Eduarda e Mirelle    Duração: 10 a 15 min
+Adrielly: US11 integrada (SCRUM-160, PR #59, e SCRUM-161, PR #60) e teste de carga do
+  pico de entrada na fila integrado (SCRUM-62, PR #64, driver DA-DES-I2-01 atendido);
+  próximo: revisão dos PRs da US13 e da US14, conferência da DoD das histórias e
+  relatório de qualidade da R2
+Maria Eduarda: US10 integrada (SCRUM-154 a 157, PRs #55 a #58) e back-end da US13
+  integrado (SCRUM-162, PR #61, e SCRUM-163, PR #62); próximo: tela do profissional,
+  aviso ao paciente e cenários da US13 (SCRUM-164 a 166), teste de queda do servidor
+  (SCRUM-63) e relatório do pipeline (SCRUM-121)
+Mirelle: US03 integrada (SCRUM-151, PR #52; SCRUM-152, PR #54; SCRUM-153, PR #63);
+  próximo: US14 (SCRUM-167 a 169) e atas e métricas da sprint (SCRUM-172)
+Impedimentos: nenhum (nenhum card com flag no Jira)
+
+Os Drivers SCRUM-62 e SCRUM-63 não estavam concluídos em 24/11, o prazo combinado na
+Planning para seguirem na sprint. Os dois continuaram na sprint e entraram
+em 25/11 (PRs #64 e #68).
+
+Depois desta daily, ainda em 25/11, entraram na develop a US13 (PRs #65 a #67, às 22h30)
+e o SCRUM-63 (PR #68). A US14 foi integrada em 26/11 de manhã (PRs #69 a #71). A
+correção da recuperação do atendimento ao recarregar a tela, apontada pela QA na
+revisão do PR #70, entrou no PR #73 (26/11, 10h10).
+
+26/11 não tem daily: dia da Review e da Retrospectiva.
