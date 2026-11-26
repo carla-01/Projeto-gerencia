@@ -5,7 +5,7 @@ Disciplina: Gerência de Projetos
 Release vigente: R2 – Fila e Atendimento (03/11 a 26/11/2026).
 Responsável: Maria Eduarda da Nóbrega (Product Owner da R2).
 Versão inicial: 19/10/2026, por Adrielly Carla Ferreira de Melo (PO da R1).
-Última atualização: 12/11/2026, repriorização após a Review da Sprint 2.
+Última atualização: 26/11/2026, repriorização após a Review da Sprint 3.
 
 #  Critério                 Justificativa
 -  -----------------------  ------------------------------------------------------------
@@ -85,6 +85,33 @@ Este histórico é atualizado depois de cada Review.
                             
 ----------------------------------------------------------------
 BACKLOG ORDENADO
+
+26/11/2026 - Repriorização após a Review da Sprint 3 e fim da R2 (SCRUM-173)
+Responsável: Maria Eduarda da Nóbrega (PO da R2)
+
+- Sprint Goals da R2:
+  Sprint 2: o paciente entra na fila do serviço, vê sua posição e pode
+  cancelar a senha. Atingido (15 de 15 pontos).
+  Sprint 3: a UBS opera o ciclo completo: check-in, prioridade legal,
+  chamada e atendimento. Atingido (19 de 19 pontos).
+- Review de 26/11: SCRUM-15, 45, 46, 47 e 48 aceitas (19 de 19 pontos).
+  Nenhuma história voltou ao backlog.
+- R2: 9 histórias planejadas, 34 pontos. Velocidades: Sprint 1 = 21,
+  Sprint 2 = 15 e Sprint 3 = 19 (média 18,3). Os 34 pontos foram aceitos.
+- Drivers SCRUM-62 e SCRUM-63 concluídos em 25/11, depois do prazo de
+  24/11 combinado na Planning. A queda do servidor foi repetida com a QA em
+  26/11: API de volta em 12 s, com 5 de 5 senhas mantidas.
+- Bugs da Sprint 3 entram no backlog da R3, nesta ordem proposta:
+  SCRUM-177 (fila do dia da recepção sempre vazia, Média), porque a
+  recepção não enxerga a fila; SCRUM-178 (senha presa em chamada ou em
+  atendimento, Média), porque impede o paciente de tirar outra senha;
+  SCRUM-176 (/actuator/health responde 401 sem login, Baixa); e BUG-06
+  (homologacao.txt cita o PostgreSQL 18, Baixa), já corrigido no PR #80.
+- A melhoria da US06 (informar o próximo horário de abertura) continua no
+  backlog.
+- Sprint 4 (Planning em 01/12): a PO + DevOps passa a ser a Mirelle, que
+  confirma esta ordem e a dos itens da R3 já priorizados.
+
 ----------------------------------------------------------------
 #   Chave     História                                 Pts  Release  Sprint  Justificativa
 --  --------  ---------------------------------------  ---  -------  ------  --------------------------------
