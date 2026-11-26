@@ -1,0 +1,240 @@
+CASOS DE TESTE - SPRINT 3 - FilaSUS
+QA: Adrielly Carla Ferreira de Melo
+Versão 1.0 - 26/11/2026 (Release 2 / Sprint 3, de 17/11 a 26/11)
+
+Histórico:
+  - v1.0 (26/11/2026): casos da US03, US10, US11, US13 e US14 executados no fim da sprint.
+
+Referência da execução:
+  - Ambiente: develop, commit a46603a (merge do PR #72)
+  - Pipeline: CI #285, GitHub Actions, 26/11/2026
+  - Back-end: mvn verify aprovado (cenários .feature executados pelo Cucumber)
+  - Front-end: npm ci, build e testes aprovados (Vitest)
+  - Smoke: cenários @smoke aprovados
+  - Resultado final: 12 casos executados e aprovados
+
+----------------------------------------------------------------
+SCRUM-15 [US-03] Gestor cadastra funcionários
+----------------------------------------------------------------
+Subtarefas: SCRUM-150 e SCRUM-151 (back-end), SCRUM-152 (tela), SCRUM-153 (Gherkin)
+
+CT-US03-01  Sucesso   Cadastro de funcionário
+  Dado que estou logado como gestor da UBS
+  E que a UBS tem o setor "Enfermagem BDD"
+  Quando cadastro um profissional com nome "Enfermeira Fictícia", e-mail "enfermeira.bdd@exemplo.test", setor "Enfermagem BDD" e papel "PROFISSIONAL"
+  Então ele recebe acesso e aparece na lista de usuários
+  Issue Jira: SCRUM-15; SCRUM-153
+  Teste automatizado: backend/src/test/resources/features/US03-gestor-cadastra-funcionarios.feature (@smoke) · FuncionarioControllerTest · Funcionarios.test.tsx#CT-US03-01
+  Resultado obtido: Passou no CI #285 da develop.
+  Status: Passou
+  Evidência: CI #285, develop, commit a46603a
+  Bug aberto: N/A
+
+CT-US03-02  Exceção   E-mail duplicado
+  Dado que estou logado como gestor da UBS
+  E que já existe um usuário com o e-mail "repetido.bdd@exemplo.test"
+  Quando tento salvar o cadastro de uma recepcionista com o e-mail "repetido.bdd@exemplo.test"
+  Então vejo "E-mail já cadastrado" e nada é gravado
+  Issue Jira: SCRUM-15; SCRUM-153
+  Teste automatizado: backend/src/test/resources/features/US03-gestor-cadastra-funcionarios.feature · FuncionarioControllerTest · Funcionarios.test.tsx#CT-US03-02
+  Resultado obtido: Passou no CI #285 da develop.
+  Status: Passou
+  Evidência: CI #285, develop, commit a46603a
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+SCRUM-45 [US-10] Check-in na recepção
+----------------------------------------------------------------
+Subtarefas: SCRUM-154 e SCRUM-155 (back-end), SCRUM-156 (tela), SCRUM-157 (Gherkin)
+
+CT-US10-01  Sucesso   Check-in
+  Dado que sou a recepcionista que faz o check-in
+  E que o paciente tem senha ativa no serviço "Clínico"
+  Quando busco pelo CPF e confirmo a presença
+  Então o status da senha do paciente muda para "PRESENTE"
+  E o horário do check-in fica gravado
+  Issue Jira: SCRUM-45; SCRUM-157
+  Teste automatizado: backend/src/test/resources/features/US10-check-in.feature (@smoke) · CheckInControllerTest · CheckIn.test.tsx#CT-US10-01
+  Resultado obtido: Passou no CI #285 da develop.
+  Status: Passou
+  Evidência: CI #285, develop, commit a46603a
+  Bug aberto: N/A
+
+CT-US10-02  Exceção   Senha inexistente
+  Dado que sou a recepcionista que faz o check-in
+  E que o CPF do paciente não tem senha hoje
+  Quando tento fazer o check-in pelo CPF
+  Então a recepção vê o aviso "Paciente sem senha hoje"
+  E, ao colocar o paciente na fila do serviço "Clínico", ele recebe a senha número 1 com o status "AGUARDANDO"
+  Issue Jira: SCRUM-45; SCRUM-157
+  Teste automatizado: backend/src/test/resources/features/US10-check-in.feature · CheckInControllerTest · CheckIn.test.tsx#CT-US10-02
+  Resultado obtido: Passou no CI #285 da develop.
+  Status: Passou
+  Evidência: CI #285, develop, commit a46603a
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+SCRUM-46 [US-11] Aplicar prioridade legal
+----------------------------------------------------------------
+Subtarefas: SCRUM-158 e SCRUM-159 (back-end), SCRUM-160 (tela), SCRUM-161 (Gherkin)
+
+CT-US11-01  Sucesso   Prioridade aplicada
+  Dado que o paciente está na fila do serviço "Clínico" com a senha número 3
+  E há 2 pessoas sem prioridade na frente dele
+  Quando a recepcionista marca a prioridade "Idoso 60+"
+  Então a senha fica com a prioridade "IDOSO"
+  E a mudança fica registrada com a recepcionista e o horário
+  E o paciente passa para a posição 1 com 0 pessoas na frente
+  Issue Jira: SCRUM-46; SCRUM-161
+  Teste automatizado: backend/src/test/resources/features/US11-prioridade-legal.feature (@smoke) · PrioridadeSenhaControllerTest · CheckIn.test.tsx#CT-US11-01
+  Resultado obtido: Passou no CI #285 da develop.
+  Status: Passou
+  Evidência: CI #285, develop, commit a46603a
+  Bug aberto: N/A
+
+CT-US11-02  Exceção   Prioridade sem justificativa
+  Dado que o paciente está na fila do serviço "Clínico" com a senha número 1
+  Quando a recepcionista tenta marcar a prioridade "Urgência" sem informar o motivo
+  Então o sistema exige o motivo com a mensagem "Informe o motivo da urgência"
+  E a senha continua sem prioridade
+  Issue Jira: SCRUM-46; SCRUM-161
+  Teste automatizado: backend/src/test/resources/features/US11-prioridade-legal.feature · PrioridadeSenhaControllerTest · CheckIn.test.tsx#CT-US11-02
+  Resultado obtido: Passou no CI #285 da develop.
+  Status: Passou
+  Evidência: CI #285, develop, commit a46603a
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+SCRUM-47 [US-13] Chamar o próximo
+----------------------------------------------------------------
+Subtarefas: SCRUM-162 e SCRUM-163 (back-end), SCRUM-164 e SCRUM-165 (telas), SCRUM-166 (Gherkin)
+Observação: o CT-US13-03 e o CT-US13-04 resolvem o ponto de atenção da Sprint 2 (o cartão da senha
+sumia da área do paciente quando ele era chamado).
+
+CT-US13-01  Sucesso   Chamada
+  Dado que sou o profissional do setor "Clínico"
+  E há um paciente presente sem prioridade com a senha número 1
+  E há um paciente presente com prioridade de idoso com a senha número 2
+  Quando chamo o próximo paciente
+  Então a senha número 2 é chamada
+  E o paciente da senha número 2 vê na área dele a situação "CHAMADA"
+  Issue Jira: SCRUM-47; SCRUM-166
+  Teste automatizado: backend/src/test/resources/features/US13-chamar-proximo.feature (@smoke) · ChamadaControllerTest · PainelProfissional.test.tsx#CT-US13-01
+  Resultado obtido: Passou no CI #285 da develop.
+  Status: Passou
+  Evidência: CI #285, develop, commit a46603a
+  Bug aberto: N/A
+
+CT-US13-02  Exceção   Fila vazia
+  Dado que sou o profissional do setor "Clínico"
+  E há um paciente sem check-in com a senha número 1
+  Quando chamo o próximo paciente
+  Então vejo o aviso "Não há pacientes aguardando"
+  E o paciente da senha número 1 continua com a situação "AGUARDANDO"
+  Issue Jira: SCRUM-47; SCRUM-166
+  Teste automatizado: backend/src/test/resources/features/US13-chamar-proximo.feature · ChamadaControllerTest · PainelProfissional.test.tsx#CT-US13-02
+  Resultado obtido: Passou no CI #285 da develop.
+  Status: Passou
+  Evidência: CI #285, develop, commit a46603a
+  Bug aberto: N/A
+
+CT-US13-03  Sucesso   Paciente vê que foi chamado
+  Dado que há um paciente presente sem prioridade com a senha número 1
+  Quando o profissional chama o próximo paciente
+  Então o paciente da senha número 1 vê na área dele a situação "CHAMADA"
+  E a área dele mostra o serviço "Clínico" e o número 1
+  Issue Jira: SCRUM-47; SCRUM-165; SCRUM-166
+  Teste automatizado: backend/src/test/resources/features/US13-chamar-proximo.feature · SenhaChamadaAtivaTest · EscolhaServico.test.tsx#CT-US13-03
+  Resultado obtido: Passou no CI #285 da develop.
+  Status: Passou
+  Evidência: CI #285, develop, commit a46603a
+  Bug aberto: N/A
+
+CT-US13-04  Exceção   Paciente chamado não tira outra senha
+  Dado que há um paciente presente sem prioridade com a senha número 1
+  E o profissional já chamou esse paciente
+  Quando o paciente da senha número 1 tenta entrar de novo na fila
+  Então o sistema não cria outra senha para ele
+  E ele continua vendo na área dele a situação "CHAMADA"
+  Issue Jira: SCRUM-47; SCRUM-163; SCRUM-166
+  Teste automatizado: backend/src/test/resources/features/US13-chamar-proximo.feature · SenhaChamadaAtivaTest · EscolhaServico.test.tsx#CT-US13-04
+  Resultado obtido: Passou no CI #285 da develop.
+  Status: Passou
+  Evidência: CI #285, develop, commit a46603a
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+SCRUM-48 [US-14] Iniciar e finalizar atendimento
+----------------------------------------------------------------
+Subtarefas: SCRUM-167 (back-end), SCRUM-168 (tela, PRs #70 e #73), SCRUM-169 (Gherkin)
+
+CT-US14-01  Sucesso   Ciclo completo
+  Dado que atendo no setor "Clínico"
+  E chamei o paciente da senha número 1
+  Quando clico em iniciar e depois em finalizar
+  Então os horários de início e fim ficam gravados
+  E a senha número 1 fica com a situação "ATENDIDA"
+  E o paciente da senha número 1 sai da fila
+  Issue Jira: SCRUM-48; SCRUM-169
+  Teste automatizado: backend/src/test/resources/features/US14-iniciar-finalizar-atendimento.feature (@smoke) · AtendimentoControllerTest · PainelProfissional.test.tsx#CT-US14-01
+  Resultado obtido: Passou no CI #285 da develop.
+  Status: Passou
+  Evidência: CI #285, develop, commit a46603a
+  Bug aberto: N/A
+
+CT-US14-02  Exceção   Finalizar sem iniciar
+  Dado que atendo no setor "Clínico"
+  E chamei o paciente da senha número 1
+  E o atendimento não foi iniciado
+  Quando tento finalizar
+  Então o sistema pede "Inicie o atendimento antes de finalizar"
+  E a senha número 1 continua com a situação "CHAMADA"
+  Issue Jira: SCRUM-48; SCRUM-169
+  Teste automatizado: backend/src/test/resources/features/US14-iniciar-finalizar-atendimento.feature · AtendimentoControllerTest · PainelProfissional.test.tsx#CT-US14-02
+  Resultado obtido: Passou no CI #285 da develop.
+  Status: Passou
+  Evidência: CI #285, develop, commit a46603a
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+RESULTADO DA EXECUÇÃO - CI #285
+----------------------------------------------------------------
+Caso         Data         Resultado final   Bug aberto
+CT-US03-01   26/11/2026   Passou            N/A
+CT-US03-02   26/11/2026   Passou            N/A
+CT-US10-01   26/11/2026   Passou            N/A
+CT-US10-02   26/11/2026   Passou            N/A
+CT-US11-01   26/11/2026   Passou            N/A
+CT-US11-02   26/11/2026   Passou            N/A
+CT-US13-01   26/11/2026   Passou            N/A
+CT-US13-02   26/11/2026   Passou            N/A
+CT-US13-03   26/11/2026   Passou            N/A
+CT-US13-04   26/11/2026   Passou            N/A
+CT-US14-01   26/11/2026   Passou            N/A
+CT-US14-02   26/11/2026   Passou            N/A
+
+----------------------------------------------------------------
+RESUMO DA EXECUÇÃO
+----------------------------------------------------------------
+Total de casos: 12
+Casos executados: 12
+Casos aprovados: 12
+Taxa de aprovação dos executados: 100%
+Casos pendentes: 0
+Casos marcados como smoke: 5 (CT-US03-01, CT-US10-01, CT-US11-01, CT-US13-01, CT-US14-01)
+Bugs encontrados na sprint: 4 (nenhum Crítico ou Alto)
+Bugs corrigidos e retestados: 0
+Bugs em aberto: 4
+
+Os 4 bugs não quebram os critérios de aceite dos casos acima, por isso os casos passaram:
+  - Média: a "Fila do dia" do painel da recepção aparece sempre vazia.
+  - Média: a senha fica presa em "CHAMADA" ou "EM_ATENDIMENTO" quando o profissional segue sem
+    finalizar. O PR #73 recupera o atendimento ao recarregar a tela, o que corrige parte do problema.
+  - Baixa: /actuator/health responde 401 sem login.
+  - Baixa: docs/devops/homologacao.txt cita o PostgreSQL 18; a homologação usa o PostgreSQL 16.
+
+Drivers arquiteturais verificados na sprint (fora dos casos acima):
+  - DA-DES-I2-01, pico de entrada na fila (SCRUM-62, PR #64): p95 de 13,82 ms, 0 erros e 0 senhas
+    repetidas em 300 entradas. Resultado em docs/qa/carga/resultado-pico-2026-11-25.txt.
+  - DA-DIS-I2-01, falha do servidor de aplicação (SCRUM-63, PR #68): em 26/11, com a QA, a API voltou
+    em 12 s, com 5 de 5 senhas e a posição mantidas.

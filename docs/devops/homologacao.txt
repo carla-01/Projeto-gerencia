@@ -19,9 +19,10 @@ homologação precisa a mais.
      git pull
 2. Java 21 ou mais novo (java -version). Se o java padrão for mais antigo, apontar a
    variável JAVA_HOME para o JDK 21 ou mais novo antes de subir o back-end.
-3. Ligar o PostgreSQL. O serviço postgresql-x64-18 só liga à mão. No PowerShell,
-   como administrador:
-     net start postgresql-x64-18
+3. Ligar o PostgreSQL 16. O serviço postgresql-x64-16 só liga à mão. Se a versão
+   instalada no computador for outra, trocar o número no nome do serviço e no caminho
+   do psql. No PowerShell, como administrador:
+     net start postgresql-x64-16
 4. Na primeira vez, criar o banco e os dados iniciais (seção 2 do
    ambiente-de-desenvolvimento.txt, scripts em docs/devops/banco/).
 
@@ -59,7 +60,7 @@ de funcionários pelo gestor, é da Sprint 3):
 1. Cadastrar um paciente fictício em http://localhost:5173/cadastro, com um e-mail
    de teste (por exemplo gestor.demo@exemplo.test).
 2. Trocar o perfil dele no banco:
-     & "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U filasus -d filasus -c "UPDATE usuario SET perfil = 'GESTOR' WHERE email = 'gestor.demo@exemplo.test';"
+     & "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U filasus -d filasus -c "UPDATE usuario SET perfil = 'GESTOR' WHERE email = 'gestor.demo@exemplo.test';"
    Perfis possíveis: PACIENTE, RECEPCIONISTA, PROFISSIONAL e GESTOR.
 3. Entrar com esse e-mail e a senha do cadastro.
 
@@ -91,8 +92,8 @@ Os serviços padrão (Clínico, Enfermagem e Odontologia) funcionam das 07:00 à
      posições seguintes andam.
      Cenário "Já fui chamado": ainda não há tela de chamada (US13, Sprint 3). Para
      simular, mudar o status da senha e atualizar a tela:
-       & "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U filasus -d filasus -c "SELECT id, numero, status FROM senha;"
-       & "C:\Program Files\PostgreSQL\18\bin\psql.exe" -U filasus -d filasus -c "UPDATE senha SET status = 'EM_ATENDIMENTO' WHERE id = 1;"
+       & "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U filasus -d filasus -c "SELECT id, numero, status FROM senha;"
+       & "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U filasus -d filasus -c "UPDATE senha SET status = 'EM_ATENDIMENTO' WHERE id = 1;"
      Troque o 1 pelo id da senha. Hoje, com a senha chamada, o cartão dela some da
      área do paciente (ponto de atenção da QA para a US13). O teste automático
      CT-US08-02 cobre o botão que não aparece.
@@ -127,3 +128,5 @@ a cada push e em todo pull request.
 12/11/2026 - Homologação definida como ambiente local pela professora. O deploy em
 nuvem (Koyeb, Render, Neon e Netlify) foi descartado, e o Dockerfile e o workflow de
 deploy saíram do repositório.
+26/11/2026 - PostgreSQL 16 como versão de referência, igual ao CI e aos scripts do
+banco (antes o texto citava o 18).

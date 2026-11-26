@@ -7,9 +7,9 @@
 
 | Documento | Arquivo | Para que serve | Card no Jira |
 | --- | --- | --- | --- |
-| Plano de qualidade | Plano_de_Qualidade v1.1.xlsx | Critérios e métricas de qualidade do projeto | SCRUM-23 |
-| Plano de teste | Plano-de-Teste_v1.2.docx | Estratégia, escopo e ambiente dos testes | SCRUM-24 · SCRUM-126 |
-| Análise de riscos baseada em defeitos | GP_RiscoBaseadoDefeitos.xlsx | Riscos que orientam a prioridade dos testes | SCRUM-17 |
+| Plano de qualidade | Plano_de_Qualidade v1.3.xlsx | Critérios e métricas de qualidade do projeto | SCRUM-23 · SCRUM-143 · SCRUM-171 |
+| Plano de teste | Plano-de-Teste_v1.3.docx | Estratégia, escopo e ambiente dos testes | SCRUM-24 · SCRUM-126 · SCRUM-170 |
+| Análise de riscos baseada em defeitos | GP_RiscoBaseadoDefeitos.xlsx | Riscos que orientam a prioridade dos testes e acompanhamento dos drivers | SCRUM-17 · SCRUM-171 |
 
 ## Execução por sprint
 
@@ -17,6 +17,9 @@
 | --- | --- | --- |
 | Sprint 1 (R1) | Casos_de_Teste_Sprint1_FilaSUS_v1.1.txt | Bugs_Sprint1_FilaSUS.txt |
 | Sprint 2 (R2) | Casos_de_Teste_Sprint2_FilaSUS_v1.1.txt (SCRUM-126) | Nenhum bug aberto |
+| Sprint 3 (R2) | Casos_de_Teste_Sprint3_FilaSUS.txt (SCRUM-170) | 4 bugs de severidade Média ou Baixa, descritos no relatório de qualidade da R2 |
+
+Relatórios de qualidade de cada release: docs/releases/Relatorio_de_Qualidade_R1_FilaSUS.txt e docs/releases/Relatorio_de_Qualidade_R2_FilaSUS.txt (SCRUM-171).
 
 Cada caso de teste aponta para a sua US no Jira e para o teste automatizado que o executa.
 Quando sai uma versão nova de um documento, a anterior é apagada da pasta e fica no histórico do Git.
