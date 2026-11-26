@@ -202,6 +202,74 @@
   border-radius: 999px;
 }
 
+/* ---------- Iniciar e finalizar o atendimento (US14) ---------- */
+
+.profissional-situacao {
+  margin: 8px 0 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--azul);
+}
+
+.profissional-situacao-fim {
+  color: #067647;
+}
+
+.profissional-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 14px;
+}
+
+.profissional-iniciar,
+.profissional-finalizar {
+  flex: 1 1 200px;
+  max-width: 260px;
+  min-height: 48px;
+  padding: 0 20px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.profissional-iniciar {
+  color: #ffffff;
+  background: var(--azul);
+  border: 2px solid var(--azul);
+}
+
+.profissional-iniciar:hover {
+  background: #0d1866;
+}
+
+.profissional-finalizar {
+  color: var(--azul);
+  background: #ffffff;
+  border: 2px solid var(--azul);
+}
+
+.profissional-finalizar:hover {
+  background: var(--azul-claro);
+}
+
+.profissional-iniciar:focus-visible,
+.profissional-finalizar:focus-visible {
+  outline: 3px solid var(--azul-borda);
+  outline-offset: 2px;
+}
+
+.profissional-iniciar:disabled,
+.profissional-finalizar:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 @keyframes profissional-surgir {
   from {
     opacity: 0;

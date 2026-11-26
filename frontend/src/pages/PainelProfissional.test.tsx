@@ -3,7 +3,10 @@ import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from '../App'
 
-/** Chamar o próximo (US13 - SCRUM-164). O back-end é simulado e os dados são fictícios. */
+/**
+ * Chamar o próximo (US13 - SCRUM-164) e iniciar/finalizar o atendimento (US14 - SCRUM-168).
+ * O back-end é simulado e os dados são fictícios.
+ */
 
 const SENHA = {
   id: 41,
@@ -16,10 +19,21 @@ const SENHA = {
 }
 const CHAMOU = { mensagem: null, senha: SENHA }
 const FILA_VAZIA = { mensagem: 'Não há pacientes aguardando', senha: null }
+const ATENDIMENTO = {
+  id: 9,
+  senhaId: 41,
+  numero: 7,
+  servico: 'Clínico',
+  nomePaciente: 'Paciente Fictício',
+  status: 'EM_ATENDIMENTO',
+  iniciadoEm: '2026-11-25T12:00:00Z',
+  finalizadoEm: null,
+}
+const FINALIZADO = { ...ATENDIMENTO, status: 'ATENDIDA', finalizadoEm: '2026-11-25T12:20:00Z' }
 
 type RespostaSimulada = { status: number; corpo: unknown }
 
-/** Respostas do POST /api/profissional/chamadas, na ordem; a última se repete. */
+/** Respostas dos POST da tela, na ordem em que são feitos; a última se repete. */
 function simularBackEnd(...respostas: RespostaSimulada[]) {
   let quantidade = 0
   return vi.spyOn(globalThis, 'fetch').mockImplementation(async () => {
@@ -101,6 +115,58 @@ describe('Tela do profissional', () => {
     chamarProximo()
 
     expect(await screen.findByRole('alert')).toHaveTextContent('Seu usuário não tem setor')
+  })
+
+  it('CT-US14-01: inicia e finaliza o atendimento, mostra os horários e tira da fila', async () => {
+    const fetch = simularBackEnd(
+      { status: 200, corpo: CHAMOU },
+      { status: 200, corpo: ATENDIMENTO },
+      { status: 200, corpo: FINALIZADO },
+    )
+    abrirComo('PROFISSIONAL')
+    chamarProximo()
+    await screen.findByText('007')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Iniciar atendimento' }))
+
+    expect(await screen.findByText(/Em atendimento desde/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Iniciar atendimento' })).toBeDisabled()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Finalizar atendimento' }))
+
+    expect(await screen.findByText(/Atendimento finalizado às/)).toHaveTextContent('20 min')
+    expect(screen.getByText(/O paciente saiu da fila/)).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Iniciar atendimento' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Finalizar atendimento' })).not.toBeInTheDocument()
+    expect(fetch.mock.calls[1][0]).toBe('/api/profissional/atendimentos/41/inicio')
+    expect(fetch.mock.calls[2][0]).toBe('/api/profissional/atendimentos/41/fim')
+  })
+
+  it('CT-US14-02: finalizar sem iniciar pede para iniciar antes', async () => {
+    simularBackEnd(
+      { status: 200, corpo: CHAMOU },
+      { status: 409, corpo: { mensagem: 'Inicie o atendimento antes de finalizar' } },
+    )
+    abrirComo('PROFISSIONAL')
+    chamarProximo()
+    await screen.findByText('007')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Finalizar atendimento' }))
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Inicie o atendimento antes de finalizar')
+    expect(screen.getByRole('button', { name: 'Iniciar atendimento' })).toBeEnabled()
+  })
+
+  it('não chama o próximo enquanto o atendimento está em andamento', async () => {
+    simularBackEnd({ status: 200, corpo: CHAMOU }, { status: 200, corpo: ATENDIMENTO })
+    abrirComo('PROFISSIONAL')
+    chamarProximo()
+    await screen.findByText('007')
+
+    fireEvent.click(screen.getByRole('button', { name: 'Iniciar atendimento' }))
+    await screen.findByText(/Em atendimento desde/)
+
+    expect(screen.getByRole('button', { name: 'Chamar próximo' })).toBeDisabled()
   })
 
   it('outro perfil não abre a tela do profissional', () => {

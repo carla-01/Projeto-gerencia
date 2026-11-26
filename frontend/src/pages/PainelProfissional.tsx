@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { finalizarAtendimento, iniciarAtendimento } from '../services/atendimento'
+import type { Atendimento } from '../services/atendimento'
 import { fazerLogout } from '../services/auth'
 import { ErroChamada, chamarProximo } from '../services/chamada'
 import type { SenhaChamada } from '../services/chamada'
@@ -14,6 +16,15 @@ function formatarNumero(numero: number): string {
 /** "2026-11-25T12:00:00Z" vira "09:00" no horário do navegador. */
 function formatarHora(iso: string): string {
   return new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+}
+
+/** Minutos entre o início e o fim, para mostrar o tempo de atendimento. */
+function formatarDuracao(inicio: string, fim: string): string {
+  const minutos = Math.round((new Date(fim).getTime() - new Date(inicio).getTime()) / 60000)
+  if (minutos < 1) {
+    return 'menos de 1 min'
+  }
+  return minutos + ' min'
 }
 
 function textoPrioridade(prioridade: PrioridadeSenha): string {
@@ -46,6 +57,11 @@ function IconeChamada() {
  *
  * "Chamar próximo" chama quem fez check-in no setor dele, pela ordem de prioridade (CT-US13-01).
  * Sem ninguém presente, aparece "Não há pacientes aguardando" (CT-US13-02).
+ *
+ * Com o paciente chamado, "Iniciar atendimento" e "Finalizar atendimento" gravam os horários
+ * (US14 - SCRUM-168). Finalizar sem iniciar mostra "Inicie o atendimento antes de finalizar",
+ * que vem do back-end (CT-US14-02). Enquanto o atendimento está em andamento, o próximo não é
+ * chamado, para o atendimento aberto não sumir da tela.
  */
 export default function PainelProfissional() {
   const navigate = useNavigate()
@@ -53,6 +69,8 @@ export default function PainelProfissional() {
   const [aviso, setAviso] = useState('')
   const [erro, setErro] = useState('')
   const [chamando, setChamando] = useState(false)
+  const [atendimento, setAtendimento] = useState<Atendimento | null>(null)
+  const [processando, setProcessando] = useState(false)
 
   function tratarErro(e: unknown) {
     if (!(e instanceof ErroChamada)) {
@@ -79,6 +97,7 @@ export default function PainelProfissional() {
       const resultado = await chamarProximo()
       if (resultado.senha !== null) {
         setSenha(resultado.senha)
+        setAtendimento(null)
       }
       // Com a fila vazia, o último chamado continua na tela.
       if (resultado.mensagem !== null) {
@@ -89,6 +108,31 @@ export default function PainelProfissional() {
     }
     setChamando(false)
   }
+
+  async function mudarAtendimento(acao: (senhaId: number) => Promise<Atendimento>) {
+    if (senha === null) {
+      return
+    }
+    setErro('')
+    setAviso('')
+    setProcessando(true)
+    try {
+      setAtendimento(await acao(senha.id))
+    } catch (e) {
+      tratarErro(e)
+    }
+    setProcessando(false)
+  }
+
+  // Depois de iniciar ou finalizar, a situação que vale é a do atendimento.
+  let situacao = ''
+  if (senha !== null) {
+    situacao = senha.status
+  }
+  if (atendimento !== null) {
+    situacao = atendimento.status
+  }
+  const emAtendimento = situacao === 'EM_ATENDIMENTO'
 
   let textoBotao = 'Chamar próximo'
   if (chamando) {
@@ -108,7 +152,12 @@ export default function PainelProfissional() {
             <h2>Fila do meu setor</h2>
             <p>Chama quem já fez check-in, respeitando a prioridade legal.</p>
           </div>
-          <button type="button" className="profissional-chamar" disabled={chamando} onClick={chamar}>
+          <button
+            type="button"
+            className="profissional-chamar"
+            disabled={chamando || emAtendimento}
+            onClick={chamar}
+          >
             <IconeChamada />
             {textoBotao}
           </button>
@@ -141,6 +190,39 @@ export default function PainelProfissional() {
               </p>
               {senha.prioridade !== 'NENHUMA' && (
                 <span className="profissional-selo">{textoPrioridade(senha.prioridade)}</span>
+              )}
+
+              {atendimento !== null && atendimento.status === 'EM_ATENDIMENTO' && (
+                <p className="profissional-situacao">
+                  Em atendimento desde {formatarHora(atendimento.iniciadoEm)}
+                </p>
+              )}
+              {atendimento !== null && atendimento.finalizadoEm !== null && (
+                <p className="profissional-situacao profissional-situacao-fim" role="status">
+                  Atendimento finalizado às {formatarHora(atendimento.finalizadoEm)} ·{' '}
+                  {formatarDuracao(atendimento.iniciadoEm, atendimento.finalizadoEm)}. O paciente saiu da fila.
+                </p>
+              )}
+
+              {situacao !== 'ATENDIDA' && (
+                <div className="profissional-acoes">
+                  <button
+                    type="button"
+                    className="profissional-iniciar"
+                    disabled={processando || emAtendimento}
+                    onClick={() => mudarAtendimento(iniciarAtendimento)}
+                  >
+                    Iniciar atendimento
+                  </button>
+                  <button
+                    type="button"
+                    className="profissional-finalizar"
+                    disabled={processando}
+                    onClick={() => mudarAtendimento(finalizarAtendimento)}
+                  >
+                    Finalizar atendimento
+                  </button>
+                </div>
               )}
             </article>
           )}
