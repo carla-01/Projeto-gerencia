@@ -20,7 +20,7 @@
 # CPF_CHAVE_CIFRA e as outras). Use o mesmo terminal e as mesmas variáveis da primeira subida.
 
 param(
-    [string]$Psql = "C:\Program Files\PostgreSQL\18\bin\psql.exe",
+    [string]$Psql = "C:\Program Files\PostgreSQL\16\bin\psql.exe",
     [string]$Banco = "filasus",
     [string]$UsuarioDoBanco = "filasus",
     [int]$PortaDoBanco = 5432,
@@ -29,6 +29,17 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+
+# Sem o PostgreSQL 16 neste computador (e sem -Psql), usa a versão instalada mais nova.
+if (-not $PSBoundParameters.ContainsKey("Psql") -and -not (Test-Path $Psql)) {
+    $instalado = Get-ChildItem "C:\Program Files\PostgreSQL\*\bin\psql.exe" -ErrorAction SilentlyContinue |
+        Sort-Object { [int]$_.Directory.Parent.Name } -Descending |
+        Select-Object -First 1
+    if ($instalado) {
+        $Psql = $instalado.FullName
+        Write-Host "PostgreSQL 16 não encontrado. Usando $Psql"
+    }
+}
 $Api = "http://localhost:8080"
 $PortaDaApi = 8080
 $QuantidadeDePacientes = 5
@@ -69,6 +80,25 @@ function SaudeUp([string]$token) {
     } catch {
         return $false
     }
+}
+
+# Processos que escutam na porta da API, conferidos antes de encerrar: só vale se for um java
+# com "filasus" na linha de comando. Outro programa na porta (um Docker de outro projeto, por
+# exemplo) faz o script parar com erro, sem encerrar nada.
+function ProcessosDoBackend {
+    $ids = @(Get-NetTCPConnection -LocalPort $PortaDaApi -State Listen -ErrorAction SilentlyContinue |
+        Select-Object -ExpandProperty OwningProcess -Unique)
+    if ($ids.Count -eq 0) {
+        throw "Nenhum processo escutando na porta $PortaDaApi. Suba o back-end antes."
+    }
+    foreach ($id in $ids) {
+        $processo = Get-CimInstance Win32_Process -Filter "ProcessId = $id"
+        if (($processo.Name -notlike "java*") -or ($processo.CommandLine -notlike "*filasus*")) {
+            throw ("A porta $PortaDaApi está com o processo $($processo.Name) (id $id), que não é o back-end " +
+                "do FilaSUS. Nada foi encerrado. Libere a porta, suba o back-end e rode de novo.")
+        }
+    }
+    return $ids
 }
 
 function Enviar([string]$caminho, $corpo, [string]$token) {
@@ -134,6 +164,9 @@ if (-not (ApiNoAr)) {
     throw "O back-end não está no ar em $Api. Suba antes (docs/devops/homologacao.txt)."
 }
 
+# Confere de quem é a porta antes de criar qualquer dado.
+ProcessosDoBackend | Out-Null
+
 Write-Host "1. Preparando a fila com $QuantidadeDePacientes pacientes fictícios..."
 ApagarDadosDoTeste
 
@@ -164,8 +197,7 @@ $antes | ForEach-Object { Write-Host "     $_" }
 Write-Host "   Posição do último paciente: $posicaoAntes"
 
 Write-Host "2. Derrubando o back-end..."
-$processos = Get-NetTCPConnection -LocalPort $PortaDaApi -State Listen |
-    Select-Object -ExpandProperty OwningProcess -Unique
+$processos = @(ProcessosDoBackend)
 $inicio = Get-Date
 $cronometro = [System.Diagnostics.Stopwatch]::StartNew()
 foreach ($id in $processos) {
@@ -215,9 +247,7 @@ ApagarDadosDoTeste
 Write-Host "Dados fictícios do teste apagados."
 
 if ($DesligarNoFim) {
-    Get-NetTCPConnection -LocalPort $PortaDaApi -State Listen |
-        Select-Object -ExpandProperty OwningProcess -Unique |
-        ForEach-Object { Stop-Process -Id $_ -Force }
+    ProcessosDoBackend | ForEach-Object { Stop-Process -Id $_ -Force }
     Write-Host "Back-end desligado."
 } else {
     Write-Host "O back-end continua no ar em segundo plano (log em $logDoBackend)."
