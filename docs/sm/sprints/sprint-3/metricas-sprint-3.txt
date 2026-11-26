@@ -11,12 +11,10 @@ e execuções da CI de 17/11 a 26/11).
 Pontos planejados: 19
 Pontos entregues: 19 (US03 5 + US10 3 + US11 5 + US13 3 + US14 3), conforme o
   burndown do Jira, que chega a 0 em 26/11
-Velocidade da Sprint 3: 19 pontos. Relatório de velocidade do Jira: Sprint 1 = 21 de
-  21 e Sprint 2 = 15 de 15. Média das Sprints 1 a 3: 18,3. O Jira mostra "Média: 12"
-  porque conta também a Sprint 0, com 0 pontos.
-  O print da velocidade foi tirado antes de a Sprint 3 ser concluída no Jira, por isso
-  ela ainda não aparece no gráfico; o print é trocado quando a sprint for concluída
-  no Jira.
+Velocidade da Sprint 3: 19 pontos. Relatório de velocidade do Jira, com a Sprint 3 já
+  concluída: Sprint 1 = 21 de 21, Sprint 2 = 15 de 15 e Sprint 3 = 19 de 19. Média das
+  Sprints 1 a 3: 18,3. O Jira mostra "Média: 13.75" porque conta também a Sprint 0,
+  com 0 pontos.
 Histórias planejadas x integradas: 5 x 5, com todas as subtarefas integradas na
   develop (US03 4/4, US10 4/4, US11 4/4, US13 5/5, US14 3/3)
 Itens da sprint no Jira: 15. Em Concluído: as 5 histórias e as SCRUM-62, 63 e 121
@@ -84,8 +82,7 @@ PRs integrados por dia:
 3. BURNDOWN E VELOCIDADE
 ----------------------------------------------------------------
 Print do burndown: docs/sm/sprints/sprint-3/burndown-sprint-3.png
-Print da velocidade: docs/sm/sprints/sprint-3/velocidade-sprint-3.png (ainda sem a
-  Sprint 3; ver item 1)
+Print da velocidade: docs/sm/sprints/sprint-3/velocidade-sprint-3.png
 
 ----------------------------------------------------------------
 4. INTERPRETAÇÃO
