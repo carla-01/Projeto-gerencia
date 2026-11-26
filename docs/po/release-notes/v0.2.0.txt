@@ -109,7 +109,7 @@ PROBLEMAS CONHECIDOS
   documentação de homologação indica "UP".
 - BUG-06 (Baixa, no relatório de qualidade da R2):
   docs/devops/homologacao.txt citava o PostgreSQL 18, mas a homologação e o
-  CI usam o PostgreSQL 16. Corrigido no PR #80, aguardando o reteste da QA.
+  CI usam o PostgreSQL 16. Corrigido no PR #80.
 - O mvn spring-boot:run não achou a classe principal em um computador cuja
   pasta do projeto tem acento no caminho; subir pelo .jar funciona.
 
