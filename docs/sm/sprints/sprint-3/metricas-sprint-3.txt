@@ -105,7 +105,7 @@ Print da velocidade: docs/sm/sprints/sprint-3/velocidade-sprint-3.png (ainda sem
 - Ação SCRUM-148 (primeira subtarefa de cada US até a daily de 23/11): não cumprida.
   Na daily de 23/11 só 2 das 5 histórias tinham a primeira subtarefa integrada (US03 e
   US11). O critério "o burndown mostra queda antes dos dois últimos dias" também não
-  foi atingido. Detalhe em registro-dailies.txt (daily 2).
+  foi atingido. Detalhe em registro-dailies-sprint-3.txt (daily 2).
 - Comparação com a Sprint 2: lá 14 dos 22 PRs entraram nos dois últimos dias e a sprint
   chegou a 0 um dia antes do fim. Na Sprint 3, 21 dos 25 PRs entraram em 25/11 e 26/11,
   e a sprint só chegou a 0 no dia da Review. A concentração no fim piorou.

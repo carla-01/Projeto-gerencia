@@ -5,7 +5,7 @@ Responsável: Mirelle Casimiro Silvino (Scrum Master da R2)
 Todo impedimento citado em daily, no grupo ou nos comentários do Jira entra aqui no
 mesmo dia e recebe o sinalizador (flag) no card do Jira enquanto estiver aberto.
 Status: Aberto, Em tratamento ou Resolvido.
-A numeração continua a da Sprint 2 (IMP-06, em sprints/sprint-2/registro-de-impedimentos.txt).
+A numeração continua a da Sprint 2 (IMP-06, em sprints/sprint-2/registro-de-impedimentos-sprint-2.txt).
 
 ----------------------------------------------------------------
 REGISTRO

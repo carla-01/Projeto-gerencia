@@ -121,5 +121,5 @@ fila).
 - Dailies às segundas e quartas, às 20h: 18/11, 23/11 e 25/11.
 - Na daily de 23/11 a SM confere se cada história tem a primeira subtarefa integrada
   (SCRUM-148).
-- Impedimentos com sinalizador no Jira e em sprint-3/registro-de-impedimentos.txt.
+- Impedimentos com sinalizador no Jira e em sprint-3/registro-de-impedimentos-sprint-3.txt.
 - Burndown acompanhado pela SM durante a sprint.
