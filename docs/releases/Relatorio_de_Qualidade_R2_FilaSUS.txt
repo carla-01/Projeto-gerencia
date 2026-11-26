@@ -1,0 +1,186 @@
+RELATÓRIO DE QUALIDADE - RELEASE 2 (R2 - Fila e Atendimento) - FilaSUS
+Tarefa: Q07 [QA] Relatório de qualidade da R2 (SCRUM-171)
+Salvar em: docs/releases/ (entrega até 26/11/2026)
+
+----------------------------------------------------------------
+1. IDENTIFICAÇÃO
+----------------------------------------------------------------
+Projeto: FilaSUS - Fila virtual para Unidades Básicas de Saúde
+Equipe: Adrielly Carla Ferreira de Melo, Maria Eduarda da Nóbrega e Mirelle Casimiro Silvino
+QA responsável: Adrielly Carla Ferreira de Melo
+Release: R2 - Fila e Atendimento (versão v0.2.0)
+Sprints cobertas: Sprint 2 (03/11 a 12/11/2026) e Sprint 3 (17/11 a 26/11/2026)
+Versão avaliada: develop, commit a46603a (CI #285, 26/11/2026)
+Repositório: https://github.com/carla-01/Projeto-gerencia
+Data do relatório: 26/11/2026
+Documentos de apoio: Plano_de_Qualidade v1.3, Plano-de-Teste_v1.3, Casos_de_Teste_Sprint2_FilaSUS_v1.1.txt,
+Casos_de_Teste_Sprint3_FilaSUS.txt, GP_RiscoBaseadoDefeitos.xlsx, docs/releases/relatorio-pipeline-r2.txt
+
+----------------------------------------------------------------
+2. ESCOPO DA RELEASE
+----------------------------------------------------------------
+Sprint 2:
+US-06 Entrar na fila (SCRUM-41) - 5 pontos
+US-07 Ver minha posição (SCRUM-42) - 3 pontos
+US-08 Cancelar minha senha (SCRUM-43) - 2 pontos
+US-09 Configurar filas e horários (SCRUM-44) - 5 pontos
+Sprint 3:
+US-03 Gestor cadastra funcionários (SCRUM-15) - 5 pontos
+US-10 Check-in na recepção (SCRUM-45) - 3 pontos
+US-11 Aplicar prioridade legal (SCRUM-46) - 5 pontos
+US-13 Chamar o próximo (SCRUM-47) - 3 pontos
+US-14 Iniciar e finalizar atendimento (SCRUM-48) - 3 pontos
+Total entregue: 34 pontos em 9 US (15 na Sprint 2 e 19 na Sprint 3).
+Casos de teste: 23 (11 na Sprint 2, incluindo o CT-US02-04 pendente da R1, e 12 na Sprint 3), em cenários
+Gherkin executados pelo Cucumber (back-end), Vitest + Testing Library (front-end) e cenários @smoke,
+todos executados pelo CI do GitHub Actions.
+Drivers arquiteturais verificados: DA-DES-I2-01 (pico de entrada na fila, SCRUM-62) e DA-DIS-I2-01
+(falha do servidor de aplicação, SCRUM-63).
+
+----------------------------------------------------------------
+3. RESUMO
+----------------------------------------------------------------
+- Bugs: 4 encontrados na Sprint 3, todos de severidade Média ou Baixa, e 0 na Sprint 2. Nenhum bug crítico ou
+  alto em aberto no fechamento da release.
+- Testes: 23 casos, 23 executados e 23 aprovados na develop (CI #285). O CT-US02-04, pendente na R1, foi
+  executado e aprovado na Sprint 2.
+- Pipeline: 95,2% de execuções verdes na develop (40 de 42, sem contar as canceladas), acima da meta de 90%.
+  Na R1 foram 71%.
+- Drivers: o pico de entrada na fila teve p95 de 13,82 ms (meta < 500 ms), e a API voltou em 12 s depois da
+  queda do servidor, sem perder senhas.
+- Conclusão: a R2 está apta para a Review. Os 4 bugs abertos e os pontos da seção 9 seguem como ações da R3.
+
+----------------------------------------------------------------
+4. BUGS ENCONTRADOS x CORRIGIDOS
+----------------------------------------------------------------
+Os IDs são provisórios; o registro no Jira fica com a SM.
+
+ID      Sev.    Onde                                       Encontrado                          Situação
+BUG-03  Média   Painel da recepção (US-10, SCRUM-45)       26/11, teste manual da QA           Aberto
+BUG-04  Média   Atendimento (US-14, SCRUM-48)              26/11, teste manual da QA           Aberto (parte corrigida no PR #73)
+BUG-05  Baixa   /actuator/health (DA-DIS-I2-01)            25/11, teste de queda (SCRUM-63)    Aberto
+BUG-06  Baixa   docs/devops/homologacao.txt                26/11, revisão da QA                Aberto
+
+Descrições:
+BUG-03 - A "Fila do dia" do painel da recepção aparece sempre vazia, mesmo com pacientes na fila. O check-in e
+a prioridade funcionam pela busca por CPF, por isso os casos da US-10 e da US-11 passaram.
+BUG-04 - Quando o profissional chama um paciente e segue sem finalizar, a senha fica presa em "CHAMADA" ou
+"EM_ATENDIMENTO". O PR #73 recupera o atendimento aberto ao recarregar a tela, o que resolve parte do
+problema; falta um jeito de encerrar a senha que ficou para trás.
+BUG-05 - O /actuator/health responde 401 sem login, então não serve para um monitor externo saber se a API
+está no ar.
+BUG-06 - O documento da homologação cita o PostgreSQL 18, mas a homologação e o CI usam o PostgreSQL 16.
+
+Balanço: encontrados 4, corrigidos 0 (1 com correção parcial), em aberto 4. Nenhum quebrou um critério de
+aceite: todos foram achados fora dos casos de teste automatizados.
+
+----------------------------------------------------------------
+5. MÉTRICAS DO PLANO DE QUALIDADE (RESULTADO R2)
+----------------------------------------------------------------
+ID    Item                              Meta                               Resultado R2                                                        Situação
+Q-01  Cobertura de testes automatizados ≥ 60% a partir da R3               N/A na R2 (JaCoCo ainda não está no CI)                             N/A na R2
+Q-02  Bugs críticos e altos em aberto   0 no fechamento da release         0 (4 bugs abertos, todos Média ou Baixa)                            Atingida
+Q-03  Qualidade dos critérios de aceite 100%                               100% (9 de 9 US com Gherkin de sucesso e de exceção)               Atingida
+Q-04  Revisão de código                 100%                               100% (47 de 47 PRs integrados na develop com aprovação)            Atingida
+Q-05  Estabilidade do pipeline          ≥ 90% de runs verdes na develop    95,2% (40 de 42, sem contar as 9 canceladas)                       Atingida
+Q-06  Execução dos casos de teste       100% dos casos das US entregues    100% (23 de 23)                                                     Atingida
+Q-07  Taxa de aprovação dos testes      ≥ 95% ao fim da release            100% (23 de 23 aprovados no CI #285)                                Atingida
+Q-08  Controle de acesso (Segurança)    100% dos 4 perfis                  100% (4 de 4 perfis recebem 403)                                    Atingida
+Q-09  Proteção de dados pessoais        0 campos em texto claro            0 (CPF só em cpf_hash e cpf_cifrado; senha só em senha_hash)       Atingida
+Q-10  Tempo de resposta no pico         < 500 ms (p95)                     p95 = 13,82 ms (300 entradas em 5 min, 0 erros, 0 senhas repetidas) Atingida
+Q-11  Atualização em tempo real         ≤ 5 s                              N/A na R2 (R3 e R4)                                                 N/A na R2
+Q-12  Disponibilidade em homologação    ≥ 99%                              N/A para o monitor (homologação local); queda: API de volta em 12 s N/A na R2
+Q-13  Restauração de backup             ≤ 1 h; perda ≤ 24 h                N/A na R2 (a partir da R3)                                          N/A na R2
+Q-14  Densidade de defeitos             Tendência decrescente              0,12 bug por ponto (4 bugs ÷ 34 pontos); R1: 0,10                  Não atingida
+Q-15  Tempo de correção de bugs graves  ≤ 3 dias                          N/A (nenhum bug Crítico ou Alto na R2)                              N/A na R2
+
+Notas:
+- Q-04: 22 PRs na Sprint 2 e 25 na Sprint 3 (do #49 ao #73), conferidos na API do GitHub em 26/11.
+- Q-05: as 2 execuções vermelhas da develop foram do deploy em nuvem, retirado em 12/11; nenhuma na Sprint 3.
+  Contando as canceladas como não verdes: 78,4%. Fonte: docs/releases/relatorio-pipeline-r2.txt (SCRUM-121).
+- Q-08: a matriz do AcessoNegadoPorPerfilTest cobre as rotas novas de funcionários, setores e prioridade. As
+  rotas do profissional (chamar o próximo e atendimento) têm teste de 403 próprio e ainda não estão na matriz.
+- Q-09: o cartão SUS fica em texto claro nas tabelas paciente e usuario. Não entra nesta métrica, que mede CPF
+  e senha, mas segue como ponto aberto do risco de Segurança.
+- Q-10: k6 em 25/11 (SCRUM-62, PR #64). Resultado em docs/qa/carga/resultado-pico-2026-11-25.txt.
+- Q-12: a homologação é local por decisão da professora (12/11), então não há monitor de disponibilidade. O
+  teste de queda (SCRUM-63, PR #68) foi feito em 25/11 (16,7 s) e repetido com a QA em 26/11 (12 s), com 5 de
+  5 senhas e a posição mantidas.
+- Q-14: Sprint 2: 0 ÷ 15 = 0. Sprint 3: 4 ÷ 19 = 0,21. 34 pontos = 15 da Sprint 2 + 19 da Sprint 3.
+
+----------------------------------------------------------------
+6. EXECUÇÃO DOS TESTES
+----------------------------------------------------------------
+Caso         Sprint   Resultado na develop (CI #285)   Bug
+CT-US02-04   2        Passou                           -
+CT-US06-01   2        Passou                           -
+CT-US06-02   2        Passou                           -
+CT-US06-03   2        Passou                           -
+CT-US06-04   2        Passou                           -
+CT-US07-01   2        Passou                           -
+CT-US07-02   2        Passou                           -
+CT-US08-01   2        Passou                           -
+CT-US08-02   2        Passou                           -
+CT-US09-01   2        Passou                           -
+CT-US09-02   2        Passou                           -
+CT-US03-01   3        Passou                           -
+CT-US03-02   3        Passou                           -
+CT-US10-01   3        Passou                           -
+CT-US10-02   3        Passou                           -
+CT-US11-01   3        Passou                           -
+CT-US11-02   3        Passou                           -
+CT-US13-01   3        Passou                           -
+CT-US13-02   3        Passou                           -
+CT-US13-03   3        Passou                           -
+CT-US13-04   3        Passou                           -
+CT-US14-01   3        Passou                           -
+CT-US14-02   3        Passou                           -
+
+Execuções do CI usadas:
+CI #167  develop  b4c9c2d  11/11  verde  fim da Sprint 2
+CI #285  develop  a46603a  26/11  verde  fim da Sprint 3, versão avaliada neste relatório
+
+Detalhes de cada caso em Casos_de_Teste_Sprint2_FilaSUS_v1.1.txt e Casos_de_Teste_Sprint3_FilaSUS.txt.
+
+----------------------------------------------------------------
+7. EXECUÇÃO FINAL ANTES DA APRESENTAÇÃO
+----------------------------------------------------------------
+CI #285 na develop (a46603a, 26/11), com os jobs backend (mvn verify com os cenários Cucumber), frontend
+(npm ci, build e Vitest), smoke e build verdes. Os 23 casos da R2 passaram, inclusive os da Sprint 2.
+
+----------------------------------------------------------------
+8. VERIFICAÇÃO DA DoD POR US (itens que a QA mede)
+----------------------------------------------------------------
+US      Critérios de aceite validados          Testes escritos e passando   Pipeline de CI sem falhas
+US-06   Sim (CT-US06-01 a 04)                  Sim                          Sim (CI #285)
+US-07   Sim (CT-US07-01, 02)                   Sim                          Sim (CI #285)
+US-08   Sim (CT-US08-01, 02)                   Sim                          Sim (CI #285)
+US-09   Sim (CT-US09-01, 02)                   Sim                          Sim (CI #285)
+US-03   Sim (CT-US03-01, 02)                   Sim                          Sim (CI #285)
+US-10   Sim (CT-US10-01, 02)                   Sim                          Sim (CI #285)
+US-11   Sim (CT-US11-01, 02)                   Sim                          Sim (CI #285)
+US-13   Sim (CT-US13-01 a 04)                  Sim                          Sim (CI #285)
+US-14   Sim (CT-US14-01, 02)                   Sim                          Sim (CI #285)
+
+----------------------------------------------------------------
+9. RISCOS E AÇÕES PARA A R3
+----------------------------------------------------------------
+- Bugs abertos: corrigir o BUG-03 e o BUG-04 no começo da R3, porque afetam o uso da fila na UBS.
+- Densidade de defeitos (Q-14 subiu para 0,12): teste manual ponta a ponta das telas antes de cada Review,
+  porque os 4 bugs foram achados fora dos casos automatizados.
+- Cobertura (Q-01): configurar o JaCoCo no CI no início da R3, quando a meta passa a valer.
+- Controle de acesso (Q-08): colocar as rotas do profissional na matriz do AcessoNegadoPorPerfilTest.
+- Dados pessoais: decidir com a equipe se o cartão SUS também deve ser protegido.
+- Disponibilidade (Q-12): liberar o /actuator/health sem login (BUG-05) para dar para monitorar a API.
+- Drivers ainda não verificados: DA-DES-I1-01 e DA-DIS-I1-01 (tempo real, Sprint 4), DA-DIS-I3-01 (backup,
+  Sprint 5) e DA-DES-I3-01 (relatório do gestor, Sprint 6). O acompanhamento de cada driver está na
+  GP_RiscoBaseadoDefeitos.xlsx.
+
+----------------------------------------------------------------
+10. CONCLUSÃO
+----------------------------------------------------------------
+Critérios de saída do Plano de Teste na R2: cenários planejados executados (23 de 23); nenhum bug crítico ou
+alto em aberto; resultados registrados neste relatório. A R2 pode ir para a Review com os 4 bugs de
+severidade Média ou Baixa e a densidade de defeitos (Q-14) como ações da R3.
+
+Adrielly Carla Ferreira de Melo - QA - 26/11/2026
