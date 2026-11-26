@@ -67,6 +67,16 @@ public interface SenhaRepository extends JpaRepository<Senha, Long> {
         + "where s.id = :id and s.status = br.uepb.filasus.fila.StatusSenha.PRESENTE")
     int chamarSePresente(@Param("id") Long id, @Param("em") Instant em);
 
+    /**
+     * Passa a senha para EM_ATENDIMENTO (US-14 - SCRUM-167) só se ela ainda estiver CHAMADA.
+     * Devolve 1 quando mudou e 0 quando o atendimento já tinha sido iniciado, para dois cliques
+     * juntos não abrirem dois atendimentos.
+     */
+    @Modifying(clearAutomatically = true)
+    @Query("update Senha s set s.status = br.uepb.filasus.fila.StatusSenha.EM_ATENDIMENTO "
+        + "where s.id = :id and s.status = br.uepb.filasus.fila.StatusSenha.CHAMADA")
+    int iniciarAtendimentoSeChamada(@Param("id") Long id);
+
     /** Senhas com esse número no dia, uma por serviço: usada no check-in (US-10). */
     List<Senha> findByNumeroAndDataRefAndStatusInOrderByIdAsc(
         int numero, LocalDate dataRef, Collection<StatusSenha> status);
