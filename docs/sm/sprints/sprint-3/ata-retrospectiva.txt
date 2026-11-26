@@ -25,7 +25,7 @@ Presentes: Adrielly, Maria Eduarda e Mirelle [CONFIRMAR]
 ----------------------------------------------------------------
 2. O QUE MELHORAR (SPRINT 3)
 ----------------------------------------------------------------
-- Trabalho concentrado no fim de novo: 20 dos 24 PRs integrados em 25/11 e 26/11, e o
+- Trabalho concentrado no fim de novo: 21 dos 25 PRs integrados em 25/11 e 26/11, e o
   burndown só chegou a 0 no dia da Review.
 - Ação SCRUM-148 não cumprida: na daily de 23/11 só 2 de 5 histórias tinham a primeira
   subtarefa integrada.
@@ -35,7 +35,8 @@ Presentes: Adrielly, Maria Eduarda e Mirelle [CONFIRMAR]
 - Drivers SCRUM-62 e SCRUM-63 concluídos depois do prazo de 24/11.
 - Títulos de PR fora do padrão (ex.: "feature/scrum 150 backend cadastro
   funcionario") e 1 commit fora do padrão de mensagem.
-- Atas da SM da Sprint 3 subidas só no fim da sprint [CONFIRMAR].
+- Atas da SM da Sprint 3 commitadas só em 26/11 (primeiro commit às 10h25), inclusive a
+  da Planning de 17/11 (SCRUM-118).
 - Conferência da DoD da QA sem comentário nas issues e histórias movidas para Concluído
   antes do último merge (US03 e US13).
 - Dois bugs de funcionalidade passaram para a R3: a "Fila do dia" da recepção nunca foi
@@ -52,7 +53,7 @@ Presentes: Adrielly, Maria Eduarda e Mirelle [CONFIRMAR]
   CI verde.
 - Processo: as histórias passaram a ir para Concluído no dia do último merge (ação
   SCRUM-114), mas nas duas sprints o trabalho se concentrou nos dois últimos dias
-  (14 de 22 PRs na Sprint 2 e 20 de 24 na Sprint 3). A ação de integrar a primeira
+  (14 de 22 PRs na Sprint 2 e 21 de 25 na Sprint 3). A ação de integrar a primeira
   subtarefa até a segunda semana não mudou esse padrão.
 - DevOps: o deploy em nuvem não saiu (IMP-06) e a professora definiu a homologação
   local em 12/11. O RSK14 (hospedagem gratuita) foi encerrado.
@@ -70,8 +71,8 @@ PR aberto recebe a revisão em até 24 horas              Adrielly (SM    10/12 
   (revisora marcada no card)                              da R3)
 Quem acumula PO e DevOps pega no máximo uma história    Mirelle (PO     01/12   a criar
   na sprint                                               da R3)
-Primeira subtarefa de cada US integrada até a daily     Adrielly (SM    10/12   a criar
-  de quarta da primeira semana (02/12), conferida nas     da R3)
+PR da primeira subtarefa de cada US aberto até 03/12    Adrielly (SM    10/12   a criar
+  e integrado até a daily de 07/12, conferido nas         da R3)
   dailies
 
 As tarefas são criadas na Sprint 4 em 01/12 e acompanhadas pela SM da R3.
@@ -88,8 +89,8 @@ Revisora confere a chave do Jira em cada     SCRUM-149  Cumprida       44 de 44 
 Concluir o deploy em homologação e           SCRUM-120  Não se aplica  Fechou em 12/11 como
   registrar as URLs                                                      homologação local
 
-Ações parciais da Sprint 1 acompanhadas na Sprint 3 [CONFIRMAR]:
-- SCRUM-115 (revisora confere "Files changed"): nenhum arquivo apagado sem motivo e CI
+Ações parciais da Sprint 1 acompanhadas na Sprint 3:
+- SCRUM-115 (revisora confere "Files changed"): cumprida; nenhum arquivo apagado e CI
   verde na develop.
 - SCRUM-117 (usar sempre o modelo de PR): parcial; vários títulos de PR ficaram fora do
   padrão.
@@ -97,8 +98,8 @@ Ações parciais da Sprint 1 acompanhadas na Sprint 3 [CONFIRMAR]:
   plano da release no mesmo dia (SCRUM-173, PR #49), mas as atas da SM subiram no fim
   da sprint.
 
-Resultado da SCRUM-148 e da SCRUM-149: ainda sem comentário nas issues [CONFIRMAR:
-comentar em 26/11, como pede a SCRUM-148].
+Resultado da SCRUM-148 comentado na issue em 26/11 (Mirelle). Resultado da SCRUM-149:
+a comentar na issue pela Adrielly [CONFIRMAR].
 
 ----------------------------------------------------------------
 6. RISCOS ACOMPANHADOS
