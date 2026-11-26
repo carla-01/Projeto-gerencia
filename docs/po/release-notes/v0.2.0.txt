@@ -82,8 +82,9 @@ INFRAESTRUTURA E DOCUMENTAÇÃO
   p95 de 13,82 ms, sem erros e sem senhas repetidas. Atendeu
   (docs/qa/carga/).
 - Driver DA-DIS-I2-01 (falha do servidor): a API voltou em 16,7 s, sem
-  perder senhas, em execução num banco temporário. Falta repetir na
-  homologação com a QA (docs/devops/queda/).
+  perder senhas, em execução num banco temporário (docs/devops/queda/).
+  Repetido com a QA em 26/11: API de volta em 12 s, com 5 de 5 senhas
+  mantidas.
 - Relatório do pipeline da R2 (docs/releases/relatorio-pipeline-r2.txt).
 - Plano da release, priorização do backlog, casos de teste, atas e métricas
   das sprints.
@@ -106,6 +107,8 @@ PROBLEMAS CONHECIDOS
   Recarregar no mesmo navegador já funciona.
 - SCRUM-176 (Baixa): GET /actuator/health responde 401 sem login, mas a
   documentação de homologação indica "UP".
+- SCRUM-XXX (Baixa): docs/devops/homologacao.txt cita o PostgreSQL 18, mas
+  a homologação e o CI usam o PostgreSQL 16.
 - O mvn spring-boot:run não achou a classe principal em um computador cuja
   pasta do projeto tem acento no caminho; subir pelo .jar funciona.
 
@@ -115,8 +118,8 @@ MÉTRICAS
 Pontos planejados: 34 (Sprint 2: 15; Sprint 3: 19)
 Pontos entregues: 34 aceitos (Sprint 2: 15; Sprint 3: 19). Velocidade da
 Sprint 3: 19 pontos
-Bugs encontrados x corrigidos: 3 x 0 (Sprint 2: 0 x 0; Sprint 3: 3 x 0,
-nenhum Crítico ou Alto; os 3 foram para o backlog da R3)
+Bugs encontrados x corrigidos: 4 x 0 (Sprint 2: 0 x 0; Sprint 3: 4 x 0,
+nenhum Crítico ou Alto; os 4 foram para o backlog da R3)
 Testes automatizados: 229 testes JUnit e 23 cenários Cucumber no
 back-end e 89 testes no front-end, todos passando (CI #285, develop,
 commit a46603a, 26/11), mais 3 cenários @smoke no Cypress
