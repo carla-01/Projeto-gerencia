@@ -74,8 +74,7 @@ SCRUM-48 US14   Mirelle         3       #69, #70, #71 e #73       Adrielly    26
 Diferenças entre o Jira e o git: a US03 foi para Concluído às 10h34 de 25/11, antes do
 merge da SCRUM-153 (PR #63, 16h46), e a US13 às 21h55, antes do merge das SCRUM-164 a
 166 (22h30). A regra é mover para Concluído depois do último merge (ação SCRUM-114).
-Os PRs da US14 foram revisados pela Adrielly; a Planning previa a Maria Eduarda
-[CONFIRMAR motivo].
+Os PRs da US14 foram revisados pela Adrielly; a Planning previa a Maria Eduarda.
 
 PRs integrados por dia:
   17/11: 1   21/11: 1   23/11: 2   25/11: 16   26/11: 5

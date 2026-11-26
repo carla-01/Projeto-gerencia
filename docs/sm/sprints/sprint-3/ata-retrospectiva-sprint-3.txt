@@ -98,8 +98,10 @@ Ações parciais da Sprint 1 acompanhadas na Sprint 3:
   plano da release no mesmo dia (SCRUM-173, PR #49), mas as atas da SM subiram no fim
   da sprint.
 
-Resultado da SCRUM-148 comentado na issue em 26/11 (Mirelle). Resultado da SCRUM-149:
-a comentar na issue pela Adrielly [CONFIRMAR].
+Resultado da SCRUM-148 comentado na issue em 26/11 (Mirelle). Aceite da PO em 26/11:
+acompanhamento aceito, meta da ação não cumprida; a ação segue ajustada para a R3 no
+plano de ação desta Retrospectiva (item 4).
+Resultado da SCRUM-149: a comentar na issue pela Adrielly [CONFIRMAR].
 
 ----------------------------------------------------------------
 6. RISCOS ACOMPANHADOS
