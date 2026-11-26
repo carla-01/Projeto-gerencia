@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import App from '../App'
@@ -290,7 +290,7 @@ describe('Área do paciente', () => {
       simularBackEnd({ senhas: [{ status: 200, corpo: [{ ...SENHA_CLINICO, status: 'EM_ATENDIMENTO' }] }] })
       abrirComoPaciente()
 
-      expect(await screen.findByRole('heading', { name: 'Sua senha' })).toBeInTheDocument()
+      expect(await screen.findByRole('heading', { name: 'Em atendimento' })).toBeInTheDocument()
       expect(screen.queryByRole('button', { name: 'Cancelar a senha de Clínico' })).not.toBeInTheDocument()
     })
 
@@ -308,6 +308,54 @@ describe('Área do paciente', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Sim, cancelar' }))
 
       expect(await screen.findByRole('alert')).toHaveTextContent('Seu atendimento já começou')
+    })
+  })
+
+  describe('US13 - Você foi chamado', () => {
+    const CHAMADA = { ...SENHA_CLINICO, status: 'CHAMADA', posicao: 0, pessoasAFrente: 0 }
+
+    afterEach(() => {
+      vi.useRealTimers()
+    })
+
+    // CT-US13-03 - Paciente vê que foi chamado
+    // Dado que o profissional me chamou / Quando abro a minha área
+    // Então vejo "Você foi chamado" com o serviço e o número da senha
+    it('CT-US13-03: mostra "Você foi chamado" com o serviço e o número', async () => {
+      simularBackEnd({ senhas: [{ status: 200, corpo: [CHAMADA] }] })
+      abrirComoPaciente()
+
+      const titulo = await screen.findByRole('heading', { name: 'Você foi chamado' })
+      expect(titulo.closest('section')).toHaveTextContent('Clínico')
+      expect(titulo.closest('section')).toHaveTextContent('6')
+      expect(screen.queryByText('0º')).not.toBeInTheDocument()
+      expect(screen.queryByRole('button', { name: 'Cancelar a senha de Clínico' })).not.toBeInTheDocument()
+    })
+
+    // CT-US13-04 - Paciente chamado não tira outra senha
+    it('CT-US13-04: não deixa entrar de novo na fila do serviço em que foi chamado', async () => {
+      simularBackEnd({ senhas: [{ status: 200, corpo: [CHAMADA] }] })
+      abrirComoPaciente()
+
+      await screen.findByRole('heading', { name: 'Você foi chamado' })
+
+      expect(await screen.findByRole('button', { name: 'Entrar na fila de Clínico' })).toBeDisabled()
+    })
+
+    it('o aviso aparece sozinho, sem o paciente recarregar a tela', async () => {
+      vi.useFakeTimers({ shouldAdvanceTime: true })
+      simularBackEnd({
+        senhas: [
+          { status: 200, corpo: [SENHA_CLINICO] },
+          { status: 200, corpo: [CHAMADA] },
+        ],
+      })
+      abrirComoPaciente()
+      await screen.findByRole('heading', { name: 'Sua senha' })
+
+      await act(() => vi.advanceTimersByTimeAsync(10000))
+
+      expect(await screen.findByRole('heading', { name: 'Você foi chamado' })).toBeInTheDocument()
     })
   })
 

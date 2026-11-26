@@ -5,6 +5,9 @@ import { ErroFila, cancelarSenha, entrarNaFila, listarMinhasSenhas, listarServic
 import type { PosicaoNaFila, ServicoDisponivel } from '../services/fila'
 import './EscolhaServico.css'
 
+/** De quanto em quanto tempo a tela confere se o paciente foi chamado (US13). */
+const INTERVALO_DE_ATUALIZACAO = 10000
+
 /** "2026-11-10" vira "10/11/2026" (a data já vem no dia local da UBS). */
 function formatarData(data: string): string {
   const [ano, mes, dia] = data.split('-')
@@ -46,6 +49,34 @@ function podeCancelar(status: string): boolean {
     return true
   }
   return false
+}
+
+/** true quando o profissional já chamou: a senha não espera mais na fila (US13). */
+function foiChamado(status: string): boolean {
+  if (status === 'CHAMADA' || status === 'EM_ATENDIMENTO') {
+    return true
+  }
+  return false
+}
+
+/** Aviso na tela do paciente chamado, com o serviço e o número (US13 - SCRUM-165). */
+function CartaoChamado({ senha }: { senha: PosicaoNaFila }) {
+  const idTitulo = 'senha-' + senha.id
+  let titulo = 'Você foi chamado'
+  let orientacao = 'Dirija-se ao atendimento agora.'
+  if (senha.status === 'EM_ATENDIMENTO') {
+    titulo = 'Em atendimento'
+    orientacao = 'O seu atendimento já começou.'
+  }
+  return (
+    <section className="fila-cartao fila-chamado" aria-labelledby={idTitulo} role="status">
+      <h2 id={idTitulo}>{titulo}</h2>
+      <p className="fila-chamado-servico">{senha.servico}</p>
+      <p className="fila-chamado-rotulo">Senha</p>
+      <p className="fila-chamado-numero">{senha.numero}</p>
+      <p className="fila-chamado-orientacao">{orientacao}</p>
+    </section>
+  )
 }
 
 type PropsCartaoSenha = {
@@ -138,6 +169,9 @@ function CartaoSenha({
  * O paciente vê a senha que já tem, a posição e quantas pessoas estão na frente. Sem senha
  * ativa, vê os serviços da UBS e entra na fila do escolhido. Fila fechada (fora do horário
  * ou sem senhas) não deixa entrar.
+ *
+ * Quando o profissional chama, o cartão da senha vira o aviso "Você foi chamado"
+ * (US13 - SCRUM-165). Enquanto há senha, a tela confere a situação sozinha.
  */
 export default function EscolhaServico() {
   const navigate = useNavigate()
@@ -187,6 +221,27 @@ export default function EscolhaServico() {
     // tratarErro só usa o navigate, que não muda.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Com senha ativa, busca a situação de tempos em tempos para o aviso aparecer sozinho.
+  const temSenha = senhas.length > 0
+  useEffect(() => {
+    if (!temSenha) {
+      return
+    }
+    const relogio = setInterval(() => {
+      listarMinhasSenhas()
+        .then(setSenhas)
+        .catch((e) => {
+          // Uma falha passageira não incomoda o paciente: a próxima busca tenta de novo.
+          if (e instanceof ErroFila && e.tipo === 'sem-login') {
+            tratarErro(e)
+          }
+        })
+    }, INTERVALO_DE_ATUALIZACAO)
+    return () => clearInterval(relogio)
+    // tratarErro só usa o navigate, que não muda.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [temSenha])
 
   function tratarErro(e: unknown) {
     if (!(e instanceof ErroFila)) {
@@ -276,17 +331,22 @@ export default function EscolhaServico() {
 
       {senhas.length > 0 && (
         <div className="fila-minhas-senhas">
-          {senhas.map((senha) => (
-            <CartaoSenha
-              key={senha.id}
-              senha={senha}
-              confirmando={confirmandoCancelamento === senha.id}
-              cancelando={cancelandoId === senha.id}
-              onPedirCancelamento={() => setConfirmandoCancelamento(senha.id)}
-              onConfirmarCancelamento={() => cancelar(senha)}
-              onDesistir={() => setConfirmandoCancelamento(null)}
-            />
-          ))}
+          {senhas.map((senha) => {
+            if (foiChamado(senha.status)) {
+              return <CartaoChamado key={senha.id} senha={senha} />
+            }
+            return (
+              <CartaoSenha
+                key={senha.id}
+                senha={senha}
+                confirmando={confirmandoCancelamento === senha.id}
+                cancelando={cancelandoId === senha.id}
+                onPedirCancelamento={() => setConfirmandoCancelamento(senha.id)}
+                onConfirmarCancelamento={() => cancelar(senha)}
+                onDesistir={() => setConfirmandoCancelamento(null)}
+              />
+            )
+          })}
           <button type="button" className="fila-botao-secundario" disabled={atualizando} onClick={atualizar}>
             {atualizando ? 'Atualizando...' : 'Atualizar posição'}
           </button>
