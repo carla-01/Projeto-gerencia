@@ -13,6 +13,8 @@ type RespostaLogin = {
 
 const CHAVE_TOKEN = 'filasus.token'
 const CHAVE_PERFIL = 'filasus.perfil'
+/** Id da senha que o profissional chamou e ainda não finalizou (US14 - SCRUM-168). */
+export const CHAVE_SENHA_EM_ANDAMENTO = 'filasus.senhaEmAndamento'
 
 export function obterToken(): string | null {
   return localStorage.getItem(CHAVE_TOKEN)
@@ -33,6 +35,8 @@ export function estaAutenticado(): boolean {
 export function fazerLogout(): void {
   localStorage.removeItem(CHAVE_TOKEN)
   localStorage.removeItem(CHAVE_PERFIL)
+  // Quem entrar depois no mesmo navegador não herda o paciente do profissional anterior.
+  localStorage.removeItem(CHAVE_SENHA_EM_ANDAMENTO)
 }
 
 /** Erro com a mensagem que deve aparecer na tela. */
