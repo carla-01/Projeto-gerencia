@@ -42,7 +42,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/gestor/servicos/**").hasRole("GESTOR")
                 // Cadastro de funcionários (US-03): só o gestor cria recepcionista e profissional.
                 .requestMatchers("/api/gestor/funcionarios/**").hasRole("GESTOR")
-                // Chamada do próximo (US-13): só o profissional de saúde.
+                // Chamada do próximo (US-13) e início/fim do atendimento (US-14): só o profissional de saúde.
                 .requestMatchers("/api/profissional/**").hasRole("PROFISSIONAL")
                 // Entrada na fila (US-06): só o próprio paciente tira a senha.
                 .requestMatchers("/api/paciente/**").hasRole("PACIENTE")
