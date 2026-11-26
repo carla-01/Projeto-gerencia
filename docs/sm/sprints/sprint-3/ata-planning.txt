@@ -1,0 +1,125 @@
+ATA DA SPRINT PLANNING - SPRINT 3
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+
+Data: 17/11/2026
+Horário: [CONFIRMAR]
+Local: [CONFIRMAR: sala de aula ou Google Meet]
+Facilitação: Mirelle Casimiro Silvino (Scrum Master)
+Product Owner + DevOps: Maria Eduarda da Nóbrega
+QA: Adrielly Carla Ferreira de Melo
+Presentes: Adrielly, Maria Eduarda e Mirelle
+Período da sprint: 17/11/2026 a 26/11/2026 (última sprint da R2)
+
+----------------------------------------------------------------
+1. PAUTA
+----------------------------------------------------------------
+- Ações da retrospectiva da Sprint 2
+- Capacidade do time e confirmação do escopo pela PO
+- Apresentação das histórias pela PO, em ordem de prioridade
+- Estimativa e confirmação dos responsáveis
+- Plano de testes da Sprint 3 (QA)
+- Definição do Sprint Goal
+- Definition of Done
+- Revisão dos riscos
+
+----------------------------------------------------------------
+2. SPRINT GOAL
+----------------------------------------------------------------
+A UBS opera o ciclo completo: check-in, prioridade legal, chamada e atendimento.
+
+----------------------------------------------------------------
+3. SPRINT BACKLOG - HISTÓRIAS
+----------------------------------------------------------------
+Chave     História                                       Pontos  Responsável     Revisa o PR
+SCRUM-15  [US-03] Gestor cadastra funcionários           5       Mirelle         Adrielly
+SCRUM-45  [US-10] Check-in na recepção                   3       Maria Eduarda   Mirelle
+SCRUM-46  [US-11] Aplicar prioridade legal               5       Adrielly        Maria Eduarda
+SCRUM-47  [US-13] Chamar o próximo                       3       Maria Eduarda   Adrielly
+SCRUM-48  [US-14] Iniciar e finalizar atendimento        3       Mirelle         Maria Eduarda
+
+Total planejado: 19 story points.
+Capacidade: a velocidade da Sprint 2 foi de 15 pontos (média de 18 nas duas sprints). O
+plano da release previa 19 pontos, acima dessa capacidade. A PO manteve a US14 na
+sprint [CONFIRMAR: motivo dito na Planning], com a regra de que ela é a primeira a sair
+e passa para a R3 (Sprint 4) se a capacidade apertar.
+A US13 passou da Adrielly para a Maria Eduarda, porque a Adrielly concentra as tarefas
+de QA e a US13 depende das outras histórias.
+Definition of Ready conferida nas cinco histórias: formato "Eu como... preciso... de
+modo que...", critérios de aceite em Gherkin, pontos estimados, prioridade definida,
+dependências identificadas e cabem na sprint.
+
+----------------------------------------------------------------
+4. DEPENDÊNCIAS IDENTIFICADAS
+----------------------------------------------------------------
+- US-10 depende da entrada na fila (US-06) e da senha do paciente.
+- US-11 depende do check-in (US-10): a recepção marca a prioridade no cartão da senha.
+- US-13 depende das US-10 e US-11 (fila com prioridade) e do setor do profissional,
+  ligado no cadastro de funcionários (US-03).
+- US-14 depende da US-13 (senha CHAMADA). Os horários gravados na tabela atendimento
+  alimentam a US16 e a US18.
+
+----------------------------------------------------------------
+5. AÇÕES DA RETROSPECTIVA DA SPRINT 2
+----------------------------------------------------------------
+Ação                                                    Responsável     Chave      Situação
+Integrar a primeira subtarefa de cada US até a daily    Mirelle         SCRUM-148  Na Sprint 3
+  de segunda da segunda semana (23/11)
+Revisora confere a chave do Jira em cada commit do PR   Adrielly        SCRUM-149  Na Sprint 3
+Concluir o deploy em homologação e registrar as URLs    Maria Eduarda   SCRUM-120  Não se aplica
+
+A SCRUM-120 fechou em 12/11 como "ambiente de homologação local documentado", por
+decisão da professora (IMP-06). A ata da Retro da Sprint 2 foi corrigida.
+Ações parciais da Sprint 1 que seguiram para a Sprint 3: SCRUM-115, 117 e 118.
+As ações são acompanhadas nas dailies e conferidas na Retrospectiva de 26/11.
+
+----------------------------------------------------------------
+6. TAREFAS DE PAPEL NA SPRINT
+----------------------------------------------------------------
+PO + DevOps (Maria Eduarda): SCRUM-173 Planning registrada no plano da release,
+  SCRUM-121 relatório do pipeline da R2, SCRUM-147 release notes e fechamento da R2,
+  repriorização do backlog após a Review
+SM (Mirelle): SCRUM-172 cerimônias, atas e métricas da Sprint 3; SCRUM-148 (ação da
+  retro)
+QA (Adrielly): Q05 testes da Sprint 3 e Q06 relatório de qualidade da R2
+  [CONFIRMAR: chaves no Jira]; SCRUM-149 (ação da retro)
+Drivers Arquiteturais 2, sem pontos: SCRUM-62 (pico de entrada na fila, k6 local,
+  Adrielly) e SCRUM-63 (queda do servidor, teste local, Maria Eduarda), revisados pela
+  Mirelle. Saem primeiro se a sprint apertar: sem conclusão até a daily de 24/11, vão
+  para a Sprint 4.
+
+----------------------------------------------------------------
+7. PAPÉIS DA RELEASE 2
+----------------------------------------------------------------
+PO + DevOps: Maria Eduarda · Scrum Master: Mirelle · QA: Adrielly
+Dev Team: as três integrantes. A passagem de papéis para a R3 acontece em 26/11.
+
+----------------------------------------------------------------
+8. QUALIDADE E DEFINITION OF DONE
+----------------------------------------------------------------
+- A QA apresentou o plano de testes da Sprint 3: as 5 histórias e a regressão das
+  Sprints 1 e 2, com casos de teste derivados do Gherkin e automatizados no CI, sempre
+  com dados fictícios.
+- Critério de saída: todos os casos executados e nenhum bug Crítico ou Alto aberto.
+- Definition of Done: a mesma da R1 e da Sprint 2 (docs/po/definition-of-done.txt). A
+  QA registra a conferência da DoD em comentário na issue logo depois do merge, antes
+  do aceite da PO.
+
+----------------------------------------------------------------
+9. RISCOS
+----------------------------------------------------------------
+Riscos revisados (docs/sm/registro-de-riscos.txt).
+Reavaliado em 17/11: RSK14 (dependência de hospedagem gratuita) encerrado, porque a
+homologação passou a ser local em 12/11 e não há mais deploy em nuvem. Os outros
+valores não mudaram [CONFIRMAR].
+Atenção da sprint: RSK07 (sobrecarga, 19 pontos acima da velocidade de 15) e RSK13
+(regressão entre histórias no merge, porque as US10, US11, US13 e US14 mexem na mesma
+fila).
+
+----------------------------------------------------------------
+10. ACOMPANHAMENTO DA SPRINT
+----------------------------------------------------------------
+- Dailies às segundas e quartas, às 20h: 18/11, 23/11 e 25/11.
+- Na daily de 23/11 a SM confere se cada história tem a primeira subtarefa integrada
+  (SCRUM-148).
+- Impedimentos com sinalizador no Jira e em sprint-3/registro-de-impedimentos.txt.
+- Burndown acompanhado pela SM durante a sprint.

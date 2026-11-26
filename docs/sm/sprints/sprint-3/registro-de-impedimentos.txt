@@ -1,0 +1,43 @@
+REGISTRO DE IMPEDIMENTOS - SPRINT 3 (RELEASE 2)
+FilaSUS · Gerência de Projetos (UEPB, 2026.2) · Scrum Master
+Responsável: Mirelle Casimiro Silvino (Scrum Master da R2)
+
+Todo impedimento citado em daily, no grupo ou nos comentários do Jira entra aqui no
+mesmo dia e recebe o sinalizador (flag) no card do Jira enquanto estiver aberto.
+Status: Aberto, Em tratamento ou Resolvido.
+A numeração continua a da Sprint 2 (IMP-06, em sprints/sprint-2/registro-de-impedimentos.txt).
+
+----------------------------------------------------------------
+REGISTRO
+----------------------------------------------------------------
+Nenhum impedimento registrado na Sprint 3 [CONFIRMAR: se alguém citou um impedimento
+em daily ou no grupo, ele entra aqui como IMP-07].
+
+----------------------------------------------------------------
+PONTOS DE ATENÇÃO (não bloquearam o trabalho)
+----------------------------------------------------------------
+Atrasos que não chegaram a travar ninguém, mas que explicam o trabalho concentrado no
+fim da sprint. Ficam registrados para a Retrospectiva.
+
+- Revisão demorada: os PRs #52 (SCRUM-151) e #54 (SCRUM-152) foram abertos em 22/11 e
+  integrados em 25/11, três dias depois. Os outros PRs da sprint foram integrados no
+  mesmo dia ou no dia seguinte.
+- Início tardio da US10 e da US13: os primeiros commits de código da Maria Eduarda são
+  de 24/11 às 20h11; a US10 entrou em 25/11 de manhã e a US13 em 25/11 às 22h30. A
+  mesma integrante acumulou PO, DevOps e duas histórias (RSK07).
+- Drivers fora do prazo: SCRUM-62 e SCRUM-63 deviam estar concluídos até 24/11 para
+  seguirem na sprint; entraram em 25/11 (PRs #64 e #68).
+- Bloqueio no CI: duas execuções da CI falharam na branch da SCRUM-162 em 25/11. O
+  PostgreSQL do CI passava de 100 conexões com os testes; foi resolvido no mesmo dia
+  pela Maria Eduarda, limitando o pool de conexões dos testes (commit "SCRUM-162 test:
+  limita as conexões dos testes"), sem afetar a develop.
+
+----------------------------------------------------------------
+RESUMO DA SPRINT 3
+----------------------------------------------------------------
+Impedimentos registrados: 0 [CONFIRMAR]
+Cards sinalizados com flag no Jira: 0 [CONFIRMAR]
+Impedimentos abertos da R2: nenhum (o IMP-06 foi resolvido em 12/11)
+Ponto levado para a Retro: o trabalho de novo ficou para os dois últimos dias (20 dos
+24 PRs da sprint entraram em 25/11 e 26/11), e a sobrecarga de quem acumula papéis
+(RSK07) apareceu pela terceira sprint seguida.

@@ -30,12 +30,17 @@ Presentes: Adrielly, Maria Eduarda e Mirelle
 3. PLANO DE AÇÃO (cada ação vira uma tarefa no Jira)
 ----------------------------------------------------------------
 Ação                                                    Responsável     Prazo   Chave
-Concluir o deploy em homologação e registrar as URLs    Maria Eduarda   26/11   SCRUM-120
-Integrar a primeira subtarefa de cada US até a daily    Mirelle         26/11   a criar
+Integrar a primeira subtarefa de cada US até a daily    Mirelle         26/11   SCRUM-148
   de segunda da segunda semana
-Revisora confere a chave do Jira em cada commit do PR   Adrielly        26/11   a criar
+Revisora confere a chave do Jira em cada commit do PR   Adrielly        26/11   SCRUM-149
 
-As tarefas são criadas na Sprint 3 em 17/11 e acompanhadas pela SM da R2.
+As tarefas foram criadas na Sprint 3 em 17/11 e acompanhadas pela SM da R2.
+
+Correção em 26/11: a primeira versão desta ata trazia a ação "Concluir o deploy em
+homologação e registrar as URLs" (Maria Eduarda, SCRUM-120). Ela não se aplica: a
+SCRUM-120 fechou em 12/11 como "ambiente de homologação local documentado", por
+decisão da professora (IMP-06), e não há deploy em nuvem na R2. As chaves das duas
+ações que estavam "a criar" foram preenchidas.
 
 ----------------------------------------------------------------
 4. AÇÕES DA RETROSPECTIVA ANTERIOR (SPRINT 1)

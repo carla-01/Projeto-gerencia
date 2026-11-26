@@ -1,0 +1,117 @@
+ATA DA RETROSPECTIVA - SPRINT 3 E RELEASE 2
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+
+Ata preparada em 26/11 com os pontos levantados pela SM a partir do git, dos PRs e das
+dailies. O time confirma os pontos e o plano de ação na Retrospectiva [CONFIRMAR].
+
+Data: 26/11/2026
+Facilitação: Mirelle Casimiro Silvino (Scrum Master)
+Presentes: Adrielly, Maria Eduarda e Mirelle [CONFIRMAR]
+
+----------------------------------------------------------------
+1. O QUE FOI BEM (SPRINT 3)
+----------------------------------------------------------------
+- 5 histórias e 19 pontos entregues, com todas as subtarefas integradas, acima da
+  velocidade da Sprint 2 (15); a US14 não precisou sair para a R3.
+- Cenários Gherkin de todas as histórias automatizados no Cucumber e rodando no CI (23
+  cenários em 10 features).
+- Os 44 commits da sprint têm a chave do Jira (ação SCRUM-149).
+- Os dois Drivers Arquiteturais 2 atendidos (SCRUM-62 e SCRUM-63).
+- A observação da QA na revisão do PR #70 foi corrigida no mesmo dia (PR #73).
+- Nenhuma execução da CI com falha na develop.
+
+----------------------------------------------------------------
+2. O QUE MELHORAR (SPRINT 3)
+----------------------------------------------------------------
+- Trabalho concentrado no fim de novo: 20 dos 24 PRs integrados em 25/11 e 26/11, e o
+  burndown só chegou a 0 no dia da Review.
+- Ação SCRUM-148 não cumprida: na daily de 23/11 só 2 de 5 histórias tinham a primeira
+  subtarefa integrada.
+- PRs esperando revisão: #52 e #54 ficaram três dias abertos (22/11 a 25/11).
+- Sobrecarga de quem acumula papéis: a PO + DevOps começou as duas histórias dela em
+  24/11 (RSK07).
+- Drivers SCRUM-62 e SCRUM-63 concluídos depois do prazo de 24/11.
+- Títulos de PR fora do padrão (ex.: "feature/scrum 150 backend cadastro
+  funcionario") e 1 commit fora do padrão de mensagem.
+- Atas da SM da Sprint 3 subidas só no fim da sprint [CONFIRMAR].
+
+----------------------------------------------------------------
+3. RETROSPECTIVA DA RELEASE 2 (SPRINTS 2 E 3)
+----------------------------------------------------------------
+- Entrega: 9 de 9 histórias da R2 entregues, 34 pontos (15 + 19). O fluxo da UBS
+  ficou completo: entrar na fila, ver a posição, cancelar, check-in, prioridade legal,
+  chamada e atendimento.
+- Qualidade: o CI ganhou Cucumber e Cypress (SCRUM-123) na Sprint 2, e todas as
+  histórias da R2 têm os cenários Gherkin automatizados. A develop terminou a R2 com o
+  CI verde.
+- Processo: as histórias passaram a ir para Concluído no dia do último merge (ação
+  SCRUM-114), mas nas duas sprints o trabalho se concentrou nos dois últimos dias
+  (14 de 22 PRs na Sprint 2 e 20 de 24 na Sprint 3). A ação de integrar a primeira
+  subtarefa até a segunda semana não mudou esse padrão.
+- DevOps: o deploy em nuvem não saiu (IMP-06) e a professora definiu a homologação
+  local em 12/11. O RSK14 (hospedagem gratuita) foi encerrado.
+- Papéis: a mesma integrante acumulou PO, DevOps e histórias nas duas sprints, e as
+  tarefas dela atrasaram nas duas (RSK07). Na R3 a Mirelle passa a acumular PO e
+  DevOps: vale aplicar o plano de ação abaixo desde a Planning da Sprint 4.
+
+----------------------------------------------------------------
+4. PLANO DE AÇÃO (cada ação vira uma tarefa no Jira)
+----------------------------------------------------------------
+Proposta da SM [CONFIRMAR ações, responsáveis e chaves com o time]:
+
+Ação                                                    Responsável     Prazo   Chave
+PR aberto recebe a revisão em até 24 horas              Adrielly (SM    10/12   a criar
+  (revisora marcada no card)                              da R3)
+Quem acumula PO e DevOps pega no máximo uma história    Mirelle (PO     01/12   a criar
+  na sprint                                               da R3)
+Primeira subtarefa de cada US integrada até a daily     Adrielly (SM    10/12   a criar
+  de quarta da primeira semana (02/12), conferida nas     da R3)
+  dailies
+
+As tarefas são criadas na Sprint 4 em 01/12 e acompanhadas pela SM da R3.
+
+----------------------------------------------------------------
+5. AÇÕES DA RETROSPECTIVA ANTERIOR (SPRINT 2)
+----------------------------------------------------------------
+Ação                                         Chave      Situação       Evidência
+Integrar a primeira subtarefa de cada US     SCRUM-148  Não cumprida   2 de 5 histórias na
+  até a daily de segunda da segunda semana                               daily de 23/11
+Revisora confere a chave do Jira em cada     SCRUM-149  Cumprida       44 de 44 commits com
+  commit do PR                                                           a chave; 1 fora do
+                                                                         padrão de mensagem
+Concluir o deploy em homologação e           SCRUM-120  Não se aplica  Fechou em 12/11 como
+  registrar as URLs                                                      homologação local
+
+Ações parciais da Sprint 1 acompanhadas na Sprint 3 [CONFIRMAR]:
+- SCRUM-115 (revisora confere "Files changed"): nenhum arquivo apagado sem motivo e CI
+  verde na develop.
+- SCRUM-117 (usar sempre o modelo de PR): parcial; vários títulos de PR ficaram fora do
+  padrão.
+- SCRUM-118 (subir atas no dia da cerimônia): parcial; a Planning foi registrada no
+  plano da release no mesmo dia (SCRUM-173, PR #49), mas as atas da SM subiram no fim
+  da sprint.
+
+Resultado da SCRUM-148 comentado na issue em 26/11 [CONFIRMAR].
+
+----------------------------------------------------------------
+6. RISCOS ACOMPANHADOS
+----------------------------------------------------------------
+- RSK07: gatilho acionado pela terceira sprint seguida (trabalho concentrado no fim e
+  atraso das tarefas de quem acumula papéis).
+- RSK13: gatilho não aconteceu. As US10, US11, US13 e US14 mexeram na mesma fila sem
+  quebrar a develop: CI verde e nenhum arquivo removido sem motivo.
+- RSK14: encerrado em 17/11 (homologação local, sem hospedagem gratuita).
+Detalhes em docs/sm/registro-de-riscos.txt.
+
+----------------------------------------------------------------
+7. PASSAGEM DO PAPEL DE SM
+----------------------------------------------------------------
+Papéis da Release 3, a partir da Planning da Sprint 4 (01/12):
+  PO + DevOps: Mirelle · Scrum Master: Adrielly · QA: Maria Eduarda
+
+A Mirelle passa à Adrielly:
+- docs/sm: calendário de cerimônias, acordos de trabalho, registro de riscos e
+  registros de impedimentos (próximo número: IMP-07).
+- Modelo das atas, dailies e métricas em docs/sm/sprints/sprint-3/.
+- As ações do plano de ação acima, para criar no Jira em 01/12 e acompanhar.
+- Os riscos em atenção: RSK07 (sobrecarga, agora com a PO + DevOps) e RSK13.
