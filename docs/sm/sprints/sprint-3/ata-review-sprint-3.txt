@@ -80,7 +80,8 @@ Não concluídas: [CONFIRMAR: nenhuma história].
 ----------------------------------------------------------------
 5. FEEDBACK RECEBIDO
 ----------------------------------------------------------------
-- [CONFIRMAR: feedback da professora e da PO na Review]
+- Nenhum feedback da professora: não houve aula para apresentar o andamento nesta
+  sprint.
 
 ----------------------------------------------------------------
 6. ENCAMINHAMENTOS

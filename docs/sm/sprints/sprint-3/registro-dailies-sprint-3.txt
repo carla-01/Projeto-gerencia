@@ -31,8 +31,8 @@ Presentes: Adrielly, Maria Eduarda e Mirelle    Duração: 10 a 15 min
 Adrielly: back-end da prioridade legal e ordem da fila integrados (SCRUM-158, PR #51, e
   SCRUM-159, PR #53, em 23/11 às 13h45); próximo: tela da recepção com a prioridade
   (SCRUM-160) e cenários Gherkin da US11 (SCRUM-161); teste de carga (SCRUM-62)
-Maria Eduarda: [CONFIRMAR: o que fez desde 18/11; não há commit dela na develop entre
-  17/11 e 24/11 às 20h]; próximo: US10 (SCRUM-154 a 157) e US13 (SCRUM-162 a 166)
+Maria Eduarda: sem entrega integrada desde a daily de 18/11; próximo: US10 (SCRUM-154
+  a 157) e US13 (SCRUM-162 a 166)
 Mirelle: US03, US10 e US11 movidas para Em andamento no Jira em 22/11; cadastro de
   funcionários integrado (SCRUM-150, PR #50, em 21/11); setor do
   profissional e lista de usuários (SCRUM-151, PR #52) e tela de funcionários
@@ -66,8 +66,8 @@ Mirelle: US03 integrada (SCRUM-151, PR #52; SCRUM-152, PR #54; SCRUM-153, PR #63
 Impedimentos: nenhum (nenhum card com flag no Jira)
 
 Os Drivers SCRUM-62 e SCRUM-63 não estavam concluídos em 24/11, o prazo combinado na
-Planning para seguirem na sprint. O time manteve os dois [CONFIRMAR: decisão], e eles
-entraram em 25/11 (PRs #64 e #68).
+Planning para seguirem na sprint. Os dois continuaram na sprint e entraram
+em 25/11 (PRs #64 e #68).
 
 Depois desta daily, ainda em 25/11, entraram na develop a US13 (PRs #65 a #67, às 22h30)
 e o SCRUM-63 (PR #68). A US14 foi integrada em 26/11 de manhã (PRs #69 a #71). A

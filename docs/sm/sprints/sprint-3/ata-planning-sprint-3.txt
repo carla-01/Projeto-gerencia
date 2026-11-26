@@ -40,8 +40,8 @@ SCRUM-48  [US-14] Iniciar e finalizar atendimento        3       Mirelle        
 Total planejado: 19 story points.
 Capacidade: a velocidade da Sprint 2 foi de 15 pontos (média de 18 nas duas sprints). O
 plano da release previa 19 pontos, acima dessa capacidade. A PO manteve a US14 na
-sprint [CONFIRMAR: motivo dito na Planning], com a regra de que ela é a primeira a sair
-e passa para a R3 (Sprint 4) se a capacidade apertar.
+sprint, com a regra registrada no plano da release: ela é a primeira a sair e passa
+para a R3 (Sprint 4) se a capacidade apertar.
 A US13 passou da Adrielly para a Maria Eduarda, porque a Adrielly concentra as tarefas
 de QA e a US13 depende das outras histórias.
 Definition of Ready conferida nas cinco histórias: formato "Eu como... preciso... de
