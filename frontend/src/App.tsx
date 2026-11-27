@@ -7,6 +7,12 @@ import AcessoNegado from './pages/AcessoNegado'
 import CadastroRecepcao from './pages/CadastroRecepcao'
 import LayoutRecepcao from './components/LayoutRecepcao'
 import PainelRecepcao from './pages/PainelRecepcao'
+import LayoutProfissional from './components/LayoutProfissional'
+import PainelProfissional from './pages/PainelProfissional'
+import ConfigurarFilas from './pages/ConfigurarFilas'
+import Funcionarios from './pages/Funcionarios'
+import LayoutGestor from './components/LayoutGestor'
+import EscolhaServico from './pages/EscolhaServico'
 import { obterPerfil } from './services/auth'
 
 /**
@@ -15,18 +21,24 @@ import { obterPerfil } from './services/auth'
  * - US02 (SCRUM-38): bloqueia as rotas que o perfil logado não pode abrir.
  * - US04 (SCRUM-39): tela de autocadastro do paciente.
  * - US05 (SCRUM-40): cadastro de paciente pela recepção.
+ * - US06 (SCRUM-137): o paciente escolhe o serviço e entra na fila.
+ * - US03 (SCRUM-152): área do gestor com o cadastro e a lista de funcionários.
+ * - US13 (SCRUM-164): o profissional chama o próximo paciente.
  */
 export default function App() {
   const location = useLocation()
   const perfil = obterPerfil()
 
   // As telas de login e de cadastro ocupam a página inteira, sem o menu provisório do esqueleto.
-  // As telas da recepção têm o próprio menu (barra lateral).
+  // As telas da recepção, do gestor e do profissional têm o próprio menu (barra lateral).
   let mostrarMenu = true
   if (location.pathname === '/login' || location.pathname === '/cadastro') {
     mostrarMenu = false
   }
-  if (location.pathname.startsWith('/recepcao')) {
+  if (location.pathname.startsWith('/recepcao') || location.pathname.startsWith('/gestor')) {
+    mostrarMenu = false
+  }
+  if (location.pathname === '/profissional') {
     mostrarMenu = false
   }
 
@@ -40,6 +52,7 @@ export default function App() {
             {perfil === 'RECEPCIONISTA' && <Link to="/recepcao">Recepção</Link>}
             <Link to="/profissional">Profissional</Link>
             <Link to="/gestor">Gestor</Link>
+            {perfil === 'GESTOR' && <Link to="/gestor/configurar-filas">Configurar filas</Link>}
           </main>
         </nav>
       )}
@@ -47,7 +60,11 @@ export default function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
-        <Route path="/paciente" element={<Pagina titulo="Área do paciente" descricao="Fila e posição do paciente (R2)." />} />
+        <Route path="/paciente" element={
+          <ProtectedRoute perfis={['PACIENTE']}>
+            <EscolhaServico />
+          </ProtectedRoute>
+        } />
         <Route path="/recepcao" element={
           <ProtectedRoute perfis={['RECEPCIONISTA']}>
             <LayoutRecepcao><PainelRecepcao /></LayoutRecepcao>
@@ -59,8 +76,21 @@ export default function App() {
           </ProtectedRoute>
         } />
         <Route path="/acesso-negado" element={<AcessoNegado />} />
-        <Route path="/profissional" element={<Pagina titulo="Profissional de saúde" descricao="Chamada e atendimento (R2)." />} />
-        <Route path="/gestor" element={<Pagina titulo="Gestor" descricao="Configuração e relatórios (R2 a R4)." />} />
+        <Route path="/profissional" element={
+          <ProtectedRoute perfis={['PROFISSIONAL']}>
+            <LayoutProfissional><PainelProfissional /></LayoutProfissional>
+          </ProtectedRoute>
+        } />
+        <Route path="/gestor" element={
+          <ProtectedRoute perfis={['GESTOR']}>
+            <LayoutGestor><Funcionarios /></LayoutGestor>
+          </ProtectedRoute>
+        } />
+        <Route path="/gestor/configurar-filas" element={
+          <ProtectedRoute perfis={['GESTOR']}>
+            <LayoutGestor><ConfigurarFilas /></LayoutGestor>
+          </ProtectedRoute>
+        } />
         <Route path="*" element={<Pagina titulo="Página não encontrada" descricao="Confira o endereço." />} />
       </Routes>
     </>

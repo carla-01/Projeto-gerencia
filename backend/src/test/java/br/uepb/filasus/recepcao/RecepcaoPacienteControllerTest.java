@@ -252,6 +252,7 @@ class RecepcaoPacienteControllerTest {
             .andExpect(status().isForbidden());
 
         assertEquals(0, pacienteRepository.count());
+        assertEquals(0, consentimentoRepository.count());
     }
 
     @Test
@@ -263,5 +264,6 @@ class RecepcaoPacienteControllerTest {
             .andExpect(status().isUnauthorized());
 
         assertEquals(0, pacienteRepository.count());
+        assertEquals(0, consentimentoRepository.count());
     }
 }

@@ -14,13 +14,15 @@ Bugs encontrados x corrigidos: 2 x 2
 Impedimentos: 5 registrados, 5 resolvidos
 Pull requests integrados na develop durante a R1: 14 (PRs #1 a #15, exceto o #8,
   que foi integrado direto na main)
-Execuções da CI e taxa de sucesso: (preencher com a aba Actions)
+Execuções da CI e taxa de sucesso: 40 execuções na R1, 20 verdes (50%), 18 vermelhas e
+  2 canceladas; na develop, 5 de 7 verdes (71%), sem contar as canceladas
+  (docs/releases/relatorio-pipeline-r2.txt, item 4)
 
 ----------------------------------------------------------------
 2. BURNDOWN
 ----------------------------------------------------------------
-docs/sprints/sprint-1/img/burndown-sprint-1.png
-Print da velocidade: docs/sprints/sprint-1/img/velocidade-sprint-1.png
+docs/sm/sprints/sprint-1/burndown-sprint-1.png
+Print da velocidade: relatório de velocidade do Jira (Sprint 1 = 21 de 21)
 
 ----------------------------------------------------------------
 3. INTERPRETAÇÃO

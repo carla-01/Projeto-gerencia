@@ -1,7 +1,10 @@
 package br.uepb.filasus.usuario;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -17,4 +20,8 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
     Optional<Usuario> findByEmail(String email);
 
     boolean existsByEmail(String email);
+
+    /** Lista de usuários da UBS (US03): já traz o setor junto, sem consulta extra por usuário. */
+    @EntityGraph(attributePaths = "setores")
+    List<Usuario> findByPerfilInOrderByNomeAsc(Collection<Perfil> perfis);
 }

@@ -1,8 +1,11 @@
 TÍTULO: [US-XX | BUG-XX] <Título curto da alteração>
 
 AUTOR: <@usuario-github>
+
 REVISORES: <@usuario-github (QA)>, <@usuario-github>
+
 ISSUE RELACIONADA: Closes #<número>
+
 BRANCH: <feature/nome-da-us>  ->  <develop | main>
 
 ----------------------------------------------------------------
@@ -22,11 +25,11 @@ POR QUE FOI FEITO
 ----------------------------------------------------------------
 TIPO DE ALTERAÇÃO
 ----------------------------------------------------------------
-[ ] Nova funcionalidade (US)
-[ ] Correção de bug
-[ ] Refatoração
-[ ] Documentação
-[ ] Configuração / CI / infraestrutura
+- [ ] Nova funcionalidade (US)
+- [ ] Correção de bug
+- [ ] Refatoração
+- [ ] Documentação
+- [ ] Configuração / CI / infraestrutura
 
 ----------------------------------------------------------------
 COMO TESTAR
@@ -45,20 +48,20 @@ EVIDÊNCIAS
 ----------------------------------------------------------------
 CHECKLIST DO AUTOR
 ----------------------------------------------------------------
-[ ] A branch está atualizada com a base
-[ ] O código segue o padrão do projeto
-[ ] Testes novos ou atualizados, e todos passando
-[ ] Pipeline de CI sem falhas
-[ ] Critérios de aceite da US atendidos
-[ ] Documentação e README atualizados, se necessário
-[ ] Sem segredos, senhas ou dados sensíveis no código
+- [ ] A branch está atualizada com a base
+- [ ] O código segue o padrão do projeto
+- [ ] Testes novos ou atualizados, e todos passando
+- [ ] Pipeline de CI sem falhas
+- [ ] Critérios de aceite da US atendidos
+- [ ] Documentação e README atualizados, se necessário
+- [ ] Sem segredos, senhas ou dados sensíveis no código
 
 ----------------------------------------------------------------
 CHECKLIST DO REVISOR (QA)
 ----------------------------------------------------------------
-[ ] Li o código e não encontrei problemas
-[ ] Executei os passos de "Como testar"
-[ ] Critérios de aceite validados
-[ ] Sem regressões visíveis
+- [ ] Li o código e não encontrei problemas
+- [ ] Executei os passos de "Como testar"
+- [ ] Critérios de aceite validados
+- [ ] Sem regressões visíveis
 
 OBSERVAÇÕES PARA O REVISOR: <pontos de atenção, dúvidas, decisões tomadas>

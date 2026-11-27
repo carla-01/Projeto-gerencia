@@ -1,0 +1,377 @@
+/* Área do paciente: escolha de serviço (US06) e posição na fila (US07) - pensada primeiro para o celular */
+
+.fila {
+  --azul: #13238f;
+  --azul-escuro: #0b1560;
+  --azul-claro: #eef0fc;
+  --texto: #111833;
+  --texto-suave: #5b6478;
+  --texto-fraco: #8a91a5;
+  --borda-suave: #eceef4;
+  --vermelho: #b42318;
+  --vermelho-fundo: #fef3f2;
+  --vermelho-borda: #fecdca;
+  --verde: #067647;
+  --verde-fundo: #ecfdf3;
+
+  box-sizing: border-box;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 16px;
+  color: var(--texto);
+}
+
+/* ---------- Cabeçalho ---------- */
+
+.fila-cabecalho {
+  margin-bottom: 20px;
+}
+
+.fila-rotulo {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--azul);
+}
+
+.fila-cabecalho h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.fila-cabecalho p:last-child {
+  margin: 0;
+  font-size: 15px;
+  color: var(--texto-suave);
+}
+
+.fila-cartao {
+  box-sizing: border-box;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid var(--borda-suave);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 4px 16px rgba(16, 24, 40, 0.04);
+}
+
+.fila-secao-titulo {
+  margin: 0 0 12px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.fila-detalhe {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--texto-suave);
+}
+
+/* ---------- Lista de serviços ---------- */
+
+.fila-lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fila-servico {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+  border-top: 1px solid var(--borda-suave);
+}
+
+.fila-servico:first-child {
+  border-top: none;
+}
+
+.fila-servico-nome {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.fila-situacao {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+.fila-aberta {
+  color: var(--verde);
+  background: var(--verde-fundo);
+}
+
+.fila-fechada {
+  color: var(--texto-suave);
+  background: #f0f2f7;
+}
+
+.fila-botao {
+  flex-shrink: 0;
+  min-height: 44px; /* área de toque confortável no celular */
+  padding: 0 18px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--azul);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.fila-botao:hover {
+  background: var(--azul-escuro);
+}
+
+.fila-botao:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(19, 35, 143, 0.25);
+}
+
+.fila-botao:disabled {
+  background: #c3c8d6;
+  cursor: default;
+}
+
+/* ---------- Alerta ---------- */
+
+.fila-alerta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--vermelho);
+  background: var(--vermelho-fundo);
+  border: 1px solid var(--vermelho-borda);
+  border-radius: 8px;
+}
+
+.fila-icone-alerta {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ---------- Aviso de sucesso ---------- */
+
+.fila-aviso {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: var(--verde);
+  background: var(--verde-fundo);
+  border-radius: 8px;
+}
+
+/* ---------- Senha e posição (US07) ---------- */
+
+.fila-minhas-senhas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.fila-senha {
+  text-align: center;
+}
+
+.fila-senha h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.fila-senha-dados {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.fila-senha-dados > div {
+  padding: 12px 8px;
+  background: var(--azul-claro);
+  border-radius: 10px;
+}
+
+.fila-senha-dados .fila-senha-numero {
+  margin: 0;
+  font-size: 44px;
+}
+
+.fila-senha-frente {
+  margin: 0 0 8px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.fila-botao-secundario {
+  min-height: 44px; /* área de toque confortável no celular */
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--azul);
+  background: #ffffff;
+  border: 1px solid var(--azul);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.fila-botao-secundario:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(19, 35, 143, 0.25);
+}
+
+.fila-botao-secundario:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.fila-senha-servico {
+  margin: 0 0 16px;
+  font-size: 15px;
+  color: var(--texto-suave);
+}
+
+.fila-senha-rotulo {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--texto-fraco);
+}
+
+.fila-senha-numero {
+  margin: 0 0 16px;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--azul);
+}
+
+/* ---------- Cancelar a senha (US08) ---------- */
+
+.fila-cancelar {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--borda-suave);
+}
+
+.fila-botao-cancelar {
+  min-height: 44px; /* área de toque confortável no celular */
+  padding: 0 16px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--vermelho);
+  background: #ffffff;
+  border: 1px solid var(--vermelho-borda);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.fila-botao-cancelar:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(180, 35, 24, 0.2);
+}
+
+.fila-botao-cancelar:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.fila-botao-confirmar-cancelamento {
+  color: #ffffff;
+  background: var(--vermelho);
+  border-color: var(--vermelho);
+}
+
+.fila-confirmacao {
+  margin: 0 0 12px;
+  font-size: 15px;
+  color: var(--texto);
+}
+
+.fila-confirmacao-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---------- Paciente chamado (US13) ---------- */
+
+.fila-chamado {
+  text-align: center;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 90% -10%, rgba(255, 255, 255, 0.25), transparent 45%),
+    linear-gradient(135deg, #079455 0%, #054f31 100%);
+  border-color: transparent;
+  animation: fila-chamar 0.5s ease-out;
+}
+
+.fila-chamado h2 {
+  margin: 0 0 4px;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.fila-chamado-servico {
+  margin: 0 0 14px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.fila-chamado-rotulo {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #abefc6;
+}
+
+.fila-chamado-numero {
+  margin: 0 0 10px;
+  font-size: 88px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.fila-chamado-orientacao {
+  margin: 0;
+  font-size: 15px;
+}
+
+@keyframes fila-chamar {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fila-chamado {
+    animation: none;
+  }
+}

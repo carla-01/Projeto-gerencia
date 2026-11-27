@@ -1,0 +1,398 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { fazerLogout } from '../services/auth'
+import { ErroFila, cancelarSenha, entrarNaFila, listarMinhasSenhas, listarServicos } from '../services/fila'
+import type { PosicaoNaFila, ServicoDisponivel } from '../services/fila'
+import './EscolhaServico.css'
+
+/** De quanto em quanto tempo a tela confere se o paciente foi chamado (US13). */
+const INTERVALO_DE_ATUALIZACAO = 10000
+
+/** "2026-11-10" vira "10/11/2026" (a data já vem no dia local da UBS). */
+function formatarData(data: string): string {
+  const [ano, mes, dia] = data.split('-')
+  return dia + '/' + mes + '/' + ano
+}
+
+/** Quantas pessoas faltam, do jeito que o paciente lê. */
+function textoPessoasAFrente(pessoas: number): string {
+  if (pessoas === 0) {
+    return 'Você é o próximo da fila'
+  }
+  if (pessoas === 1) {
+    return '1 pessoa na sua frente'
+  }
+  return pessoas + ' pessoas na sua frente'
+}
+
+function IconeAlerta() {
+  return (
+    <svg className="fila-icone-alerta" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M12 7.5v5.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      <circle cx="12" cy="16.5" r="1.2" fill="currentColor" />
+    </svg>
+  )
+}
+
+function IconeCheck() {
+  return (
+    <svg className="fila-icone-alerta" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+/** Só dá para cancelar enquanto a senha está na fila. Depois de chamada, não (CT-US08-02). */
+function podeCancelar(status: string): boolean {
+  if (status === 'AGUARDANDO' || status === 'PRESENTE') {
+    return true
+  }
+  return false
+}
+
+/** true quando o profissional já chamou: a senha não espera mais na fila (US13). */
+function foiChamado(status: string): boolean {
+  if (status === 'CHAMADA' || status === 'EM_ATENDIMENTO') {
+    return true
+  }
+  return false
+}
+
+/** Aviso na tela do paciente chamado, com o serviço e o número (US13 - SCRUM-165). */
+function CartaoChamado({ senha }: { senha: PosicaoNaFila }) {
+  const idTitulo = 'senha-' + senha.id
+  let titulo = 'Você foi chamado'
+  let orientacao = 'Dirija-se ao atendimento agora.'
+  if (senha.status === 'EM_ATENDIMENTO') {
+    titulo = 'Em atendimento'
+    orientacao = 'O seu atendimento já começou.'
+  }
+  return (
+    <section className="fila-cartao fila-chamado" aria-labelledby={idTitulo} role="status">
+      <h2 id={idTitulo}>{titulo}</h2>
+      <p className="fila-chamado-servico">{senha.servico}</p>
+      <p className="fila-chamado-rotulo">Senha</p>
+      <p className="fila-chamado-numero">{senha.numero}</p>
+      <p className="fila-chamado-orientacao">{orientacao}</p>
+    </section>
+  )
+}
+
+type PropsCartaoSenha = {
+  senha: PosicaoNaFila
+  /** true quando o paciente clicou em "Cancelar senha" e falta confirmar. */
+  confirmando: boolean
+  cancelando: boolean
+  onPedirCancelamento: () => void
+  onConfirmarCancelamento: () => void
+  onDesistir: () => void
+}
+
+/** Senha do paciente com a posição (US07) e o botão de cancelar com confirmação (US08). */
+function CartaoSenha({
+  senha,
+  confirmando,
+  cancelando,
+  onPedirCancelamento,
+  onConfirmarCancelamento,
+  onDesistir,
+}: PropsCartaoSenha) {
+  const idTitulo = 'senha-' + senha.id
+  let orientacao = 'Faça o check-in na recepção quando chegar à UBS.'
+  if (senha.status === 'PRESENTE') {
+    orientacao = 'Check-in feito. Aguarde ser chamado.'
+  }
+  let textoConfirmar = 'Sim, cancelar'
+  if (cancelando) {
+    textoConfirmar = 'Cancelando...'
+  }
+  return (
+    <section className="fila-cartao fila-senha" aria-labelledby={idTitulo}>
+      <h2 id={idTitulo}>Sua senha</h2>
+      <p className="fila-senha-servico">{senha.servico}</p>
+      <div className="fila-senha-dados">
+        <div>
+          <p className="fila-senha-rotulo">Senha</p>
+          <p className="fila-senha-numero">{senha.numero}</p>
+        </div>
+        <div>
+          <p className="fila-senha-rotulo">Posição</p>
+          <p className="fila-senha-numero">{senha.posicao}º</p>
+        </div>
+      </div>
+      <p className="fila-senha-frente">{textoPessoasAFrente(senha.pessoasAFrente)}</p>
+      <p className="fila-detalhe">
+        Senha de {formatarData(senha.data)}. {orientacao}
+      </p>
+
+      {podeCancelar(senha.status) && (
+        <div className="fila-cancelar">
+          {!confirmando && (
+            <button
+              type="button"
+              className="fila-botao-cancelar"
+              aria-label={'Cancelar a senha de ' + senha.servico}
+              onClick={onPedirCancelamento}
+            >
+              Cancelar senha
+            </button>
+          )}
+          {confirmando && (
+            <>
+              <p className="fila-confirmacao">Tem certeza? Você vai sair da fila de {senha.servico}.</p>
+              <div className="fila-confirmacao-botoes">
+                <button
+                  type="button"
+                  className="fila-botao-cancelar fila-botao-confirmar-cancelamento"
+                  disabled={cancelando}
+                  onClick={onConfirmarCancelamento}
+                >
+                  {textoConfirmar}
+                </button>
+                <button type="button" className="fila-botao-secundario" disabled={cancelando} onClick={onDesistir}>
+                  Não, manter a senha
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </section>
+  )
+}
+
+/**
+ * Área do paciente: escolha de serviço (US06 - SCRUM-137), posição na fila (US07 - SCRUM-140)
+ * e cancelamento da senha (US08 - SCRUM-129).
+ *
+ * O paciente vê a senha que já tem, a posição e quantas pessoas estão na frente. Sem senha
+ * ativa, vê os serviços da UBS e entra na fila do escolhido. Fila fechada (fora do horário
+ * ou sem senhas) não deixa entrar.
+ *
+ * Quando o profissional chama, o cartão da senha vira o aviso "Você foi chamado"
+ * (US13 - SCRUM-165). Enquanto há senha, a tela confere a situação sozinha.
+ */
+export default function EscolhaServico() {
+  const navigate = useNavigate()
+  const [servicos, setServicos] = useState<ServicoDisponivel[]>([])
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState('')
+  const [entrandoEm, setEntrandoEm] = useState<number | null>(null)
+  const [senhas, setSenhas] = useState<PosicaoNaFila[]>([])
+  const [aviso, setAviso] = useState('')
+  const [atualizando, setAtualizando] = useState(false)
+  const [confirmandoCancelamento, setConfirmandoCancelamento] = useState<number | null>(null)
+  const [cancelandoId, setCancelandoId] = useState<number | null>(null)
+
+  useEffect(() => {
+    let ativo = true
+    listarServicos()
+      .then((lista) => {
+        if (ativo) {
+          setServicos(lista)
+        }
+      })
+      .catch((e) => {
+        if (ativo) {
+          tratarErro(e)
+        }
+      })
+      .finally(() => {
+        if (ativo) {
+          setCarregando(false)
+        }
+      })
+    // Separado dos serviços: se a posição falhar, a lista de serviços continua aparecendo.
+    listarMinhasSenhas()
+      .then((lista) => {
+        if (ativo) {
+          setSenhas(lista)
+        }
+      })
+      .catch((e) => {
+        if (ativo) {
+          tratarErro(e)
+        }
+      })
+    return () => {
+      ativo = false
+    }
+    // tratarErro só usa o navigate, que não muda.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Com senha ativa, busca a situação de tempos em tempos para o aviso aparecer sozinho.
+  const temSenha = senhas.length > 0
+  useEffect(() => {
+    if (!temSenha) {
+      return
+    }
+    const relogio = setInterval(() => {
+      listarMinhasSenhas()
+        .then(setSenhas)
+        .catch((e) => {
+          // Uma falha passageira não incomoda o paciente: a próxima busca tenta de novo.
+          if (e instanceof ErroFila && e.tipo === 'sem-login') {
+            tratarErro(e)
+          }
+        })
+    }, INTERVALO_DE_ATUALIZACAO)
+    return () => clearInterval(relogio)
+    // tratarErro só usa o navigate, que não muda.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [temSenha])
+
+  function tratarErro(e: unknown) {
+    if (!(e instanceof ErroFila)) {
+      setErro('Não foi possível entrar na fila agora. Tente de novo.')
+      return
+    }
+    if (e.tipo === 'sem-login') {
+      fazerLogout()
+      navigate('/login', { replace: true })
+      return
+    }
+    if (e.tipo === 'sem-permissao') {
+      navigate('/acesso-negado', { replace: true })
+      return
+    }
+    setErro(e.message)
+  }
+
+  async function entrar(servico: ServicoDisponivel) {
+    setErro('')
+    setAviso('')
+    setEntrandoEm(servico.id)
+    try {
+      const senha = await entrarNaFila(servico.id)
+      setAviso('Você entrou na fila de ' + senha.servico + '.')
+      // Busca de novo para mostrar a posição da senha nova.
+      setSenhas(await listarMinhasSenhas())
+    } catch (e) {
+      tratarErro(e)
+    }
+    setEntrandoEm(null)
+  }
+
+  /** Cancela a senha depois da confirmação. A fila anda e a opção de entrar volta (US08). */
+  async function cancelar(senha: PosicaoNaFila) {
+    setErro('')
+    setAviso('')
+    setCancelandoId(senha.id)
+    try {
+      await cancelarSenha(senha.id)
+      setAviso('Sua senha de ' + senha.servico + ' foi cancelada.')
+    } catch (e) {
+      tratarErro(e)
+    }
+    // Busca de novo nos dois casos: a senha cancelada some e, se o paciente já foi chamado, a tela se ajusta.
+    try {
+      setSenhas(await listarMinhasSenhas())
+    } catch (e) {
+      tratarErro(e)
+    }
+    setCancelandoId(null)
+    setConfirmandoCancelamento(null)
+  }
+
+  async function atualizar() {
+    setErro('')
+    setAtualizando(true)
+    try {
+      setSenhas(await listarMinhasSenhas())
+    } catch (e) {
+      tratarErro(e)
+    }
+    setAtualizando(false)
+  }
+
+  return (
+    <main className="fila">
+      <header className="fila-cabecalho">
+        <p className="fila-rotulo">Paciente</p>
+        <h1>Área do paciente</h1>
+        <p>Escolha o serviço e entre na fila pelo celular.</p>
+      </header>
+
+      {aviso !== '' && (
+        <p className="fila-aviso" role="status">
+          <IconeCheck />
+          {aviso}
+        </p>
+      )}
+
+      {erro !== '' && (
+        <div className="fila-alerta" role="alert">
+          <IconeAlerta />
+          {erro}
+        </div>
+      )}
+
+      {senhas.length > 0 && (
+        <div className="fila-minhas-senhas">
+          {senhas.map((senha) => {
+            if (foiChamado(senha.status)) {
+              return <CartaoChamado key={senha.id} senha={senha} />
+            }
+            return (
+              <CartaoSenha
+                key={senha.id}
+                senha={senha}
+                confirmando={confirmandoCancelamento === senha.id}
+                cancelando={cancelandoId === senha.id}
+                onPedirCancelamento={() => setConfirmandoCancelamento(senha.id)}
+                onConfirmarCancelamento={() => cancelar(senha)}
+                onDesistir={() => setConfirmandoCancelamento(null)}
+              />
+            )
+          })}
+          <button type="button" className="fila-botao-secundario" disabled={atualizando} onClick={atualizar}>
+            {atualizando ? 'Atualizando...' : 'Atualizar posição'}
+          </button>
+        </div>
+      )}
+
+      <section className="fila-cartao" aria-labelledby="titulo-servicos" aria-busy={carregando}>
+        <h2 id="titulo-servicos" className="fila-secao-titulo">Serviços de hoje</h2>
+
+        {carregando && <p className="fila-detalhe">Carregando serviços...</p>}
+
+        {!carregando && servicos.length === 0 && erro === '' && (
+          <p className="fila-detalhe">Nenhum serviço disponível hoje.</p>
+        )}
+
+        <ul className="fila-lista">
+          {servicos.map((servico) => {
+            // O nome do serviço é único (US09), então dá para comparar pela senha.
+            const jaEstaNaFila = senhas.some((senha) => senha.servico === servico.nome)
+            let textoBotao = 'Entrar na fila'
+            if (jaEstaNaFila) {
+              textoBotao = 'Na fila'
+            } else if (entrandoEm === servico.id) {
+              textoBotao = 'Entrando...'
+            }
+            return (
+              <li key={servico.id} className="fila-servico">
+                <div>
+                  <p className="fila-servico-nome">{servico.nome}</p>
+                  {servico.aberta && <span className="fila-situacao fila-aberta">Fila aberta</span>}
+                  {!servico.aberta && <span className="fila-situacao fila-fechada">Fila fechada</span>}
+                </div>
+                <button
+                  type="button"
+                  className="fila-botao"
+                  disabled={!servico.aberta || jaEstaNaFila || entrandoEm !== null}
+                  aria-label={'Entrar na fila de ' + servico.nome}
+                  onClick={() => entrar(servico)}
+                >
+                  {textoBotao}
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </section>
+    </main>
+  )
+}

@@ -1,0 +1,38 @@
+REGISTRO DE IMPEDIMENTOS - SPRINT 2 (RELEASE 2)
+FilaSUS · Gerência de Projetos (UEPB, 2026.2) · Scrum Master
+Responsável: Mirelle Casimiro Silvino (Scrum Master da R2)
+
+Todo impedimento citado em daily, no grupo ou nos comentários do Jira entra aqui no
+mesmo dia e recebe o sinalizador (flag) no card do Jira enquanto estiver aberto.
+Status: Aberto, Em tratamento ou Resolvido.
+A numeração continua a da R1 (IMP-01 a IMP-05, em docs/sm/registro-de-impedimentos.txt).
+
+----------------------------------------------------------------
+REGISTRO
+----------------------------------------------------------------
+IMP-06
+  Surgiu em: 09/11/2026 (daily)
+  Impedimento: Maria Eduarda não conseguiu concluir o deploy em homologação (SCRUM-120)
+  na sprint. O deploy precisava de uma plataforma gratuita que rodasse o back-end sem
+  Docker na máquina (restrição do IMP-01). A primeira opção (Koyeb) não deu certo e foi
+  trocada pelo Render, que monta o back-end com um Dockerfile só no servidor. O roteiro
+  de DevOps previa commits em 05/11 e 10/11; o workflow só foi integrado no PR #42 em
+  11/11, e os endereços de homologação ainda não estão em docs/devops/homologacao.txt.
+  Afeta: SCRUM-120; aceite das histórias em homologação na Review de 12/11.
+  Flag no card do Jira: SCRUM-120, sinalizado em 09/11 e retirado em 12/11
+  Quem resolveu: Maria Eduarda (DevOps)
+  Status: Resolvido em 12/11/2026 · 3 dias
+  Solução: a professora definiu a homologação local em 12/11. O aceite da Review de
+  12/11 foi feito no ambiente local, como na R1. O workflow de deploy no Render (PR #42)
+  continua na develop.
+
+----------------------------------------------------------------
+RESUMO DA SPRINT 2
+----------------------------------------------------------------
+Impedimentos registrados: 1
+Resolvidos: 1 (IMP-06, em 12/11)
+Cards sinalizados com flag no Jira: 1 (SCRUM-120, flag retirada em 12/11)
+Tempo até a resolução: 3 dias (09/11 a 12/11)
+Impedimento recorrente: nenhum. Ponto de atenção levado para a Retro: a tarefa de
+DevOps atrasou enquanto a mesma integrante era PO e desenvolvia a US08 (RSK07,
+sobrecarga).

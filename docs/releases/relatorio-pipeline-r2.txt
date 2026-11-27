@@ -1,0 +1,132 @@
+RELATÓRIO DO PIPELINE - R2 - FILA E ATENDIMENTO
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+SCRUM-121 (T14) · Responsável: Maria Eduarda da Nóbrega (PO + DevOps da R2)
+Dados coletados em 26/11/2026, do GitHub Actions (workflow "CI"), execuções
+#54 (03/11 21:05) a #279 (26/11 07:26). Horários de Brasília.
+Repositório: https://github.com/carla-01/Projeto-gerencia
+
+----------------------------------------------------------------
+1. O PIPELINE
+----------------------------------------------------------------
+Arquivo: .github/workflows/ci.yml. Roda em todo push e em todo pull request.
+
+Job        O que faz
+---------  ------------------------------------------------------------
+backend    mvn verify (Java 21): testes e cenários Cucumber contra um
+           PostgreSQL 16 de teste
+frontend   npm ci, build e testes (Vitest)
+smoke      cenários @smoke no Cypress, com back-end, front-end e banco no ar
+build      só passa se os três anteriores passarem; é a checagem exigida para
+           o merge na develop
+
+Um push novo cancela a execução anterior da mesma branch (concurrency), o que
+explica as execuções canceladas.
+
+Mudanças na R2:
+- Cucumber e Cypress com @smoke entraram no CI (SCRUM-123).
+- Um job de deploy em nuvem entrou (SCRUM-120) e foi retirado em 12/11, porque
+  a professora definiu a homologação local (PR #46).
+- O pool de conexões dos testes foi limitado (SCRUM-162, 25/11).
+
+----------------------------------------------------------------
+2. NÚMEROS DA R2
+----------------------------------------------------------------
+Recorte              Execuções  Verdes  Vermelhas  Canceladas  Verdes/total  Verdes/(verdes+vermelhas)
+-------------------  ---------  ------  ---------  ----------  ------------  -------------------------
+R2, todas                  226     189          6          31         83,6%                      96,9%
+R2, só develop              51      40          2           9         78,4%                      95,2%
+Sprint 2 (03-16/11)        138     119          4          15         86,2%                      96,7%
+  develop                   28      24          2           2         85,7%                      92,3%
+Sprint 3 (17-26/11)         88      70          2          16         79,5%                      97,2%
+  develop                   23      16          0           7         69,6%                       100%
+
+A contagem de vermelhas usa o resultado final. Outras 2 execuções (#235 e #259)
+falharam na primeira tentativa e ficaram verdes na reexecução: somando-as, foram
+8 execuções com alguma falha.
+
+Q-05 (estabilidade do pipeline, meta de pelo menos 90% de execuções verdes na
+develop): 95,2% (40 de 42), sem contar as canceladas, o mesmo critério dos 71%
+da R1 (5 de 7). Meta atingida. Contando as canceladas como não verdes: 78,4%.
+
+Tempo médio de uma execução verde: 112 s (1 min 52 s); mediana de 119 s.
+Base: 187 execuções verdes na primeira tentativa. Sprint 2: 100 s. Sprint 3: 134 s.
+
+----------------------------------------------------------------
+3. FALHAS, CAUSAS E TEMPO ATÉ A CORREÇÃO
+----------------------------------------------------------------
+Tempo até a correção: do fim da execução com falha ao fim da primeira execução
+verde seguinte na mesma branch (ou da reexecução).
+
+Run   Data e hora   Branch / evento              O que falhou          Corrigida em
+----  ------------  ---------------------------  --------------------  ---------------
+#147  10/11 19:55   SCRUM-140, push              front (Testes) e      7 min (#149)
+                                                 smoke
+#148  10/11 19:59   SCRUM-140, push              smoke                 3 min (#149)
+#177  11/11 21:30   develop, push                deploy do front       1.410 min (#187)
+                                                 (Netlify)
+#180  11/11 23:04   develop, push                deploy do front       1.316 min (#187)
+                                                 (Netlify)
+#235  25/11 10:08   SCRUM-160, 1ª tentativa      back-end              5 min (reexecução)
+#242  25/11 10:37   SCRUM-162, push              back-end              9 min (#244)
+#243  25/11 10:39   SCRUM-162, pull request      back-end              9 min (#244)
+#259  25/11 20:39   SCRUM-165, push              back-end              18 min (reexecução)
+
+Causas:
+- #147 e #148: a falha dos testes do front em #147 aconteceu no commit da tela,
+  enviado antes do commit que atualizava os testes (causa deduzida pela ordem dos
+  commits). A causa da falha do smoke não foi confirmada: o log não foi consultado.
+  A #149 ficou verde depois de a branch ser atualizada com a develop.
+- #177 e #180: o passo "Publicar o front-end" do deploy em nuvem falhou. Build e
+  testes não foram a causa. O deploy foi retirado do CI em 12/11 (PR #46). O tempo
+  longo é o intervalo até essa decisão.
+- #235: causa não confirmada (log não consultado). A branch só alterava o front e a
+  reexecução passou sem mudança no código; provável falha do ambiente.
+- #242 e #243: defeito de configuração dos testes. Cada classe de teste com relógio
+  próprio abria 10 conexões e o PostgreSQL do CI passou das 100
+  ("too many clients already"). Passava no computador, que usa H2. Corrigido no
+  commit 416ae24, limitando cada pool a 3 conexões.
+- #259: falha externa. O Maven Central respondeu 429 (Too Many Requests) ao baixar
+  o spring-boot-starter-parent, e o build nem compilou. A execução de pull request
+  do mesmo commit passou; resolvido com reexecução.
+
+Resumo por tipo (8 execuções):
+- Código ou teste do projeto: 4 (#147, #148, #242, #243)
+- Deploy em nuvem, já retirado: 2 (#177, #180)
+- Ambiente ou serviço externo: 2 (#235, provável; #259, confirmada)
+
+Na develop, as únicas vermelhas foram as do deploy (#177 e #180). Nenhuma na
+Sprint 3.
+
+----------------------------------------------------------------
+4. COMPARAÇÃO R1 x R2
+----------------------------------------------------------------
+Indicador                          R1                      R2
+---------------------------------  ----------------------  ------------------------
+Execuções                          40                      226
+Verdes / total                     20 (50%)                189 (83,6%)
+Vermelhas                          18                      6 (8 com a 1ª tentativa)
+Canceladas                         2                       31
+Verdes na develop (sem canceladas) 71% (5 de 7)            95,2% (40 de 42)
+Tempo médio de execução verde      61 s                    112 s
+Jobs                               back-end e front-end    + smoke (Cypress)
+
+A execução ficou mais longa porque a R2 tem mais testes, um PostgreSQL de teste e o
+job de smoke, que sobe o sistema inteiro. Em troca, a taxa de sucesso subiu.
+
+----------------------------------------------------------------
+5. AMBIENTE DE HOMOLOGAÇÃO
+----------------------------------------------------------------
+O deploy em nuvem foi descartado por decisão da professora (12/11/2026). A
+homologação da R2 é local e reproduzível, descrita em docs/devops/homologacao.txt.
+
+----------------------------------------------------------------
+6. MELHORIAS PARA A R3
+----------------------------------------------------------------
+- Rodar os testes em PostgreSQL antes do push quando o PR criar classes de teste
+  com contexto próprio.
+- Reduzir a dependência de download no CI e reexecutar em caso de 429.
+- Atualizar actions/checkout, setup-java e setup-node, que avisam sobre o Node 20.
+- Ao ver uma falha, registrar a causa na issue no mesmo dia, enquanto o log está
+  à mão (duas causas deste relatório ficaram sem confirmação).
+
+Evidência: aba Actions do repositório, execuções citadas acima.

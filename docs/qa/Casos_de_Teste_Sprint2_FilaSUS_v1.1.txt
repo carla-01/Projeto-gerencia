@@ -1,0 +1,214 @@
+CASOS DE TESTE - SPRINT 2 - FilaSUS
+QA: Adrielly Carla Ferreira de Melo
+Versão 1.1 - 11/11/2026 (Release 2 / Sprint 2, de 03/11 a 12/11)
+
+Histórico:
+  - v1.0 (04/11/2026): CT-US02-04, caso pendente da Sprint 1.
+  - v1.1 (11/11/2026): casos da US06, US07, US08 e US09 executados no fim da sprint.
+
+Referência da execução:
+  - Ambiente: develop, commit b4c9c2d (merge do PR #42)
+  - Pipeline: CI #167, GitHub Actions, 11/11/2026
+  - Back-end: mvn verify aprovado (cenários .feature executados pelo Cucumber)
+  - Front-end: npm ci, build e testes aprovados (Vitest)
+  - Smoke: cenários @smoke do Cypress aprovados
+  - Resultado final: 11 casos executados e aprovados
+
+----------------------------------------------------------------
+SCRUM-38 [US-02] Controle de acesso por papel
+----------------------------------------------------------------
+CT-US02-04  Exceção   Tentativa negada registrada no log
+  Caso pendente da Sprint 1 (Casos_de_Teste_Sprint1_FilaSUS_v1.1.txt), repriorizado em 03/11 para fechar a US02.
+  Dado que estou logado como paciente
+  Quando tento acessar a rota do painel da recepção "/api/recepcao/fila"
+  Então o sistema responde 403
+  E o log registra "Acesso negado" com o perfil "PACIENTE", o método "GET" e a rota "/api/recepcao/fila"
+  E o log não mostra o token de acesso
+  Issue Jira: SCRUM-124 (tarefa); SCRUM-38; DA-SEG-I1-01
+  Teste automatizado: backend/src/test/resources/features/US02-log-acesso-negado.feature · CucumberTest (passos em ControleDeAcessoSteps)
+  Resultado obtido: Passou na execução local do mvn verify em 04/11/2026 e no CI #69. Passou de novo na regressão do CI #167.
+  Status: Passou
+  Evidência: CI #69, commit ed7fc82; CI #167, develop, commit b4c9c2d
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+SCRUM-41 [US-06] Entrar na fila
+----------------------------------------------------------------
+Subtarefas: SCRUM-135, SCRUM-136 (back-end), SCRUM-137 (tela), SCRUM-138 (Gherkin)
+Observação: o critério "Já estou na fila" da história virou o CT-US06-04. O CT-US06-03 cobre a
+fila lotada (senhas do dia esgotadas), que a história junta com o fora do horário no Cenário 2.
+
+CT-US06-01  Sucesso   Entrar na fila com sucesso
+  Dado que sou um paciente cadastrado e logado
+  E o serviço "Clínico" funciona das 07:00 às 17:00 com limite de 40 senhas
+  Quando entro na fila do serviço "Clínico"
+  Então recebo a senha número 1 do serviço "Clínico"
+  E a senha fica com o status "AGUARDANDO"
+  Issue Jira: SCRUM-41; SCRUM-138
+  Teste automatizado: backend/src/test/resources/features/US06-entrar-na-fila.feature (@smoke) · EntradaFilaControllerTest · EscolhaServico.test.tsx "entra na fila e mostra a senha com a posição" · Cypress smoke entrada-na-fila.feature
+  Resultado obtido: Passou no CI #167 da develop.
+  Status: Passou
+  Evidência: CI #167, develop, commit b4c9c2d
+  Bug aberto: N/A
+
+CT-US06-02  Exceção   Fila fechada fora do horário
+  Dado que sou um paciente cadastrado e logado
+  E o serviço "Odontologia" funciona das 13:00 às 17:00 com limite de 20 senhas
+  Quando entro na fila do serviço "Odontologia" às 09:00
+  Então vejo a mensagem "Fila fechada"
+  E nenhuma senha é gerada para mim
+  Issue Jira: SCRUM-41; SCRUM-138
+  Teste automatizado: backend/src/test/resources/features/US06-entrar-na-fila.feature · EscolhaServico.test.tsx "não deixa entrar na fila de um serviço fechado"
+  Resultado obtido: Passou no CI #167 da develop.
+  Status: Passou
+  Evidência: CI #167, develop, commit b4c9c2d
+  Bug aberto: N/A
+
+CT-US06-03  Exceção   Fila fechada quando as senhas do dia acabaram
+  Dado que sou um paciente cadastrado e logado
+  E o serviço "Enfermagem" funciona das 07:00 às 17:00 com limite de 1 senha
+  E já foi emitida 1 senha hoje no serviço "Enfermagem"
+  Quando entro na fila do serviço "Enfermagem"
+  Então vejo a mensagem "Fila fechada"
+  E nenhuma senha é gerada para mim
+  Issue Jira: SCRUM-41; SCRUM-138
+  Teste automatizado: backend/src/test/resources/features/US06-entrar-na-fila.feature · EscolhaServico.test.tsx "mostra "Fila fechada" quando a fila fecha antes de o paciente entrar"
+  Resultado obtido: Passou no CI #167 da develop.
+  Status: Passou
+  Evidência: CI #167, develop, commit b4c9c2d
+  Bug aberto: N/A
+
+CT-US06-04  Exceção   Não tirar duas senhas no mesmo serviço
+  Dado que sou um paciente cadastrado e logado
+  E já entrei na fila do serviço "Clínico"
+  Quando entro na fila do serviço "Clínico" de novo
+  Então vejo a mensagem "Você já tem uma senha ativa neste serviço"
+  E nenhuma senha nova é gerada
+  Issue Jira: SCRUM-41; SCRUM-138
+  Teste automatizado: backend/src/test/resources/features/US06-entrar-na-fila.feature · EscolhaServico.test.tsx "avisa quando o paciente já tem uma senha ativa no serviço"
+  Resultado obtido: Passou no CI #167 da develop.
+  Status: Passou
+  Evidência: CI #167, develop, commit b4c9c2d
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+SCRUM-42 [US-07] Ver minha posição
+----------------------------------------------------------------
+Subtarefas: SCRUM-139 (back-end), SCRUM-140 (tela), SCRUM-141 (Gherkin)
+
+CT-US07-01  Sucesso   Posição exibida
+  Dado que tenho a senha número 3 na fila do serviço "Clínico"
+  E há 2 pessoas aguardando na minha frente
+  Quando abro a minha fila
+  Então vejo a senha número 3 do serviço "Clínico"
+  E estou na posição 3 com 2 pessoas na minha frente
+  Issue Jira: SCRUM-42; SCRUM-141
+  Teste automatizado: backend/src/test/resources/features/US07-ver-minha-posicao.feature (@smoke) · PosicaoFilaControllerTest · EscolhaServico.test.tsx#CT-US07-01
+  Resultado obtido: Passou no CI #167 da develop.
+  Status: Passou
+  Evidência: CI #167, develop, commit b4c9c2d
+  Bug aberto: N/A
+
+CT-US07-02  Exceção   Não estou na fila
+  Dado que já fui atendido hoje no serviço "Clínico" e não tenho senha ativa
+  Quando abro a minha fila
+  Então nenhuma senha aparece para mim
+  E vejo a opção "Entrar na fila" no serviço "Clínico"
+  Issue Jira: SCRUM-42; SCRUM-141
+  Teste automatizado: backend/src/test/resources/features/US07-ver-minha-posicao.feature · EscolhaServico.test.tsx#CT-US07-02 · Cypress smoke posicao-na-fila.feature
+  Resultado obtido: Passou no CI #167 da develop.
+  Status: Passou
+  Evidência: CI #167, develop, commit b4c9c2d
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+SCRUM-43 [US-08] Cancelar minha senha
+----------------------------------------------------------------
+Subtarefas: SCRUM-43 (back-end e Gherkin, PR #35), SCRUM-129 (tela, PR #41)
+
+CT-US08-01  Sucesso   Cancelamento
+  Dado que estou na fila do serviço "Clínico" com a senha número 1
+  E há mais 2 pacientes aguardando depois de mim
+  Quando clico em cancelar e confirmo
+  Então a minha senha fica com o status "CANCELADA"
+  E restam 2 senhas na fila do serviço, e quem estava atrás anda uma posição
+  Issue Jira: SCRUM-43; SCRUM-129
+  Teste automatizado: backend/src/test/resources/features/US08-cancelar-senha.feature (@smoke) · CancelamentoSenhaControllerTest · EscolhaServico.test.tsx#CT-US08-01
+  Resultado obtido: Passou no CI #167 da develop.
+  Status: Passou
+  Evidência: CI #167, develop, commit b4c9c2d
+  Bug aberto: N/A
+
+CT-US08-02  Exceção   Já fui chamado
+  Dado que estou na fila do serviço "Clínico" com a senha número 1
+  E o meu atendimento já começou
+  Quando tento cancelar
+  Então o botão de cancelar não aparece na tela
+  E, se o pedido chegar ao back-end, recebo "Seu atendimento já começou" e a senha continua "EM_ATENDIMENTO"
+  Issue Jira: SCRUM-43; SCRUM-129
+  Teste automatizado: backend/src/test/resources/features/US08-cancelar-senha.feature · CancelamentoSenhaControllerTest#naoCancelaDuranteOAtendimento · EscolhaServico.test.tsx#CT-US08-02
+  Resultado obtido: Passou no CI #167 da develop.
+  Status: Passou
+  Evidência: CI #167, develop, commit b4c9c2d
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+SCRUM-44 [US-09] Configurar filas e horários
+----------------------------------------------------------------
+Subtarefas: SCRUM-132 (back-end), SCRUM-133 (tela), SCRUM-134 (Gherkin)
+
+CT-US09-01  Sucesso   Configuração salva
+  Dado que estou autenticado no painel do gestor
+  Quando defino o serviço "Clínico" das 07:00 às 12:00 com limite de 40 senhas
+  Então a fila abre e fecha nesses horários e limita a 40 senhas
+  Issue Jira: SCRUM-44; SCRUM-134
+  Teste automatizado: backend/src/test/resources/features/US09-configurar-filas-e-horarios.feature (@smoke) · ServicoControllerTest#gestorSalvaServicoComHorarios · ConfigurarFilas.test.tsx#CT-US09-01
+  Resultado obtido: Passou no CI #167 da develop.
+  Status: Passou
+  Evidência: CI #167, develop, commit b4c9c2d
+  Bug aberto: N/A
+
+CT-US09-02  Exceção   Horário inválido
+  Dado que estou autenticado no painel do gestor
+  E já existe o serviço "Clínico" configurado das 07:00 às 12:00 com limite de 40 senhas
+  Quando defino o serviço "Clínico" das 12:00 às 07:00 com limite de 20 senhas
+  Então recebo a mensagem "Horário inválido" sem salvar nem alterar a configuração
+  Issue Jira: SCRUM-44; SCRUM-134
+  Teste automatizado: backend/src/test/resources/features/US09-configurar-filas-e-horarios.feature · ServicoControllerTest#fimAntesDoInicioNaoSalva · ConfigurarFilas.test.tsx#CT-US09-02
+  Resultado obtido: Passou no CI #167 da develop.
+  Status: Passou
+  Evidência: CI #167, develop, commit b4c9c2d
+  Bug aberto: N/A
+
+----------------------------------------------------------------
+RESULTADO DA EXECUÇÃO - CI #167
+----------------------------------------------------------------
+Caso         Data         Resultado final   Bug aberto
+CT-US02-04   11/11/2026   Passou            N/A
+CT-US06-01   11/11/2026   Passou            N/A
+CT-US06-02   11/11/2026   Passou            N/A
+CT-US06-03   11/11/2026   Passou            N/A
+CT-US06-04   11/11/2026   Passou            N/A
+CT-US07-01   11/11/2026   Passou            N/A
+CT-US07-02   11/11/2026   Passou            N/A
+CT-US08-01   11/11/2026   Passou            N/A
+CT-US08-02   11/11/2026   Passou            N/A
+CT-US09-01   11/11/2026   Passou            N/A
+CT-US09-02   11/11/2026   Passou            N/A
+
+----------------------------------------------------------------
+RESUMO DA EXECUÇÃO
+----------------------------------------------------------------
+Total de casos: 11
+Casos executados: 11
+Casos aprovados: 11
+Taxa de aprovação dos executados: 100%
+Casos pendentes: 0
+Casos marcados como smoke: 5 (CT-US06-01, CT-US07-01, CT-US07-02 no Cypress, CT-US08-01, CT-US09-01)
+Bugs encontrados na sprint: 0
+Bugs corrigidos e retestados: 0
+Bugs em aberto: 0
+
+Ponto de atenção (não é bug dos critérios de aceite): o GET /api/paciente/senhas só devolve senhas
+AGUARDANDO e PRESENTE. Quando o paciente é chamado, o cartão da senha some da área do paciente.
+Fica para avaliar com a PO na Sprint 3, junto da US13 (chamar o próximo).

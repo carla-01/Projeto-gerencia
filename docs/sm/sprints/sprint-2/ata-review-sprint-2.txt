@@ -1,0 +1,69 @@
+ATA DA SPRINT REVIEW - SPRINT 2
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+
+Data: 12/11/2026
+Local: sala de aula (aula de 12/11)
+Facilitação: Mirelle Casimiro Silvino (Scrum Master)
+Presentes: Maria Eduarda (PO + DevOps), Mirelle (SM) e Adrielly (QA)
+
+----------------------------------------------------------------
+1. OBJETIVO DA SPRINT
+----------------------------------------------------------------
+O paciente entra na fila do serviço, vê sua posição e pode cancelar a senha.
+Resultado: ATINGIDO. 15 de 15 pontos entregues.
+
+----------------------------------------------------------------
+2. HISTÓRIAS E DECISÃO DA PO
+----------------------------------------------------------------
+História        Dev             Pontos  Entregue em             Decisão da PO
+SCRUM-41 US06   Adrielly        5       PRs #28, #31, #32, #33  Aceita
+SCRUM-42 US07   Adrielly        3       PRs #37, #39 e #40      Aceita
+SCRUM-43 US08   Maria Eduarda   2       PRs #35 e #41           Aceita
+SCRUM-44 US09   Mirelle         5       PRs #27, #30, #34, #36  Aceita
+
+Cenários conferidos pela PO no aceite:
+- US06: "Entrada com sucesso", "Fila fechada", "Já estou na fila"
+- US07: "Posição exibida", "Não estou na fila"
+- US08: "Cancelamento", "Já fui chamado"
+- US09: "Configuração salva", "Horário inválido"
+
+DoD de cada história verificada pela QA e comentada na issue antes do aceite.
+Aceite feito no ambiente local, a homologação definida pela professora em 12/11
+(IMP-06).
+Não concluídas: nenhuma história.
+
+----------------------------------------------------------------
+3. INCREMENTO DEMONSTRADO
+----------------------------------------------------------------
+- Paciente escolhe o serviço e entra na fila, com fila fechada fora do horário ou sem
+  senhas (US06)
+- Senha e posição do paciente na fila, com as pessoas à frente (US07)
+- Cancelamento da senha com confirmação (US08)
+- Gestor configura filas, horários e limite de senhas por dia (US09)
+- Cenários Gherkin no Cucumber e smoke no Cypress rodando no CI (SCRUM-123)
+- Pendências da R1: log de acesso negado com teste (SCRUM-124) e 403 para os 4 perfis
+  (SCRUM-125)
+
+----------------------------------------------------------------
+4. BUGS E DESVIOS
+----------------------------------------------------------------
+- Nenhum bug encontrado na sprint: 11 de 11 casos de teste aprovados, CI #164 verde.
+- Ponto de atenção da QA: o cartão da senha some da área do paciente quando ele é
+  chamado. Avaliar com a PO na Sprint 3, junto da US13 (chamar o próximo).
+- Deploy em homologação não saiu na sprint (IMP-06). A professora definiu a
+  homologação local em 12/11, e a SCRUM-120 foi concluída como ambiente de homologação
+  local documentado. O workflow de deploy no Render (PR #42) continua na develop.
+- Drivers de Desempenho (teste de carga com k6) ficam para a R3, conforme a DoD.
+- 1 commit sem a chave do Jira (d48eb86, 06/11).
+
+----------------------------------------------------------------
+5. FEEDBACK RECEBIDO
+----------------------------------------------------------------
+- Nenhum feedback além do aceite das 4 histórias.
+
+----------------------------------------------------------------
+6. ENCAMINHAMENTOS
+----------------------------------------------------------------
+- Backlog repriorizado pela PO para a Sprint 3 (SCRUM-144; Planning em 17/11). O plano da release
+  prevê 19 pontos, acima da velocidade de 15; se não couber, a US14 (SCRUM-48) passa
+  para a R3.

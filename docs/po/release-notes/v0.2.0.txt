@@ -1,0 +1,146 @@
+FILASUS v0.2.0 - R2 - FILA E ATENDIMENTO
+Data: 26/11/2026
+PO + DevOps: Maria Eduarda da Nóbrega
+SM: Mirelle Casimiro Silvino
+QA: Adrielly Carla Ferreira de Melo
+
+================================================================
+OBJETIVOS DAS SPRINTS
+================================================================
+Sprint 2 (03/11 a 12/11): O paciente entra na fila do serviço, vê sua
+posição e pode cancelar a senha.
+
+Resultado: objetivo atingido. As 4 histórias planejadas foram entregues
+e aceitas pela PO na Review de 12/11/2026 (a US06 com ressalva).
+
+Sprint 3 (17/11 a 26/11): A UBS opera o ciclo completo: check-in,
+prioridade legal, chamada e atendimento.
+
+Resultado: objetivo atingido. As 5 histórias planejadas foram entregues e
+aceitas pela PO na Review de 26/11/2026.
+
+================================================================
+HISTÓRIAS ENTREGUES
+================================================================
+SCRUM-41 [US-06] Entrar na fila (5 pts) - Sprint 2
+  Responsável: Adrielly Carla Ferreira de Melo
+  O paciente escolhe o serviço e recebe a senha pelo celular; fila fora do
+  horário ou sem senhas não aceita entrada.
+
+SCRUM-42 [US-07] Ver minha posição (3 pts) - Sprint 2
+  Responsável: Adrielly Carla Ferreira de Melo
+  O paciente vê a senha, a posição e quantas pessoas estão na frente.
+
+SCRUM-43 [US-08] Cancelar minha senha (2 pts) - Sprint 2
+  Responsável: Maria Eduarda da Nóbrega
+  O paciente cancela a senha enquanto o atendimento não começou.
+
+SCRUM-44 [US-09] Configurar filas e horários (5 pts) - Sprint 2
+  Responsável: Mirelle Casimiro Silvino
+  O gestor define o horário e o limite diário de senhas de cada serviço.
+
+SCRUM-15 [US-03] Gestor cadastra funcionários (5 pts) - Sprint 3
+  Responsável: Mirelle Casimiro Silvino
+  O gestor cadastra recepcionistas e profissionais, com o setor do
+  profissional, e vê a lista de usuários da UBS.
+
+SCRUM-45 [US-10] Check-in na recepção (3 pts) - Sprint 3
+  Responsável: Maria Eduarda da Nóbrega
+  A recepção confirma a presença pelo CPF ou número da senha e coloca na
+  fila o paciente que chegou sem senha.
+
+SCRUM-46 [US-11] Aplicar prioridade legal (5 pts) - Sprint 3
+  Responsável: Adrielly Carla Ferreira de Melo
+  A recepção marca idoso, gestante, pessoa com deficiência ou urgência
+  (com motivo), e a ordem da fila e a posição passam a respeitá-la.
+
+SCRUM-47 [US-13] Chamar o próximo (3 pts) - Sprint 3
+  Responsável: Maria Eduarda da Nóbrega
+  O profissional chama o próximo presente do seu setor; o paciente vê
+  "Você foi chamado" e não tira outra senha no mesmo serviço.
+
+SCRUM-48 [US-14] Iniciar e finalizar atendimento (3 pts) - Sprint 3
+  Responsável: Mirelle Casimiro Silvino
+  O profissional inicia e finaliza o atendimento, com os horários
+  gravados.
+
+================================================================
+NÃO CONCLUÍDAS E PARA ONDE FORAM
+================================================================
+- Ressalva da US06: no cenário "Fila fechada" o sistema não informa o
+  próximo horário de abertura. A melhoria voltou ao backlog.
+- Nenhuma história da Sprint 2 ou da Sprint 3 ficou sem concluir.
+
+================================================================
+INFRAESTRUTURA E DOCUMENTAÇÃO
+================================================================
+- Homologação local documentada (docs/devops/homologacao.txt). O deploy em
+  nuvem foi descartado por decisão da professora (12/11).
+- Cucumber e Cypress no CI, com os cenários @smoke.
+- Modelos de issue e de PR na pasta .github.
+- Driver DA-DES-I2-01 (pico de entrada na fila): teste de carga com k6,
+  p95 de 13,82 ms, sem erros e sem senhas repetidas. Atendeu
+  (docs/qa/carga/).
+- Driver DA-DIS-I2-01 (falha do servidor): a API voltou em 16,7 s, sem
+  perder senhas, em execução num banco temporário (docs/devops/queda/).
+  Repetido com a QA em 26/11: API de volta em 12 s, com 5 de 5 senhas
+  mantidas.
+- Relatório do pipeline da R2 (docs/releases/relatorio-pipeline-r2.txt).
+- Plano da release, priorização do backlog, casos de teste, atas e métricas
+  das sprints.
+
+================================================================
+CORREÇÕES
+================================================================
+- O controle de acesso por perfil e o log de acesso negado, pendências da
+  R1, foram tratados (SCRUM-124 e SCRUM-125).
+- Os testes passaram a usar no máximo 3 conexões por contexto, porque
+  estouravam o PostgreSQL do CI (SCRUM-162).
+
+================================================================
+PROBLEMAS CONHECIDOS
+================================================================
+- SCRUM-177 (Média): a "Fila do dia" do painel da recepção sempre aparece
+  vazia, porque o GET /api/recepcao/fila devolve uma lista fixa.
+- SCRUM-178 (Média): a senha pode ficar presa em chamada ou em atendimento
+  se o profissional chamar o próximo sem iniciar ou trocar de computador.
+  Recarregar no mesmo navegador já funciona.
+- SCRUM-176 (Baixa): GET /actuator/health responde 401 sem login, mas a
+  documentação de homologação indica "UP".
+- BUG-06 (Baixa, no relatório de qualidade da R2):
+  docs/devops/homologacao.txt citava o PostgreSQL 18, mas a homologação e o
+  CI usam o PostgreSQL 16. Corrigido no PR #80.
+- O mvn spring-boot:run não achou a classe principal em um computador cuja
+  pasta do projeto tem acento no caminho; subir pelo .jar funciona.
+
+================================================================
+MÉTRICAS
+================================================================
+Pontos planejados: 34 (Sprint 2: 15; Sprint 3: 19)
+Pontos entregues: 34 aceitos (Sprint 2: 15; Sprint 3: 19). Velocidade da
+Sprint 3: 19 pontos
+Bugs encontrados x corrigidos: 4 x 0 (Sprint 2: 0 x 0; Sprint 3: 4 x 0,
+nenhum Crítico ou Alto; os 4 foram para o backlog da R3)
+Testes automatizados: 229 testes JUnit e 23 cenários Cucumber no
+back-end e 89 testes no front-end, todos passando (CI #285, develop,
+commit a46603a, 26/11), mais 3 cenários @smoke no Cypress
+Pull requests integrados na develop desde a v0.1.0: 53 (até o commit
+a46603a, 26/11, antes dos PRs de documentação do fechamento)
+Execuções de CI e taxa de sucesso (03/11 a 26/11): 226 execuções, 189 com
+sucesso (83,6%); sem contar as canceladas, 96,9%. Na develop: 40 de 42
+(95,2%)
+
+================================================================
+COMO RODAR ESTA VERSÃO
+================================================================
+Seguir docs/devops/homologacao.txt (ambiente local; não há deploy em
+nuvem). Instalação das ferramentas em
+docs/devops/ambiente-de-desenvolvimento.txt.
+
+================================================================
+PRÓXIMA RELEASE
+================================================================
+R3 (Sprint 4 em diante, Planning em 01/12)
+PO + DevOps: Mirelle Casimiro Silvino
+SM: Adrielly Carla Ferreira de Melo
+QA: Maria Eduarda da Nóbrega

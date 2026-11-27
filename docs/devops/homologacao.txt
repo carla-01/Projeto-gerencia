@@ -1,0 +1,132 @@
+AMBIENTE DE HOMOLOGAÇÃO LOCAL - FilaSUS
+SCRUM-120 · Responsável: Maria Eduarda (DevOps, R2)
+
+Como subir a homologação no computador, para o aceite das histórias na Review.
+Por decisão da professora (12/11/2026), a homologação da R2 roda local: não há
+deploy em nuvem. Só com dados fictícios. Nenhuma senha, token ou chave entra
+neste arquivo.
+
+A instalação das ferramentas e o fluxo de trabalho estão em
+docs/devops/ambiente-de-desenvolvimento.txt. Este arquivo cobre só o que a
+homologação precisa a mais.
+
+
+----------------------------------------------------------------
+1. ANTES DE COMEÇAR
+----------------------------------------------------------------
+1. Atualizar o código:
+     git switch develop
+     git pull
+2. Java 21 ou mais novo (java -version). Se o java padrão for mais antigo, apontar a
+   variável JAVA_HOME para o JDK 21 ou mais novo antes de subir o back-end.
+3. Ligar o PostgreSQL 16. O serviço postgresql-x64-16 só liga à mão. Se a versão
+   instalada no computador for outra, trocar o número no nome do serviço e no caminho
+   do psql. No PowerShell, como administrador:
+     net start postgresql-x64-16
+4. Na primeira vez, criar o banco e os dados iniciais (seção 2 do
+   ambiente-de-desenvolvimento.txt, scripts em docs/devops/banco/).
+
+
+----------------------------------------------------------------
+2. SUBIR O SISTEMA
+----------------------------------------------------------------
+Em dois terminais, na raiz do repositório:
+
+  Back-end (http://localhost:8080)
+    cd backend
+    mvn spring-boot:run
+
+  Front-end (http://localhost:5173)
+    cd frontend
+    npm install        (só na primeira vez)
+    npm run dev
+
+O front repassa /auth, /api e /pacientes para o back-end na porta 8080.
+O sistema está no ar quando http://localhost:8080/actuator/health responde
+{"status":"UP"} e http://localhost:5173 abre a tela de login.
+
+Os valores de banco e de chaves vêm de variáveis de ambiente (DB_URL, DB_USER,
+DB_PASSWORD, JWT_SECRET, CPF_CHAVE_HASH, CPF_CHAVE_CIFRA); sem elas, valem os padrões
+de desenvolvimento do application.properties.
+Atenção: se CPF_CHAVE_CIFRA mudar, os CPFs já cadastrados deixam de abrir.
+
+
+----------------------------------------------------------------
+3. USUÁRIOS DE TESTE
+----------------------------------------------------------------
+Só o paciente se cadastra sozinho (US04). Para os outros perfis (a US03, cadastro
+de funcionários pelo gestor, é da Sprint 3):
+
+1. Cadastrar um paciente fictício em http://localhost:5173/cadastro, com um e-mail
+   de teste (por exemplo gestor.demo@exemplo.test).
+2. Trocar o perfil dele no banco:
+     & "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U filasus -d filasus -c "UPDATE usuario SET perfil = 'GESTOR' WHERE email = 'gestor.demo@exemplo.test';"
+   Perfis possíveis: PACIENTE, RECEPCIONISTA, PROFISSIONAL e GESTOR.
+3. Entrar com esse e-mail e a senha do cadastro.
+
+O menu do gestor ainda não tem link para a configuração das filas. A tela abre em
+http://localhost:5173/gestor/configurar-filas.
+
+
+----------------------------------------------------------------
+4. ROTEIRO DA DEMONSTRAÇÃO (REVIEW DA SPRINT 2)
+----------------------------------------------------------------
+Os serviços padrão (Clínico, Enfermagem e Odontologia) funcionam das 07:00 às 17:00.
+À noite todas as filas aparecem fechadas, então a demonstração começa pela US09.
+
+1. US09 - Configurar filas e horários (gestor)
+     Cenário "Configuração salva": criar um serviço novo, por exemplo "Clínico Noite",
+     das 18:00 às 23:59, com 40 senhas.
+     Cenário "Horário inválido": informar o fim antes do início e ver "Horário
+     inválido", sem salvar nada.
+2. US06 - Entrar na fila (paciente)
+     Cenário "Entrada com sucesso": entrar na fila do serviço novo e receber a senha.
+     Cenário "Já estou na fila": o botão mostra "Na fila" e não cria outra senha.
+     Cenário "Fila fechada": Odontologia, que fecha às 17:00, aparece com "Fila fechada".
+3. US07 - Ver minha posição (paciente)
+     Cenário "Posição exibida": senha, posição e quantas pessoas estão na frente
+     (com um segundo paciente na fila a posição muda).
+     Cenário "Não estou na fila": sem senha ativa, aparece "Entrar na fila".
+4. US08 - Cancelar minha senha (paciente)
+     Cenário "Cancelamento": "Cancelar senha", confirmar, a senha sai da fila e as
+     posições seguintes andam.
+     Cenário "Já fui chamado": ainda não há tela de chamada (US13, Sprint 3). Para
+     simular, mudar o status da senha e atualizar a tela:
+       & "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U filasus -d filasus -c "SELECT id, numero, status FROM senha;"
+       & "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U filasus -d filasus -c "UPDATE senha SET status = 'EM_ATENDIMENTO' WHERE id = 1;"
+     Troque o 1 pelo id da senha. Hoje, com a senha chamada, o cartão dela some da
+     área do paciente (ponto de atenção da QA para a US13). O teste automático
+     CT-US08-02 cobre o botão que não aparece.
+
+
+----------------------------------------------------------------
+5. TESTES AUTOMATIZADOS
+----------------------------------------------------------------
+  Back-end (cenários Cucumber incluídos)   cd backend && mvn verify
+  Front-end                                cd frontend && npm test
+  Cenários @smoke no Cypress               cd frontend && npm run cy:smoke
+                                           (com o back-end e o npm run dev rodando)
+
+O cy:smoke cadastra pacientes fictícios no banco local. Os mesmos testes rodam no CI
+a cada push e em todo pull request.
+
+
+----------------------------------------------------------------
+6. CONFERIR ANTES DA REVIEW
+----------------------------------------------------------------
+1. O serviço do PostgreSQL está ligado.
+2. http://localhost:8080/actuator/health responde UP.
+3. A tela de login abre em http://localhost:5173.
+4. Existe um paciente e um gestor de teste (seção 3).
+5. Existe um serviço aberto no horário da Review (seção 4, passo 1).
+6. A demonstração foi ensaiada uma vez inteira.
+
+
+----------------------------------------------------------------
+7. HISTÓRICO
+----------------------------------------------------------------
+12/11/2026 - Homologação definida como ambiente local pela professora. O deploy em
+nuvem (Koyeb, Render, Neon e Netlify) foi descartado, e o Dockerfile e o workflow de
+deploy saíram do repositório.
+26/11/2026 - PostgreSQL 16 como versão de referência, igual ao CI e aos scripts do
+banco (antes o texto citava o 18).

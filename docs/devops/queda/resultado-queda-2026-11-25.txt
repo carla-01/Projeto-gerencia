@@ -1,0 +1,58 @@
+RESULTADO DO TESTE DE QUEDA DO SERVIDOR
+SCRUM-63 · Driver DA-DIS-I2-01 (Falha do servidor de aplicação) · US06 (Entrar na fila)
+Responsável: Maria Eduarda da Nóbrega (DevOps da R2)
+
+----------------------------------------------------------------
+1. COMO FOI RODADO
+----------------------------------------------------------------
+Data: 25/11/2026, 22:25 às 22:26
+Ambiente: computador local, back-end da develop (commit 4d15fc8) empacotado em .jar,
+  Java 23 e PostgreSQL 18.4. O banco foi uma instância temporária, criada só para o
+  teste e apagada no fim, e não o banco de homologação.
+Script: docs/devops/queda/teste-queda-servidor.ps1
+Fila: 5 pacientes fictícios no serviço "Teste de Queda".
+Queda: o processo do back-end foi encerrado à força (Stop-Process) e subido de novo
+  na sequência com java -jar. O tempo conta do encerramento até o /actuator/health
+  responder UP.
+QA acompanhando: NÃO. A repetir com a Adrielly na homologação (seção 4).
+
+----------------------------------------------------------------
+2. RESULTADO
+----------------------------------------------------------------
+Meta                                 Obtido                       Atendeu?
+-----------------------------------  ---------------------------  --------
+API de volta em até 2 minutos        16,7 s                       Sim
+Nenhuma senha perdida                5 antes e 5 depois, com o    Sim
+                                     mesmo número e status
+Paciente continua vendo a posição    5ª antes e 5ª depois         Sim
+
+Senhas antes e depois (id | número | status):
+  1|1|AGUARDANDO
+  2|2|AGUARDANDO
+  3|3|AGUARDANDO
+  4|4|AGUARDANDO
+  5|5|AGUARDANDO
+
+Resultado do driver DA-DIS-I2-01 nesta execução: ATENDEU.
+Falta confirmar na homologação, com a QA acompanhando.
+
+----------------------------------------------------------------
+3. OBSERVAÇÕES
+----------------------------------------------------------------
+- O reinício foi disparado pelo script. Num caso real o reinício é manual: o tempo
+  que a pessoa leva para perceber a queda e agir se soma aos 16,7 s.
+- GET /actuator/health sem login responde 401, porque o SecurityConfig não libera a
+  rota. O docs/devops/homologacao.txt diz que ela responde {"status":"UP"}. O script
+  consulta a saúde com o login de um paciente de teste. Abrir um bug.
+- O mvn spring-boot:run não achou a classe principal neste computador
+  (ClassNotFoundException), provavelmente pelo acento no caminho da pasta; não foi
+  confirmado. Por isso o teste usa o .jar.
+- O teste não cobre queda do banco, do computador ou falta de energia.
+
+----------------------------------------------------------------
+4. REPETIR NA HOMOLOGAÇÃO, COM A QA
+----------------------------------------------------------------
+Data: ____/11/2026        QA acompanhando: ______________________
+Tempo até voltar: ______  Senhas antes/depois: ______ / ______
+Atendeu? ( ) Sim  ( ) Não  ( ) Parcial
+Evidência: print da saída do script anexado na SCRUM-63.

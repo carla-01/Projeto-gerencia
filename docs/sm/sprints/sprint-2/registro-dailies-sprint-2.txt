@@ -1,0 +1,57 @@
+REGISTRO DE DAILIES - SPRINT 2
+FilaSUS · Gerência de Projetos (UEPB, 2026.2)
+Facilitação e registro: Mirelle Casimiro Silvino (Scrum Master)
+
+Dailies às segundas e quartas-feiras, às 20h, online, de 10 a 15 minutos.
+Cada integrante responde: o que fez, o que vai fazer e o que está travando.
+O que cada uma fez foi conferido nos commits e no quadro do Jira do período.
+
+03/11 não teve daily: dia da Sprint Planning.
+
+---
+
+## DAILY 1 - quarta-feira, 04/11/2026, 20h
+
+Presentes: Adrielly, Maria Eduarda e Mirelle    Duração: 10 a 15 min
+Adrielly: plano de testes da Sprint 2 apresentado na Planning; próximo: CT-US02-04, log
+  de acesso negado (SCRUM-124), e US06 (SCRUM-41)
+Maria Eduarda: refinamento e plano da Release 2 (SCRUM-119), tarefas da retro
+  (SCRUM-114) e modelos de issue e PR na .github (SCRUM-122); próximo: ata da Planning
+  no repositório e deploy em homologação (SCRUM-120)
+Mirelle: Planning da Sprint 2 facilitada; próximo: back-end de serviços e horários
+  da US09 (SCRUM-131)
+Impedimentos: nenhum
+
+---
+
+## DAILY 2 - segunda-feira, 09/11/2026, 20h
+
+Presentes: Adrielly, Maria Eduarda e Mirelle    Duração: 10 a 15 min
+Adrielly: SCRUM-124 integrada (PR #25) e entidades Servico e Senha da US06 (PR #28);
+  próximo: endpoint de entrada na fila (SCRUM-136), tela de escolha de serviço
+  (SCRUM-137) e cenários Gherkin da US06 (SCRUM-138)
+Maria Eduarda: modelos da .github integrados (PR #23) e ata da Planning (PR #26);
+  Cucumber e Cypress no CI em andamento; próximo: integrar a SCRUM-123, US08 (SCRUM-43)
+  e deploy (SCRUM-120)
+Mirelle: back-end de serviços e horários integrado (SCRUM-131, PR #27); limite de
+  senhas por dia em andamento; próximo: integrar a SCRUM-132 e tela de configuração de
+  filas (SCRUM-133)
+Impedimentos: deploy em homologação (SCRUM-120) ainda sem nenhum commit; o roteiro
+  previa o início em 05/11. Ver IMP-06.
+
+---
+
+## DAILY 3 - quarta-feira, 11/11/2026, 20h
+
+Presentes: Adrielly, Maria Eduarda e Mirelle    Duração: 10 a 15 min
+Adrielly: US06 integrada (PRs #31, #32 e #33) e US07 integrada (PRs #37, #39 e #40);
+  próximo: checklist da DoD nas histórias e plano de teste e de qualidade atualizados
+  para a Review
+Maria Eduarda: Cucumber e Cypress no CI (PR #29), US08 integrada (PRs #35 e #41) e
+  workflow de deploy integrado (PR #42); próximo: primeiro deploy e URL de homologação
+  (SCRUM-120) e aceite das histórias na Review
+Mirelle: US09 integrada (PRs #27, #30, #34 e #36) e controle de acesso por perfil
+  (SCRUM-125, PR #38); próximo: atas, métricas e burndown (SCRUM-127) e Review e Retro
+Impedimentos: IMP-06 (deploy em homologação não concluído)
+
+12/11 não tem daily: dia da Review e da Retrospectiva.
